@@ -16,11 +16,17 @@ performance issue: dnf repomanage is really slow
 
 Some benchmark results (find 15 old RPMs among 5000)
 
-# DNF on Fedora
+# DNF on Fedora 27
 
     $ time dnf repomanage --old --keep 5 .
     ...
     real	0m15,971s
+
+# DNF on Fedora 25
+
+    $ time dnf repomanage --old --keep 5 .
+    ...
+    real	0m0,269s
 
 # YUM on RHEL / CentOS
 
