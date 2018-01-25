@@ -39,6 +39,7 @@ if (!isset($rpms)) {
 	die("Missing rpm directory argument\n");
 }
 if (is_dir($rpms)) {
+	$rpms = realpath($rpms);
 } else {
 	die("$rpms is not a directory\n");
 }
