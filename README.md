@@ -6,6 +6,7 @@ Experimental wrapper for librpm
 For now, only expose
 
 	int rpmvercmp(string evr1, string evr2);
+	array rpminfo(string path [, bool full ]);
 
 
 Mostly a PoC build for fun because of
@@ -38,5 +39,5 @@ Some benchmark results (find 15 old RPMs among 5000)
 
     $ time php repomanage.php --old --keep 5 .
     ...
-    real	0m0,634s
+    real	0m0,135s
 

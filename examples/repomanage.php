@@ -44,19 +44,20 @@ if (is_dir($rpms)) {
 }
 
 $tree = [];
-$handle = popen('rpm -qp --qf "%{NAME} %{EPOCHNUM} %{VERSION} %{RELEASE} %{ARCH} %{NEVR}\n" ' . $rpms . "/*.rpm", "r");
-while ($line = fgets($handle)) {
-	$tab = explode(' ', trim($line));
-	if (count($tab) == 6) {
-		$tree[$tab[4]][$tab[0]][] = [
-			'name' => $tab[0],
-			'path' => $tab[5],
-			'evr'  => "${tab[1]}:${tab[2]}-${tab[3]}",
-		];
+foreach(glob("$rpms/*.rpm") as $rpm) {
+	$info = rpminfo($rpm);
+	if (is_array($info)) {
+		$info['path'] = $rpm;
+		$info['evr'] = $info['Version'] . '-' . $info['Release'];
+		if (isset($info['Epoch'])) {
+			$info['evr'] = $info['Epoch'] . ":" . $info['evr'];
+		}
+		$tree[$info['Name']][$info['Arch']][] = $info;
 	} else {
-		echo "Ignore $line\n";
+		echo "Skip $rpm\n";
 	}
 }
+
 foreach($tree as $arch => $subtree) {
 	foreach ($subtree as $name => $versions) {
 		if (count($versions) > $keep) {

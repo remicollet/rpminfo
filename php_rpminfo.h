@@ -22,7 +22,7 @@
 extern zend_module_entry rpminfo_module_entry;
 #define phpext_rpminfo_ptr &rpminfo_module_entry
 
-#define PHP_RPMINFO_VERSION "0.1.0" /* Replace with version number for your extension */
+#define PHP_RPMINFO_VERSION "0.1.0-dev" /* Replace with version number for your extension */
 
 #ifdef PHP_WIN32
 #	define PHP_RPMINFO_API __declspec(dllexport)
@@ -36,15 +36,9 @@ extern zend_module_entry rpminfo_module_entry;
 #include "TSRM.h"
 #endif
 
-/*
-  	Declare any global variables you may need between the BEGIN
-	and END macros here:
-
 ZEND_BEGIN_MODULE_GLOBALS(rpminfo)
-	zend_long  global_value;
-	char *global_string;
+	rpmts ts;
 ZEND_END_MODULE_GLOBALS(rpminfo)
-*/
 
 /* Always refer to the globals in your function as RPMINFO_G(variable).
    You are encouraged to rename these macros something shorter, see
