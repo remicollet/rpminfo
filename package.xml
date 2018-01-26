@@ -34,6 +34,7 @@
       <file name="CREDITS" role="doc"/>
       <file name="EXPERIMENTAL" role="doc"/>
       <file name="LICENSE" role="doc"/>
+      <file name="README.md" role="doc"/>
       <dir name ="examples">
         <file name="repomanage.php" role="doc"/>
         <file name="rpmvercmp.php" role="doc"/>
