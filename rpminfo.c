@@ -163,7 +163,16 @@ PHP_FUNCTION(rpmvercmp)
 }
 /* }}} */
 
-/* Remove if there's nothing to do at request start */
+/* {{{ PHP_MINIT_FUNCTION
+ */
+PHP_MINIT_FUNCTION(rpminfo)
+{
+	REGISTER_STRING_CONSTANT("RPMVERSION", (char *)RPMVERSION, CONST_CS | CONST_PERSISTENT);
+
+	return SUCCESS;
+}
+/* }}} */
+
 /* {{{ PHP_RINIT_FUNCTION
  */
 PHP_RINIT_FUNCTION(rpminfo)
@@ -232,7 +241,7 @@ zend_module_entry rpminfo_module_entry = {
 	NULL,
 	"rpminfo",
 	rpminfo_functions,
-	NULL,
+	PHP_MINIT(rpminfo),
 	NULL,
 	PHP_RINIT(rpminfo),
 	NULL,
