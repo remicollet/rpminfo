@@ -42,13 +42,6 @@ static rpmts rpminfo_getts(rpmVSFlags flags) {
 	return RPMINFO_G(ts);
 }
 
-static void rpminfo_freets(void) {
-	if (RPMINFO_G(ts)) {
-		rpmtsFree(RPMINFO_G(ts));
-		RPMINFO_G(ts) = NULL;
-	}
-}
-
 ZEND_BEGIN_ARG_INFO_EX(arginfo_rpminfo, 0, 0, 1)
 	ZEND_ARG_INFO(0, path)
 	ZEND_ARG_INFO(0, full)
@@ -170,6 +163,18 @@ PHP_FUNCTION(rpmvercmp)
 }
 /* }}} */
 
+/* Remove if there's nothing to do at request start */
+/* {{{ PHP_RINIT_FUNCTION
+ */
+PHP_RINIT_FUNCTION(rpminfo)
+{
+#if defined(COMPILE_DL_RPMINFO) && defined(ZTS)
+	ZEND_TSRMLS_CACHE_UPDATE();
+#endif
+	return SUCCESS;
+}
+/* }}} */
+
 /* {{{ PHP_MINFO_FUNCTION
  */
 PHP_MINFO_FUNCTION(rpminfo)
@@ -193,7 +198,6 @@ static PHP_GINIT_FUNCTION(rpminfo) /* {{{ */
 #if defined(COMPILE_DL_SESSION) && defined(ZTS)
 	ZEND_TSRMLS_CACHE_UPDATE();
 #endif
-
 	rpminfo_globals->ts = NULL;
 }
 /* }}} */
@@ -202,7 +206,10 @@ static PHP_GINIT_FUNCTION(rpminfo) /* {{{ */
 */
 PHP_GSHUTDOWN_FUNCTION(rpminfo)
 {
-	rpminfo_freets();
+	if (rpminfo_globals->ts) {
+		rpmtsFree(rpminfo_globals->ts);
+		rpminfo_globals->ts = NULL;
+	}
 }
 /* }}} */
 
@@ -227,7 +234,7 @@ zend_module_entry rpminfo_module_entry = {
 	rpminfo_functions,
 	NULL,
 	NULL,
-	NULL,
+	PHP_RINIT(rpminfo),
 	NULL,
 	PHP_MINFO(rpminfo),
 	PHP_RPMINFO_VERSION,

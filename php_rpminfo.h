@@ -40,10 +40,6 @@ ZEND_BEGIN_MODULE_GLOBALS(rpminfo)
 	rpmts ts;
 ZEND_END_MODULE_GLOBALS(rpminfo)
 
-/* Always refer to the globals in your function as RPMINFO_G(variable).
-   You are encouraged to rename these macros something shorter, see
-   examples in any other php module directory.
-*/
 #define RPMINFO_G(v) ZEND_MODULE_GLOBALS_ACCESSOR(rpminfo, v)
 
 #if defined(ZTS) && defined(COMPILE_DL_RPMINFO)
