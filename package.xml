@@ -12,7 +12,7 @@
   </lead>
   <date>2018-01-26</date>
   <version>
-    <release>0.1.0</release>
+    <release>0.1.1</release>
     <api>0.1.0</api>
   </version>
   <stability>
@@ -21,9 +21,8 @@
   </stability>
   <license>PHP 3.01</license>
   <notes>
-- first release with 2 functions:
-  int rpmvercmp(string evr1, string evr2);
-  array rpminfo(string path [, bool full]);
+- fix segfault in ZTS mode
+- define RPMVERSION constant
   </notes>
   <contents>
     <dir name="/">
@@ -40,9 +39,11 @@
         <file name="rpmvercmp.php" role="doc"/>
       </dir>
       <dir name ="tests">
-        <file name="001.phpt" role="test"/>
-        <file name="002.phpt" role="test"/>
-        <file name="003.phpt" role="test"/>
+        <file name="001-presence.phpt" role="test"/>
+        <file name="002-rpmvercmp.phpt" role="test"/>
+        <file name="003-rpminfo.phpt" role="test"/>
+        <file name="004-constants.phpt" role="test"/>
+        <file name="005-rpminfo-full.phpt" role="test"/>
         <file name="bidon.rpm" role="test"/>
         <file name="bidon-src.rpm" role="test"/>
       </dir>
