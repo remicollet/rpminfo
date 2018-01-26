@@ -18,12 +18,12 @@ int(-1)
 int(1)
 int(0)
 
-Warning: rpmvercmp() expects exactly 2 parameters, 0 given in %s/002.php on line 6
+Warning: rpmvercmp() expects exactly 2 parameters, 0 given in %s/002-rpmvercmp.php on line 6
 NULL
 
-Warning: rpmvercmp() expects exactly 2 parameters, 1 given in %s/002.php on line 7
+Warning: rpmvercmp() expects exactly 2 parameters, 1 given in %s/002-rpmvercmp.php on line 7
 NULL
 
-Warning: rpmvercmp() expects exactly 2 parameters, 3 given in %s/002.php on line 8
+Warning: rpmvercmp() expects exactly 2 parameters, 3 given in %s/002-rpmvercmp.php on line 8
 NULL
 Done
