@@ -10,13 +10,13 @@ if test "$PHP_RPMINFO" != "no"; then
 
   AC_MSG_CHECKING(for librpm)
   if test -x "$PKG_CONFIG" && $PKG_CONFIG --exists rpm; then
-    if $PKG_CONFIG rpm --atleast-version 4; then
+    if $PKG_CONFIG rpm --atleast-version 4.11.3; then
       LIBRPM_CFLAGS=`$PKG_CONFIG rpm --cflags`
       LIBRPM_LIBDIR=`$PKG_CONFIG rpm --libs`
       LIBRPM_VERSON=`$PKG_CONFIG rpm --modversion`
       AC_MSG_RESULT(from pkgconfig: version $LIBRPM_VERSON)
     else
-      AC_MSG_ERROR(system librpm is too old)
+      AC_MSG_ERROR(system librpm is too old: version 4.11.3 required)
     fi
   else
     AC_MSG_ERROR(pkg-config not found)
