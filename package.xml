@@ -3,7 +3,7 @@
   <name>rpminfo</name>
   <channel>pecl.php.net</channel>
   <summary>RPM information</summary>
-  <description>Rerieve RPM information using librpm.</description>
+  <description>Retrieve RPM information using librpm.</description>
   <lead>
     <name>Remi Collet</name>
     <user>remi</user>
