@@ -32,19 +32,6 @@
 
 ZEND_DECLARE_MODULE_GLOBALS(rpminfo)
 
-/* True global resources - no need for thread safety here */
-// static int le_rpminfo;
-
-/* {{{ PHP_INI
- */
-/* Remove comments and fill if you need to have entries in php.ini
-PHP_INI_BEGIN()
-    STD_PHP_INI_ENTRY("rpminfo.global_value",      "42", PHP_INI_ALL, OnUpdateLong, global_value, zend_rpminfo_globals, rpminfo_globals)
-    STD_PHP_INI_ENTRY("rpminfo.global_string", "foobar", PHP_INI_ALL, OnUpdateString, global_string, zend_rpminfo_globals, rpminfo_globals)
-PHP_INI_END()
-*/
-/* }}} */
-
 static rpmts rpminfo_getts(rpmVSFlags flags) {
 	if (!RPMINFO_G(ts)) {
 		RPMINFO_G(ts) = rpmtsCreate();
@@ -183,60 +170,6 @@ PHP_FUNCTION(rpmvercmp)
 }
 /* }}} */
 
-/* {{{ php_rpminfo_init_globals
- */
-/* Uncomment this function if you have INI entries
-static void php_rpminfo_init_globals(zend_rpminfo_globals *rpminfo_globals)
-{
-	rpminfo_globals->global_value = 0;
-	rpminfo_globals->global_string = NULL;
-}
-*/
-/* }}} */
-
-/* {{{ PHP_MINIT_FUNCTION
- */
-PHP_MINIT_FUNCTION(rpminfo)
-{
-	/* If you have INI entries, uncomment these lines
-	REGISTER_INI_ENTRIES();
-	*/
-	return SUCCESS;
-}
-/* }}} */
-
-/* {{{ PHP_MSHUTDOWN_FUNCTION
- */
-PHP_MSHUTDOWN_FUNCTION(rpminfo)
-{
-	/* uncomment this line if you have INI entries
-	UNREGISTER_INI_ENTRIES();
-	*/
-	return SUCCESS;
-}
-/* }}} */
-
-/* Remove if there's nothing to do at request start */
-/* {{{ PHP_RINIT_FUNCTION
- */
-PHP_RINIT_FUNCTION(rpminfo)
-{
-#if defined(COMPILE_DL_RPMINFO) && defined(ZTS)
-	ZEND_TSRMLS_CACHE_UPDATE();
-#endif
-	return SUCCESS;
-}
-/* }}} */
-
-/* Remove if there's nothing to do at request end */
-/* {{{ PHP_RSHUTDOWN_FUNCTION
- */
-PHP_RSHUTDOWN_FUNCTION(rpminfo)
-{
-	return SUCCESS;
-}
-/* }}} */
-
 /* {{{ PHP_MINFO_FUNCTION
  */
 PHP_MINFO_FUNCTION(rpminfo)
@@ -292,10 +225,10 @@ zend_module_entry rpminfo_module_entry = {
 	NULL,
 	"rpminfo",
 	rpminfo_functions,
-	PHP_MINIT(rpminfo),
-	PHP_MSHUTDOWN(rpminfo),
-	PHP_RINIT(rpminfo),		/* Replace with NULL if there's nothing to do at request start */
-	PHP_RSHUTDOWN(rpminfo),	/* Replace with NULL if there's nothing to do at request end */
+	NULL,
+	NULL,
+	NULL,
+	NULL,
 	PHP_MINFO(rpminfo),
 	PHP_RPMINFO_VERSION,
 	PHP_MODULE_GLOBALS(rpminfo),
