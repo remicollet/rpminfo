@@ -71,7 +71,8 @@ ZEND_END_ARG_INFO()
    Retrieve information from a RPM file */
 PHP_FUNCTION(rpminfo)
 {
-	char *path, *msg=NULL, *val;
+	char *path;
+	const char *val;
 	size_t len;
 	zend_bool full = 0;
 	FD_t f;
