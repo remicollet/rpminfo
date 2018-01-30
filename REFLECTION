@@ -1,11 +1,16 @@
-Extension [ <persistent> extension #15 rpminfo version 0.1.0 ] {
+Extension [ <persistent> extension #15 rpminfo version 0.1.2-dev ] {
+
+  - Constants [1] {
+    Constant [ string RPMVERSION ] { 4.14.0 }
+  }
 
   - Functions {
     Function [ <internal:rpminfo> function rpminfo ] {
 
-      - Parameters [2] {
+      - Parameters [3] {
         Parameter #0 [ <required> $path ]
         Parameter #1 [ <optional> $full ]
+        Parameter #2 [ <optional> &$error ]
       }
     }
     Function [ <internal:rpminfo> function rpmvercmp ] {

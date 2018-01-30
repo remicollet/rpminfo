@@ -50,6 +50,7 @@ The return value is a hash table, or false if it fails.
         [Release] => 1.fc25.remi
         [Arch] => x86_64
     )
+    
     php > print_r(rpminfo("tests/bidon.rpm", true));
     Array
     (
@@ -66,6 +67,16 @@ The return value is a hash table, or false if it fails.
         ...
         [IsSource] => 
     )
+    
+    php > var_dump(rpminfo("missing.rpm"));
+    Warning: rpminfo(): Can't open 'missing.rpm': No such file or directory in php shell code on line 1
+    bool(false)
+    
+    php > var_dump(rpminfo("missing.rpm", false, $error));
+    bool(false)
+    php > echo $error;
+    Can't open 'missing.rpm': No such file or directory
+
 
 ----
 

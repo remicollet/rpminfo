@@ -21,7 +21,7 @@
   </stability>
   <license>PHP 3.01</license>
   <notes>
--
+- rpminfo(): add option to retrieve error message instead of raising a warning
   </notes>
   <contents>
     <dir name="/">
@@ -44,6 +44,7 @@
         <file name="003-rpminfo.phpt" role="test"/>
         <file name="004-constants.phpt" role="test"/>
         <file name="005-rpminfo-full.phpt" role="test"/>
+        <file name="006-rpminfo-errors.phpt" role="test"/>
         <file name="bidon.rpm" role="test"/>
         <file name="bidon-src.rpm" role="test"/>
       </dir>

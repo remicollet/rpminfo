@@ -45,30 +45,38 @@ static rpmts rpminfo_getts(rpmVSFlags flags) {
 ZEND_BEGIN_ARG_INFO_EX(arginfo_rpminfo, 0, 0, 1)
 	ZEND_ARG_INFO(0, path)
 	ZEND_ARG_INFO(0, full)
+	ZEND_ARG_INFO(1, error)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto array rpminfo(string path [, bool full])
+/* {{{ proto array rpminfo(string path [, bool full [, string &$error])
    Retrieve information from a RPM file */
 PHP_FUNCTION(rpminfo)
 {
-	char *path;
+	char *path, *e_msg;
 	const char *val;
-	size_t len;
+	size_t len, e_len=0;
 	zend_bool full = 0;
+	zval *error = NULL;
 	FD_t f;
-	int rc;
 	Header h;
 	HeaderIterator hi;
 	rpmTagVal tag;
 	rpmTagType type;
 	rpmts ts = rpminfo_getts(_RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|b", &path, &len, &full) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|bz", &path, &len, &full, &error) == FAILURE) {
 		return;
+	}
+	if (error) {
+		ZVAL_DEREF(error);
+		zval_dtor(error);
+		ZVAL_NULL(error);
 	}
 
 	f = Fopen(path, "r");
 	if (f) {
+		int rc;
+
 		rc = rpmReadPackageFile(ts, f, "rpminfo", &h);
 		if (rc == RPMRC_OK || rc == RPMRC_NOKEY || rc == RPMRC_NOTTRUSTED) {
 
@@ -125,20 +133,25 @@ PHP_FUNCTION(rpminfo)
 			return;
 
 		} else if (rc == RPMRC_NOTFOUND) {
-			php_error_docref(NULL, E_WARNING, "Can't read '%s': Argument is not a RPM file", path);
-
+			e_len = spprintf(&e_msg, 0, "Can't read '%s': Argument is not a RPM file", path);
 		} else if (rc == RPMRC_NOTFOUND) {
-			php_error_docref(NULL, E_WARNING, "Can't read '%s': Error reading header from package", path);
-
+			e_len = spprintf(&e_msg, 0, "Can't read '%s': Error reading header from package", path);
 		} else {
-			php_error_docref(NULL, E_WARNING, "Can't read '%s': Unkown error", path);
+			e_len = spprintf(&e_msg, 0, "Can't read '%s': Unkown error", path);
 		}
 
 		Fclose(f);
 	} else {
-		php_error_docref(NULL, E_WARNING, "Can't open '%s': %s", path, Fstrerror(f));
+		e_len = spprintf(&e_msg, 0, "Can't open '%s': %s", path, Fstrerror(f));
 	}
-
+	if (e_len) {
+		if (error) {
+			ZVAL_STRINGL(error, e_msg, e_len);
+		} else {
+			php_error_docref(NULL, E_WARNING, "%s", e_msg);
+		}
+		efree(e_msg);
+	}
 	RETURN_FALSE;
 }
 /* }}} */
