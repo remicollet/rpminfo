@@ -42,6 +42,7 @@ Available functions:
       <dir name ="examples">
         <file name="repomanage.php" role="doc"/>
         <file name="rpmvercmp.php" role="doc"/>
+        <file name="librpm.php" role="doc"/>
       </dir>
       <dir name ="tests">
         <file name="001-presence.phpt" role="test"/>
