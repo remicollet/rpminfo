@@ -12,7 +12,7 @@
   </lead>
   <date>2018-02-08</date>
   <version>
-    <release>0.1.2</release>
+    <release>0.1.3dev</release>
     <api>0.1.0</api>
   </version>
   <stability>
@@ -21,8 +21,7 @@
   </stability>
   <license>PHP 3.01</license>
   <notes>
-- first pecl release
-- rpminfo(): add option to retrieve error message instead of raising a warning
+- 
   </notes>
   <contents>
     <dir name="/">
@@ -64,6 +63,22 @@
   <providesextension>rpminfo</providesextension>
   <extsrcrelease/>
   <changelog>
+    <release>
+      <date>2018-02-08</date>
+      <version>
+        <release>0.1.3dev</release>
+        <api>0.1.0</api>
+      </version>
+      <stability>
+        <release>alpha</release>
+        <api>alpha</api>
+      </stability>
+      <license>PHP 3.01</license>
+      <notes>
+- first pecl release
+- rpminfo(): add option to retrieve error message instead of raising a warning
+      </notes>
+    </release>
     <release>
       <date>2018-01-26</date>
       <version>
