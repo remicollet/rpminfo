@@ -6,6 +6,11 @@ Retrieve RPM information from PHP code using librpm.
 
 ----
 
+# Sources
+
+* Official git repository: https://git.remirepo.net/cgit/tools/php-rpminfo.git/
+* Mirror on github for contributors: https://github.com/remicollet/rpminfo
+
 # Build
 
 You need the rpm development files (rpm-devel) version >= 4.11.3.
