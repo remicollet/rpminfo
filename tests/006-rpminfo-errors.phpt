@@ -28,9 +28,9 @@ bool(false)
 
 + PHP Warnings
 bool(false)
-string(75) "Can't open '%s/tests/missing.rpm': No such file or directory"
+string(%d) "Can't open '%s/tests/missing.rpm': No such file or directory"
 bool(false)
-string(87) "Can't read '%s/tests/006-rpminfo-errors.php': Argument is not a RPM file"
+string(%d) "Can't read '%s/tests/006-rpminfo-errors.php': Argument is not a RPM file"
 bool(true)
 NULL
 Done

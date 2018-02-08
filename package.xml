@@ -10,9 +10,9 @@
     <email>remi@php.net</email>
     <active>yes</active>
   </lead>
-  <date>2018-01-26</date>
+  <date>2018-02-08</date>
   <version>
-    <release>0.1.2dev</release>
+    <release>0.1.2</release>
     <api>0.1.0</api>
   </version>
   <stability>
@@ -21,6 +21,7 @@
   </stability>
   <license>PHP 3.01</license>
   <notes>
+- first pecl release
 - rpminfo(): add option to retrieve error message instead of raising a warning
   </notes>
   <contents>
