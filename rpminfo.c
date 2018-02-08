@@ -24,6 +24,8 @@
 #include "php_ini.h"
 #include "ext/standard/info.h"
 
+#include <fcntl.h>
+#include <rpm/rpmdb.h>
 #include <rpm/rpmio.h>
 #include <rpm/rpmlib.h>
 #include <rpm/rpmts.h>
@@ -34,12 +36,68 @@ ZEND_DECLARE_MODULE_GLOBALS(rpminfo)
 
 static rpmts rpminfo_getts(rpmVSFlags flags) {
 	if (!RPMINFO_G(ts)) {
+		rpmReadConfigFiles(NULL, NULL);
 		RPMINFO_G(ts) = rpmtsCreate();
 	}
 	if (RPMINFO_G(ts)) {
 		(void)rpmtsSetVSFlags(RPMINFO_G(ts), flags);
 	}
 	return RPMINFO_G(ts);
+}
+
+static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
+{
+	HeaderIterator hi;
+	rpmTagVal tag;
+	rpmTagType type;
+	const char *val;
+
+	array_init(return_value);
+	hi = headerInitIterator(h);
+	while ((tag=headerNextTag(hi)) != RPMTAG_NOT_FOUND) {
+		switch (tag) {
+			case RPMTAG_NAME:
+			case RPMTAG_VERSION:
+			case RPMTAG_RELEASE:
+			case RPMTAG_EPOCH:
+			case RPMTAG_ARCH:
+				break;
+			default:
+				if (!full) {
+					continue;
+				}
+		}
+
+		type = rpmTagGetTagType(tag);
+		switch (type) {
+			case RPM_STRING_TYPE:
+			case RPM_I18NSTRING_TYPE:
+				val = headerGetString(h, tag);
+				if (val) {
+					add_assoc_string(return_value, rpmTagGetName(tag), headerGetAsString(h, tag));
+				} else {
+					add_assoc_null(return_value, rpmTagGetName(tag));
+				}
+				break;
+			case RPM_CHAR_TYPE:
+			case RPM_INT8_TYPE:
+			case RPM_INT16_TYPE:
+			case RPM_INT32_TYPE:
+			case RPM_INT64_TYPE:
+				add_assoc_long(return_value, rpmTagGetName(tag), (zend_long)headerGetNumber(h, tag));
+				break;
+			default:
+				val = headerGetAsString(h, tag);
+				if (val) {
+					add_assoc_string(return_value, rpmTagGetName(tag), headerGetAsString(h, tag));
+				} else {
+					add_assoc_null(return_value, rpmTagGetName(tag));
+				}
+		}
+	}
+	if (full) {
+		add_assoc_bool(return_value, "IsSource", headerIsSource(h));
+	}
 }
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_rpminfo, 0, 0, 1)
@@ -53,15 +111,11 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(rpminfo)
 {
 	char *path, *e_msg;
-	const char *val;
 	size_t len, e_len=0;
 	zend_bool full = 0;
 	zval *error = NULL;
 	FD_t f;
 	Header h;
-	HeaderIterator hi;
-	rpmTagVal tag;
-	rpmTagType type;
 	rpmts ts = rpminfo_getts(_RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|bz", &path, &len, &full, &error) == FAILURE) {
@@ -79,53 +133,7 @@ PHP_FUNCTION(rpminfo)
 
 		rc = rpmReadPackageFile(ts, f, "rpminfo", &h);
 		if (rc == RPMRC_OK || rc == RPMRC_NOKEY || rc == RPMRC_NOTTRUSTED) {
-
-			array_init(return_value);
-			hi = headerInitIterator(h);
-			while ((tag=headerNextTag(hi)) != RPMTAG_NOT_FOUND) {
-				switch (tag) {
-					case RPMTAG_NAME:
-					case RPMTAG_VERSION:
-					case RPMTAG_RELEASE:
-					case RPMTAG_EPOCH:
-					case RPMTAG_ARCH:
-						break;
-					default:
-						if (!full) {
-							continue;
-						}
-				}
-
-				type = rpmTagGetTagType(tag);
-				switch (type) {
-					case RPM_STRING_TYPE:
-					case RPM_I18NSTRING_TYPE:
-						val = headerGetString(h, tag);
-						if (val) {
-							add_assoc_string(return_value, rpmTagGetName(tag), headerGetAsString(h, tag));
-						} else {
-							add_assoc_null(return_value, rpmTagGetName(tag));
-						}
-						break;
-					case RPM_CHAR_TYPE:
-					case RPM_INT8_TYPE:
-					case RPM_INT16_TYPE:
-					case RPM_INT32_TYPE:
-					case RPM_INT64_TYPE:
-						add_assoc_long(return_value, rpmTagGetName(tag), (zend_long)headerGetNumber(h, tag));
-						break;
-					default:
-						val = headerGetAsString(h, tag);
-						if (val) {
-							add_assoc_string(return_value, rpmTagGetName(tag), headerGetAsString(h, tag));
-						} else {
-							add_assoc_null(return_value, rpmTagGetName(tag));
-						}
-				}
-			}
-			if (full) {
-				add_assoc_bool(return_value, "IsSource", headerIsSource(h));
-			}
+			rpm_header_to_zval(return_value, h, full);
 			if (h) {
 				headerFree(h);
 			}
@@ -153,6 +161,43 @@ PHP_FUNCTION(rpminfo)
 		efree(e_msg);
 	}
 	RETURN_FALSE;
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbinfo, 0, 0, 1)
+	ZEND_ARG_INFO(0, name)
+	ZEND_ARG_INFO(0, full)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto array rpmdbinfo(string name [, bool full [, string &$error])
+   Retrieve information from a RPM file */
+PHP_FUNCTION(rpmdbinfo)
+{
+	char *name;
+	size_t len;
+	zend_bool full = 0;
+	Header h;
+	rpmdb db;
+	rpmdbMatchIterator di;
+	rpmts ts = rpminfo_getts(_RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|b", &name, &len, &full) == FAILURE) {
+		return;
+	}
+
+	rpmtsOpenDB(ts, O_RDONLY);
+	db = rpmtsGetRdb(ts);
+	di = rpmdbInitIterator(db, RPMTAG_NAME, name, len);
+	if (!di) {
+		RETURN_FALSE;
+	}
+
+	array_init(return_value);
+	while ((h = rpmdbNextIterator(di)) != NULL) {
+		zval tmp;
+		rpm_header_to_zval(&tmp, h, full);
+		add_next_index_zval(return_value, &tmp);
+	}
 }
 /* }}} */
 
@@ -240,6 +285,7 @@ PHP_GSHUTDOWN_FUNCTION(rpminfo)
  * Every user visible function must have an entry in rpminfo_functions[].
  */
 const zend_function_entry rpminfo_functions[] = {
+	PHP_FE(rpmdbinfo,         arginfo_rpmdbinfo)
 	PHP_FE(rpminfo,           arginfo_rpminfo)
 	PHP_FE(rpmvercmp,         arginfo_rpmvercmp)
 	PHP_FE_END

@@ -21,7 +21,8 @@
   </stability>
   <license>PHP 3.01</license>
   <notes>
-- 
+- new function:
+  array rpmdbinfo(string name [, bool full]);
   </notes>
   <contents>
     <dir name="/">
@@ -45,6 +46,7 @@
         <file name="004-constants.phpt" role="test"/>
         <file name="005-rpminfo-full.phpt" role="test"/>
         <file name="006-rpminfo-errors.phpt" role="test"/>
+        <file name="007-rpmdbinfo.phpt" role="test"/>
         <file name="bidon.rpm" role="test"/>
         <file name="bidon-src.rpm" role="test"/>
       </dir>

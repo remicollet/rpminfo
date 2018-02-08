@@ -41,9 +41,10 @@ Allow to compare 2 EVR (epoch:version-release) strings. The return value is < 0 
 
 ## rpminfo
 
-	array rpminfo(string path [, bool full ]);
+	array rpminfo(string path [, bool full  [, string &error]]);
 
 Retrieve information from a rpm file, reading its metadata.
+If given `error` will be used to store error message instead of raising a warning.
 The return value is a hash table, or false if it fails.
 
     $ php -a
@@ -82,6 +83,25 @@ The return value is a hash table, or false if it fails.
     php > echo $error;
     Can't open 'missing.rpm': No such file or directory
 
+## rpmdbinfo
+
+	array rpmdbinfo(string path [, bool full ]);
+
+Retrieve information from rpm database about an installed package.
+The return value is an array of hash tables, or false if it fails.
+
+    $ php -a
+    php > print_r(rpmdbinfo("php"));
+    Array
+    (
+        [0] => Array
+            (
+                [Name] => php
+                [Version] => 7.2.2
+                [Release] => 1.fc27.remi
+                [Arch] => x86_64
+            )
+    )
 
 ----
 
