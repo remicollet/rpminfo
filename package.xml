@@ -3,7 +3,12 @@
   <name>rpminfo</name>
   <channel>pecl.php.net</channel>
   <summary>RPM information</summary>
-  <description>Retrieve RPM information using librpm.</description>
+  <description>Retrieve RPM information using librpm.
+Available functions:
+- rpmvercmp to compare 2 EVRs
+- rpminfo to retrieve information from a RPM file
+- rpmdbinfo to rerieve information from an installed RPM
+</description>
   <lead>
     <name>Remi Collet</name>
     <user>remi</user>
@@ -12,12 +17,12 @@
   </lead>
   <date>2018-02-08</date>
   <version>
-    <release>0.1.3dev</release>
-    <api>0.1.0</api>
+    <release>0.2.0</release>
+    <api>0.2.0</api>
   </version>
   <stability>
-    <release>alpha</release>
-    <api>alpha</api>
+    <release>beta</release>
+    <api>beta</api>
   </stability>
   <license>PHP 3.01</license>
   <notes>
