@@ -87,6 +87,23 @@ static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
 			case RPM_INT64_TYPE:
 				add_assoc_long(return_value, rpmTagGetName(tag), (zend_long)headerGetNumber(h, tag));
 				break;
+			case RPM_STRING_ARRAY_TYPE:
+				{
+					struct rpmtd_s keys;
+					if (headerGet(h, tag, &keys, HEADERGET_MINMEM)) {
+						const char *key;
+						zval tmp;
+
+						array_init(&tmp);
+						while ((key = rpmtdNextString(&keys))) {
+							add_next_index_string(&tmp, key);
+						}
+						add_assoc_zval(return_value, rpmTagGetName(tag), &tmp);
+					} else {
+						add_assoc_null(return_value, rpmTagGetName(tag));
+					}
+				}
+				break;
 			default:
 				val = headerGetAsString(h, tag);
 				if (val) {
