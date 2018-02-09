@@ -61,6 +61,7 @@ static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
 			case RPMTAG_RELEASE:
 			case RPMTAG_EPOCH:
 			case RPMTAG_ARCH:
+			case RPMTAG_SUMMARY:
 				break;
 			default:
 				if (!full) {

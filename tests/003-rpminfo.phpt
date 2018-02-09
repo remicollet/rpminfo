@@ -8,13 +8,15 @@ var_dump(rpminfo(__DIR__ . "/bidon.rpm"));
 ?>
 Done
 --EXPECTF--
-array(4) {
+array(5) {
   ["Name"]=>
   string(5) "bidon"
   ["Version"]=>
   string(1) "1"
   ["Release"]=>
   string(11) "1.fc25.remi"
+  ["Summary"]=>
+  string(5) "Bidon"
   ["Arch"]=>
   string(6) "x86_64"
 }

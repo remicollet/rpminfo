@@ -26,7 +26,7 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
--
+- add summary in minimal information set
   </notes>
   <contents>
     <dir name="/">
