@@ -29,6 +29,14 @@ abstract class Common {
 		return $ret;
 	}
 
+	protected function _files() {
+		$ret = [];
+		for ($i=0 ; $i<count($this->info['Basenames']) ; $i++) {
+			$ret[] = $this->info['Dirnames'][$this->info['Dirindexes'][$i]] . $this->info['Basenames'][$i];
+		}
+		return $ret;
+	}
+
 	public function __get($name) {
 		switch ($name) {
 			case 'EVR':
@@ -62,6 +70,10 @@ abstract class Common {
 			case 'Provides':
 				if (isset($this->info['Providename'])) {
 					return $this->_dep($this->info['Providename'], $this->info['Provideflags'], $this->info['Provideversion']);
+				}
+			case 'Files':
+				if (isset($this->info['Basenames'])) {
+					return $this->_files();
 				}
 			default:
 				if (isset($this->info[$name])) {
@@ -115,11 +127,9 @@ class Package extends Common {
 }
 
 
+
 /*
 $a = new File(dirname(__DIR__).'/tests/bidon.rpm');
-echo "Requires: ";  print_r($a->Requires);
-echo "Provides: ";  print_r($a->Provides);
-echo "Conflicts: "; print_r($a->Conflicts);
-echo "Obsoletes: "; print_r($a->Obsoletes);
+$a = new Package('php-cli');
+print_r($a->Files);
 */
-
