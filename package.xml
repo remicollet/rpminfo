@@ -17,7 +17,7 @@ Available functions:
   </lead>
   <date>2018-02-12</date>
   <version>
-    <release>0.2.1</release>
+    <release>0.2.2dev</release>
     <api>0.2.0</api>
   </version>
   <stability>
@@ -26,9 +26,7 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
-- add summary in minimal information set
-- retrieve array from metadata
-- add RPMSENSE_* macros
+-
   </notes>
   <contents>
     <dir name="/">
@@ -72,6 +70,23 @@ Available functions:
   <providesextension>rpminfo</providesextension>
   <extsrcrelease/>
   <changelog>
+    <release>
+      <date>2018-02-12</date>
+      <version>
+        <release>0.2.1</release>
+        <api>0.2.0</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <license>PHP 3.01</license>
+      <notes>
+- add summary in minimal information set
+- retrieve array from metadata
+- add RPMSENSE_* macros
+      </notes>
+    </release>
     <release>
       <date>2018-02-08</date>
       <version>
