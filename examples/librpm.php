@@ -22,7 +22,7 @@ abstract class Common {
 				if (isset($signs[$flags[$i] & 15])) {
 					$ret[] = $names[$i] . $signs[$flags[$i] & 15] . $vers[$i];
 				} else {
-					$ret[] = $names[$i] . '('. ($flags[$i] & 15) .')' . $vers[$i];
+					$ret[] = $names[$i] . $vers[$i];
 				}
 			}
 		}
@@ -130,6 +130,7 @@ class Package extends Common {
 
 /*
 $a = new File(dirname(__DIR__).'/tests/bidon.rpm');
-$a = new Package('php-cli');
-print_r($a->Files);
+$a = new Package('phpunit7');
+print_r($a->Requires);
 */
+
