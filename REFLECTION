@@ -1,7 +1,30 @@
-Extension [ <persistent> extension #15 rpminfo version 0.2.0 ] {
+Extension [ <persistent> extension #15 rpminfo version 0.2.1-dev ] {
 
-  - Constants [1] {
+  - Constants [24] {
     Constant [ string RPMVERSION ] { 4.14.1 }
+    Constant [ integer RPMSENSE_ANY ] { 0 }
+    Constant [ integer RPMSENSE_LESS ] { 2 }
+    Constant [ integer RPMSENSE_GREATER ] { 4 }
+    Constant [ integer RPMSENSE_EQUAL ] { 8 }
+    Constant [ integer RPMSENSE_POSTTRANS ] { 32 }
+    Constant [ integer RPMSENSE_PREREQ ] { 64 }
+    Constant [ integer RPMSENSE_PRETRANS ] { 128 }
+    Constant [ integer RPMSENSE_INTERP ] { 256 }
+    Constant [ integer RPMSENSE_SCRIPT_PRE ] { 512 }
+    Constant [ integer RPMSENSE_SCRIPT_POST ] { 1024 }
+    Constant [ integer RPMSENSE_SCRIPT_PREUN ] { 2048 }
+    Constant [ integer RPMSENSE_SCRIPT_POSTUN ] { 4096 }
+    Constant [ integer RPMSENSE_SCRIPT_VERIFY ] { 8192 }
+    Constant [ integer RPMSENSE_FIND_REQUIRES ] { 16384 }
+    Constant [ integer RPMSENSE_FIND_PROVIDES ] { 32768 }
+    Constant [ integer RPMSENSE_TRIGGERIN ] { 65536 }
+    Constant [ integer RPMSENSE_TRIGGERUN ] { 131072 }
+    Constant [ integer RPMSENSE_TRIGGERPOSTUN ] { 262144 }
+    Constant [ integer RPMSENSE_MISSINGOK ] { 524288 }
+    Constant [ integer RPMSENSE_RPMLIB ] { 16777216 }
+    Constant [ integer RPMSENSE_TRIGGERPREIN ] { 33554432 }
+    Constant [ integer RPMSENSE_KEYRING ] { 67108864 }
+    Constant [ integer RPMSENSE_CONFIG ] { 268435456 }
   }
 
   - Functions {

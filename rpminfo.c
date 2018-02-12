@@ -69,6 +69,7 @@ static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
 				}
 		}
 
+		//printf("Tag: %-30s  Type: %8lx - %8lx - %8lx\n", rpmTagGetName(tag), (long)rpmTagGetTagType(tag), (long)rpmTagGetType(tag), (long)rpmTagGetReturnType(tag));
 		type = rpmTagGetTagType(tag);
 		switch (type) {
 			case RPM_STRING_TYPE:
@@ -82,10 +83,70 @@ static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
 				break;
 			case RPM_CHAR_TYPE:
 			case RPM_INT8_TYPE:
-			case RPM_INT16_TYPE:
-			case RPM_INT32_TYPE:
-			case RPM_INT64_TYPE:
 				add_assoc_long(return_value, rpmTagGetName(tag), (zend_long)headerGetNumber(h, tag));
+				break;
+			case RPM_INT16_TYPE:
+				if (rpmTagGetReturnType(tag) == RPM_ARRAY_RETURN_TYPE) {
+					struct rpmtd_s keys;
+					if (headerGet(h, tag, &keys, HEADERGET_MINMEM)) {
+						uint16_t *key;
+						zval tmp;
+
+						array_init(&tmp);
+						rpmtdInit(&keys);
+						while (rpmtdNext(&keys)>=0) {
+							key = rpmtdGetUint16(&keys);
+							add_next_index_long(&tmp, (zend_long)*key);
+						}
+						add_assoc_zval(return_value, rpmTagGetName(tag), &tmp);
+					} else {
+						add_assoc_null(return_value, rpmTagGetName(tag));
+					}
+				} else {
+					add_assoc_long(return_value, rpmTagGetName(tag), (zend_long)headerGetNumber(h, tag));
+				}
+				break;
+			case RPM_INT32_TYPE:
+				if (rpmTagGetReturnType(tag) == RPM_ARRAY_RETURN_TYPE) {
+					struct rpmtd_s keys;
+					if (headerGet(h, tag, &keys, HEADERGET_MINMEM)) {
+						uint32_t *key;
+						zval tmp;
+
+						array_init(&tmp);
+						rpmtdInit(&keys);
+						while (rpmtdNext(&keys)>=0) {
+							key = rpmtdGetUint32(&keys);
+							add_next_index_long(&tmp, (zend_long)*key);
+						}
+						add_assoc_zval(return_value, rpmTagGetName(tag), &tmp);
+					} else {
+						add_assoc_null(return_value, rpmTagGetName(tag));
+					}
+				} else {
+					add_assoc_long(return_value, rpmTagGetName(tag), (zend_long)headerGetNumber(h, tag));
+				}
+				break;
+			case RPM_INT64_TYPE:
+				if (rpmTagGetReturnType(tag) == RPM_ARRAY_RETURN_TYPE) {
+					struct rpmtd_s keys;
+					if (headerGet(h, tag, &keys, HEADERGET_MINMEM)) {
+						uint64_t *key;
+						zval tmp;
+
+						array_init(&tmp);
+						rpmtdInit(&keys);
+						while (rpmtdNext(&keys)>=0) {
+							key = rpmtdGetUint64(&keys);
+							add_next_index_long(&tmp, (zend_long)*key);
+						}
+						add_assoc_zval(return_value, rpmTagGetName(tag), &tmp);
+					} else {
+						add_assoc_null(return_value, rpmTagGetName(tag));
+					}
+				} else {
+					add_assoc_long(return_value, rpmTagGetName(tag), (zend_long)headerGetNumber(h, tag));
+				}
 				break;
 			case RPM_STRING_ARRAY_TYPE:
 				{
@@ -244,6 +305,30 @@ PHP_FUNCTION(rpmvercmp)
 PHP_MINIT_FUNCTION(rpminfo)
 {
 	REGISTER_STRING_CONSTANT("RPMVERSION", (char *)RPMVERSION, CONST_CS | CONST_PERSISTENT);
+
+	REGISTER_LONG_CONSTANT("RPMSENSE_ANY",           RPMSENSE_ANY,           CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_LESS",          RPMSENSE_LESS,          CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_GREATER",       RPMSENSE_GREATER,       CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_EQUAL",         RPMSENSE_EQUAL,         CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_POSTTRANS",     RPMSENSE_POSTTRANS,     CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_PREREQ",        RPMSENSE_PREREQ,        CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_PRETRANS",      RPMSENSE_PRETRANS,      CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_INTERP",        RPMSENSE_INTERP,        CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_SCRIPT_PRE",    RPMSENSE_SCRIPT_PRE,    CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_SCRIPT_POST",   RPMSENSE_SCRIPT_POST,   CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_SCRIPT_PREUN",  RPMSENSE_SCRIPT_PREUN,  CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_SCRIPT_POSTUN", RPMSENSE_SCRIPT_POSTUN, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_SCRIPT_VERIFY", RPMSENSE_SCRIPT_VERIFY, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_FIND_REQUIRES", RPMSENSE_FIND_REQUIRES, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_FIND_PROVIDES", RPMSENSE_FIND_PROVIDES, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_TRIGGERIN",     RPMSENSE_TRIGGERIN,     CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_TRIGGERUN",     RPMSENSE_TRIGGERUN,     CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_TRIGGERPOSTUN", RPMSENSE_TRIGGERPOSTUN, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_MISSINGOK",     RPMSENSE_MISSINGOK,     CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_RPMLIB",        RPMSENSE_RPMLIB,        CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_TRIGGERPREIN",  RPMSENSE_TRIGGERPREIN,  CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_KEYRING",       RPMSENSE_KEYRING,       CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPMSENSE_CONFIG",        RPMSENSE_CONFIG,        CONST_CS | CONST_PERSISTENT);
 
 	return SUCCESS;
 }

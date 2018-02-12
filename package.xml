@@ -27,7 +27,8 @@ Available functions:
   <license>PHP 3.01</license>
   <notes>
 - add summary in minimal information set
-- retrieve array of strings from metadata
+- retrieve array from metadata
+- add RPMSENSE_* macros
   </notes>
   <contents>
     <dir name="/">

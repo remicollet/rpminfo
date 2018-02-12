@@ -7,6 +7,28 @@ namespace Remi\RPM;
 abstract class Common {
 	protected $info = NULL;
 
+	protected function _dep(Array $names, Array $flags, Array $vers) {
+		$ret = [];
+		$signs = [
+			RPMSENSE_EQUAL                    => ' = ',
+			RPMSENSE_LESS                     => ' < ',
+			RPMSENSE_GREATER                  => ' > ',
+			RPMSENSE_LESS    | RPMSENSE_EQUAL => ' <= ',
+			RPMSENSE_GREATER | RPMSENSE_EQUAL => ' >= ',
+		];
+
+		if (count($names) == count($vers) && count($vers) == count($flags)) {
+			for ($i=0 ; $i<count($names) ; $i++) {
+				if (isset($signs[$flags[$i] & 15])) {
+					$ret[] = $names[$i] . $signs[$flags[$i] & 15] . $vers[$i];
+				} else {
+					$ret[] = $names[$i] . '('. ($flags[$i] & 15) .')' . $vers[$i];
+				}
+			}
+		}
+		return $ret;
+	}
+
 	public function __get($name) {
 		switch ($name) {
 			case 'EVR':
@@ -25,6 +47,22 @@ abstract class Common {
 					$ret .= '.' . $this->info['Arch'];
 				}
 				return $ret;
+			case 'Requires':
+				if (isset($this->info['Requirename'])) {
+					return $this->_dep($this->info['Requirename'], $this->info['Requireflags'], $this->info['Requireversion']);
+				}
+			case 'Conflicts':
+				if (isset($this->info['Conflictname'])) {
+					return $this->_dep($this->info['Conflictname'], $this->info['Conflictflags'], $this->info['Conflictversion']);
+				}
+			case 'Obsoletes':
+				if (isset($this->info['Obsoletename'])) {
+					return $this->_dep($this->info['Obsoletename'], $this->info['Obsoleteflags'], $this->info['Obsoleteversion']);
+				}
+			case 'Provides':
+				if (isset($this->info['Providename'])) {
+					return $this->_dep($this->info['Providename'], $this->info['Provideflags'], $this->info['Provideversion']);
+				}
 			default:
 				if (isset($this->info[$name])) {
 					return $this->info[$name];
@@ -75,4 +113,13 @@ class Package extends Common {
 		}
 	}
 }
+
+
+/*
+$a = new File(dirname(__DIR__).'/tests/bidon.rpm');
+echo "Requires: ";  print_r($a->Requires);
+echo "Provides: ";  print_r($a->Provides);
+echo "Conflicts: "; print_r($a->Conflicts);
+echo "Obsoletes: "; print_r($a->Obsoletes);
+*/
 
