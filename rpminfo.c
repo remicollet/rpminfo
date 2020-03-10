@@ -289,14 +289,54 @@ ZEND_END_ARG_INFO()
    Compare 2 RPM evr (epoch:version-release) strings */
 PHP_FUNCTION(rpmvercmp)
 {
-	char *evr1, *evr2;
+	char *evr1, *evr2, *v1, *r1, *v2, *r2, *p;
+	char empty[] = "";
 	size_t len1, len2;
+	long e1, e2, r;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &evr1, &len1, &evr2, &len2) == FAILURE) {
 		return;
 	}
-
-	RETURN_LONG(rpmvercmp(evr1, evr2));
+	p = strchr(evr1, ':');
+	if (p) {
+		v1 = p+1;
+		*p=0;
+		e1 = atol(evr1);
+	} else {
+		v1 = evr1;
+		e1 = 0;
+	}
+	p = strchr(evr2, ':');
+	if (p) {
+		v2 = p+1;
+		*p=0;
+		e2 = atol(evr2);
+	} else {
+		v2 = evr2;
+		e2 = 0;
+	}
+	if (e1 != e2) {
+		RETURN_LONG(e1 - e2);
+	}
+	p = strchr(v1, '-');
+	if (p) {
+		r1 = p+1;
+		*p = 0;
+	} else {
+		r1 = empty;
+	}
+	p = strchr(v2, '-');
+	if (p) {
+		r2 = p+1;
+		*p = 0;
+	} else {
+		r2 = empty;
+	}
+	r = rpmvercmp(v1, v2);
+	if (r) {
+		RETURN_LONG(r);
+	}
+	RETURN_LONG(rpmvercmp(r1, r2));
 }
 /* }}} */
 
