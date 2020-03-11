@@ -247,7 +247,6 @@ PHP_FUNCTION(rpminfo)
 ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbinfo, 0, 0, 1)
 	ZEND_ARG_INFO(0, name)
 	ZEND_ARG_INFO(0, full)
-	ZEND_ARG_INFO(0, match_mode)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto array rpmdbinfo(string name [, bool full])
@@ -287,9 +286,9 @@ PHP_FUNCTION(rpmdbinfo)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbsearch, 0, 0, 2)
-	ZEND_ARG_INFO(0, tag_name)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbsearch, 0, 0, 1)
 	ZEND_ARG_INFO(0, pattern)
+	ZEND_ARG_INFO(0, tag_name)
 	ZEND_ARG_INFO(0, mode)
 ZEND_END_ARG_INFO()
 
