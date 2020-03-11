@@ -17,7 +17,7 @@ Available functions:
   </lead>
   <date>2020-03-11</date>
   <version>
-    <release>0.2.3dev</release>
+    <release>0.2.3</release>
     <api>0.2.0</api>
   </version>
   <stability>
@@ -26,7 +26,7 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
--
+- fix gh#2 free allocated iterators to avoid "DB2053 Freeing read locks..." messages
   </notes>
   <contents>
     <dir name="/">
