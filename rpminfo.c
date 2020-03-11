@@ -286,17 +286,22 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmvercmp, 0, 0, 2)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto int rpmcmpver(string evr1, string evr2)
-   Compare 2 RPM evr (epoch:version-release) strings */
+   Compare 2 RPM EVRs (epoch:version-release) strings */
 PHP_FUNCTION(rpmvercmp)
 {
-	char *evr1, *evr2, *v1, *r1, *v2, *r2, *p;
-	char empty[] = "";
-	size_t len1, len2;
+	char *in_evr1, *evr1, *v1, *r1;
+	char *in_evr2, *evr2, *v2, *r2;
+	char *p, empty[] = "";
 	long e1, e2, r;
+	size_t len1, len2;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &evr1, &len1, &evr2, &len2) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &in_evr1, &len1, &in_evr2, &len2) == FAILURE) {
 		return;
 	}
+	evr1 = estrdup(in_evr1);
+	evr2 = estrdup(in_evr2);
+
+	// Epoch
 	p = strchr(evr1, ':');
 	if (p) {
 		v1 = p+1;
@@ -315,28 +320,37 @@ PHP_FUNCTION(rpmvercmp)
 		v2 = evr2;
 		e2 = 0;
 	}
-	if (e1 != e2) {
-		RETURN_LONG(e1 - e2);
-	}
-	p = strchr(v1, '-');
-	if (p) {
-		r1 = p+1;
-		*p = 0;
+	if (e1 < e2) {
+		RETVAL_LONG(-1);
+	} else if (e1 > e2) {
+		RETVAL_LONG(1);
 	} else {
-		r1 = empty;
+		// Version
+		p = strchr(v1, '-');
+		if (p) {
+			r1 = p+1;
+			*p = 0;
+		} else {
+			r1 = empty;
+		}
+		p = strchr(v2, '-');
+		if (p) {
+			r2 = p+1;
+			*p = 0;
+		} else {
+			r2 = empty;
+		}
+		r = rpmvercmp(v1, v2);
+		if (r) {
+			RETVAL_LONG(r);
+		} else {
+			// Release
+			r = rpmvercmp(r1, r2);
+			RETVAL_LONG(r);
+		}
 	}
-	p = strchr(v2, '-');
-	if (p) {
-		r2 = p+1;
-		*p = 0;
-	} else {
-		r2 = empty;
-	}
-	r = rpmvercmp(v1, v2);
-	if (r) {
-		RETURN_LONG(r);
-	}
-	RETURN_LONG(rpmvercmp(r1, r2));
+	efree(evr1);
+	efree(evr2);
 }
 /* }}} */
 
