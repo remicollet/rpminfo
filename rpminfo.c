@@ -279,6 +279,7 @@ PHP_FUNCTION(rpmdbinfo)
 		add_next_index_zval(return_value, &tmp);
 	}
 
+	rpmdbFreeIterator(di);
 	rpmtsCloseDB(ts);
 }
 /* }}} */
