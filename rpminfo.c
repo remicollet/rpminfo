@@ -174,6 +174,7 @@ static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
 				}
 		}
 	}
+	headerFreeIterator(hi);
 	if (full) {
 		add_assoc_bool(return_value, "IsSource", headerIsSource(h));
 	}
