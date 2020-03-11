@@ -268,6 +268,7 @@ PHP_FUNCTION(rpmdbinfo)
 	db = rpmtsGetRdb(ts);
 	di = rpmdbInitIterator(db, RPMTAG_NAME, name, len);
 	if (!di) {
+		rpmtsCloseDB(ts);
 		RETURN_FALSE;
 	}
 
@@ -277,6 +278,8 @@ PHP_FUNCTION(rpmdbinfo)
 		rpm_header_to_zval(&tmp, h, full);
 		add_next_index_zval(return_value, &tmp);
 	}
+
+	rpmtsCloseDB(ts);
 }
 /* }}} */
 
