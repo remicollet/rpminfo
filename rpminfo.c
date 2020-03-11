@@ -275,7 +275,7 @@ PHP_FUNCTION(rpmdbinfo)
 		di = rpmdbInitIterator(db, RPMTAG_NAME, name, len);
 	}
 	if (!di) {
-		php_error_docref(NULL, E_WARNING, "Can't open rpmdb");
+		// Not found
 		rpmtsCloseDB(ts);
 		RETURN_FALSE;
 	}
