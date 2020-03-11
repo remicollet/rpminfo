@@ -26,8 +26,8 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
-- add match_mode parameters to rpmdbinfo function allowing
-  to search packages with name matching a glob or a regex.
+- add rpmdbsearch function to search packages using
+  name, owned files, requires, provides...
   </notes>
   <contents>
     <dir name="/">
@@ -53,7 +53,7 @@ Available functions:
         <file name="005-rpminfo-full.phpt" role="test"/>
         <file name="006-rpminfo-errors.phpt" role="test"/>
         <file name="007-rpmdbinfo.phpt" role="test"/>
-        <file name="008-rpmdbinfo2.phpt" role="test"/>
+        <file name="008-rpmdbsearch.phpt" role="test"/>
         <file name="bidon.rpm" role="test"/>
         <file name="bidon-src.rpm" role="test"/>
       </dir>

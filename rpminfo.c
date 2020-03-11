@@ -250,37 +250,86 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbinfo, 0, 0, 1)
 	ZEND_ARG_INFO(0, match_mode)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto array rpmdbinfo(string name [, bool full [, string &$error])
-   Retrieve information from a RPM file */
+/* {{{ proto array rpmdbinfo(string name [, bool full])
+   Retrieve information from an installed RPM */
 PHP_FUNCTION(rpmdbinfo)
 {
 	char *name;
 	size_t len;
 	zend_bool full = 0;
+	Header h;
+	rpmdb db;
+	rpmdbMatchIterator di;
+	rpmts ts = rpminfo_getts(_RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|b", &name, &len, &full) == FAILURE) {
+		return;
+	}
+
+	rpmtsOpenDB(ts, O_RDONLY);
+	db = rpmtsGetRdb(ts);
+	di = rpmdbInitIterator(db, RPMTAG_NAME, name, len);
+	if (!di) {
+		// Not found
+		rpmtsCloseDB(ts);
+		RETURN_FALSE;
+	}
+
+	array_init(return_value);
+	while ((h = rpmdbNextIterator(di)) != NULL) {
+		zval tmp;
+		rpm_header_to_zval(&tmp, h, full);
+		add_next_index_zval(return_value, &tmp);
+	}
+
+	rpmdbFreeIterator(di);
+	rpmtsCloseDB(ts);
+}
+/* }}} */
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbsearch, 0, 0, 2)
+	ZEND_ARG_INFO(0, tag_name)
+	ZEND_ARG_INFO(0, pattern)
+	ZEND_ARG_INFO(0, mode)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto array rpmdbsearch(string pattern [, integer tag_name = RPM_TAG_NAME [, integer mode]])
+   Search information from installed RPMs */
+PHP_FUNCTION(rpmdbsearch)
+{
+	char *name;
+	size_t len;
+	zend_long crit = RPMTAG_NAME;
 	zend_long mode = 0;
 	Header h;
 	rpmdb db;
 	rpmdbMatchIterator di;
 	rpmts ts = rpminfo_getts(_RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|bl", &name, &len, &full, &mode) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|ll", &name, &len, &crit, &mode) == FAILURE) {
 		return;
+	}
+
+	if (mode && crit != RPMTAG_NAME) {
+		php_error_docref(NULL, E_WARNING, "Mode only allowed for name");
+		mode = 0;
 	}
 
 	rpmtsOpenDB(ts, O_RDONLY);
 	db = rpmtsGetRdb(ts);
 	if (mode) {
-		di = rpmdbInitIterator(db, RPMTAG_NAME, NULL, 0);
+		di = rpmdbInitIterator(db, crit, NULL, len);
 	} else {
-		di = rpmdbInitIterator(db, RPMTAG_NAME, name, len);
+		di = rpmdbInitIterator(db, crit, name, len);
 	}
 	if (!di) {
 		// Not found
 		rpmtsCloseDB(ts);
 		RETURN_FALSE;
 	}
+
 	if (mode) {
-		if (rpmdbSetIteratorRE(di, RPMTAG_NAME, mode, name)) {
+		if (rpmdbSetIteratorRE(di, crit, mode, name)) {
 			php_error_docref(NULL, E_WARNING, "Can't set filter");
 			rpmtsCloseDB(ts);
 			RETURN_FALSE;
@@ -290,7 +339,7 @@ PHP_FUNCTION(rpmdbinfo)
 	array_init(return_value);
 	while ((h = rpmdbNextIterator(di)) != NULL) {
 		zval tmp;
-		rpm_header_to_zval(&tmp, h, full);
+		rpm_header_to_zval(&tmp, h, 0);
 		add_next_index_zval(return_value, &tmp);
 	}
 
@@ -403,9 +452,15 @@ PHP_MINIT_FUNCTION(rpminfo)
 	REGISTER_LONG_CONSTANT("RPMSENSE_KEYRING",       RPMSENSE_KEYRING,       CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("RPMSENSE_CONFIG",        RPMSENSE_CONFIG,        CONST_CS | CONST_PERSISTENT);
 
-	REGISTER_LONG_CONSTANT("RPM_MATCH_EQUAL",        0,                      CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPM_MATCH_DEFAULT",      RPMMIRE_DEFAULT,        CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPM_MATCH_STRCMP",       RPMMIRE_STRCMP,         CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("RPM_MATCH_REGEX",        RPMMIRE_REGEX,          CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("RPM_MATCH_GLOB",         RPMMIRE_GLOB,           CONST_CS | CONST_PERSISTENT);
+
+	REGISTER_LONG_CONSTANT("RPM_TAG_NAME",           RPMTAG_NAME,            CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPM_TAG_INSTFILENAMES",  RPMTAG_INSTFILENAMES,   CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPM_TAG_REQUIRENAME",    RPMTAG_REQUIRENAME,     CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("RPM_TAG_PROVIDENAME",    RPMTAG_PROVIDENAME,     CONST_CS | CONST_PERSISTENT);
 
 	return SUCCESS;
 }
@@ -466,6 +521,7 @@ PHP_GSHUTDOWN_FUNCTION(rpminfo)
  */
 const zend_function_entry rpminfo_functions[] = {
 	PHP_FE(rpmdbinfo,         arginfo_rpmdbinfo)
+	PHP_FE(rpmdbsearch,       arginfo_rpmdbsearch)
 	PHP_FE(rpminfo,           arginfo_rpminfo)
 	PHP_FE(rpmvercmp,         arginfo_rpmvercmp)
 	PHP_FE_END

@@ -4,13 +4,19 @@ Check for rpmdbinfo function
 <?php if (!extension_loaded("rpminfo")) print "skip"; ?>
 --FILE--
 <?php 
-$a = rpmdbinfo('php*', false, RPM_MATCH_GLOB);
+$a = rpmdbsearch('php*', RPM_TAG_NAME , RPM_MATCH_GLOB);
 var_dump(count($a) > 1);
-$a = rpmdbinfo('^php', false, RPM_MATCH_REGEX);
+
+$a = rpmdbsearch('^php', RPM_TAG_NAME, RPM_MATCH_REGEX);
 var_dump(count($a) > 1);
+
+$a = rpmdbsearch(PHP_BINARY, RPM_TAG_INSTFILENAMES);
+var_dump(count($a) == 1);
+
 ?>
 Done
 --EXPECTF--
+bool(true)
 bool(true)
 bool(true)
 Done

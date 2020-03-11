@@ -108,7 +108,7 @@ Retrieve information from rpm database about installed packages using glob or re
 The return value is an array of hash tables, or false if it fails.
 
     $ php -a
-    php > print_r(rpmdbinfo("php-pecl-r*", false, RPM_MATCH_GLOB));
+    php > print_r(rpmdbsearch("php-pecl-r*", RPM_TAG_NAME, RPM_MATCH_GLOB));
     Array
     (
         [0] => Array
@@ -121,10 +121,10 @@ The return value is an array of hash tables, or false if it fails.
             )
         [1] => Array
             (
-                [Name] => php-pecl-request
-                [Version] => 1.0.0
-                [Release] => 0.11.b2.fc31.remi.7.3
-                [Summary] => Server-side request and response objects
+                [Name] => php-pecl-redis5
+                [Version] => 5.2.0
+                [Release] => 1.fc31.remi.7.3
+                [Summary] => Extension for communicating with the Redis key-value store
                 [Arch] => x86_64
             )
         [2] => Array
@@ -138,7 +138,7 @@ The return value is an array of hash tables, or false if it fails.
     )
 
     $ php -a
-    php > print_r(rpmdbinfo("^php-pecl-r", false, RPM_MATCH_REGEX));
+    php > print_r(rpmdbsearch("^php-pecl-r", RPM_TAG_NAME, RPM_MATCH_REGEX));
     Array
     (
         [0] => Array
@@ -151,10 +151,10 @@ The return value is an array of hash tables, or false if it fails.
             )
         [1] => Array
             (
-                [Name] => php-pecl-request
-                [Version] => 1.0.0
-                [Release] => 0.11.b2.fc31.remi.7.3
-                [Summary] => Server-side request and response objects
+                [Name] => php-pecl-redis5
+                [Version] => 5.2.0
+                [Release] => 1.fc31.remi.7.3
+                [Summary] => Extension for communicating with the Redis key-value store
                 [Arch] => x86_64
             )
         [2] => Array
@@ -167,6 +167,19 @@ The return value is an array of hash tables, or false if it fails.
             )
     )
 
+    $ php -a
+    php > print_r(rpmdbsearch(PHP_BINARY, RPM_TAG_INSTFILENAMES));
+    Array
+    (
+        [0] => Array
+            (
+                [Name] => php-cli
+                [Version] => 7.3.15
+                [Release] => 1.fc31.remi
+                [Summary] => Command-line interface for PHP
+                [Arch] => x86_64
+            )
+    )
 
 ----
 
