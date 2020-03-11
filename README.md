@@ -97,11 +97,76 @@ The return value is an array of hash tables, or false if it fails.
         [0] => Array
             (
                 [Name] => php
-                [Version] => 7.2.2
-                [Release] => 1.fc27.remi
+                [Version] => 7.3.5
+                [Release] => 1.fc31.remi
+                [Summary] => PHP scripting language for creating dynamic web sites
                 [Arch] => x86_64
             )
     )
+
+Retrieve information from rpm database about installed packages using glob or regex.
+The return value is an array of hash tables, or false if it fails.
+
+    $ php -a
+    php > print_r(rpmdbinfo("php-pecl-r*", false, RPM_MATCH_GLOB));
+    Array
+    (
+        [0] => Array
+            (
+                [Name] => php-pecl-radius
+                [Version] => 1.4.0
+                [Release] => 0.10.b1.fc31
+                [Summary] => Radius client library
+                [Arch] => x86_64
+            )
+        [1] => Array
+            (
+                [Name] => php-pecl-request
+                [Version] => 1.0.0
+                [Release] => 0.11.b2.fc31.remi.7.3
+                [Summary] => Server-side request and response objects
+                [Arch] => x86_64
+            )
+        [2] => Array
+            (
+                [Name] => php-pecl-rpminfo
+                [Version] => 0.2.3
+                [Release] => 1.fc31.remi.7.3
+                [Summary] => RPM information
+                [Arch] => x86_64
+            )
+    )
+
+    $ php -a
+    php > print_r(rpmdbinfo("^php-pecl-r", false, RPM_MATCH_REGEX));
+    Array
+    (
+        [0] => Array
+            (
+                [Name] => php-pecl-radius
+                [Version] => 1.4.0
+                [Release] => 0.10.b1.fc31
+                [Summary] => Radius client library
+                [Arch] => x86_64
+            )
+        [1] => Array
+            (
+                [Name] => php-pecl-request
+                [Version] => 1.0.0
+                [Release] => 0.11.b2.fc31.remi.7.3
+                [Summary] => Server-side request and response objects
+                [Arch] => x86_64
+            )
+        [2] => Array
+            (
+                [Name] => php-pecl-rpminfo
+                [Version] => 0.2.3
+                [Release] => 1.fc31.remi.7.3
+                [Summary] => RPM information
+                [Arch] => x86_64
+            )
+    )
+
 
 ----
 

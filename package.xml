@@ -26,7 +26,8 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
--
+- add match_mode parameters to rpmdbinfo function allowing
+  to search packages with name matching a glob or a regex.
   </notes>
   <contents>
     <dir name="/">
