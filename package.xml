@@ -27,7 +27,7 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
--
+- improve search logic, use index when exists and no search mode
   </notes>
   <contents>
     <dir name="/">

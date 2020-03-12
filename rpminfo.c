@@ -309,23 +309,33 @@ static int hex2bin(const char *hex, char *bin, int len) {
 	return i/2;
 }
 
-static int canUseRe(zend_long tag) {
-	if (tag == RPMTAG_GROUP ||
-		tag == RPMTAG_TRIGGERNAME ||
-		tag == RPMTAG_PKGID ||
-		tag == RPMTAG_HDRID ||
-		tag == RPMTAG_INSTALLTID ||
-		tag == RPMTAG_CONFLICTNAME ||
-		tag == RPMTAG_REQUIRENAME ||
-		tag == RPMTAG_PROVIDENAME ||
-		tag == RPMTAG_SUGGESTNAME ||
-		tag == RPMTAG_SUPPLEMENTNAME ||
-		tag == RPMTAG_RECOMMENDNAME ||
-		tag == RPMTAG_ENHANCENAME ||
-		tag == RPMTAG_INSTFILENAMES) {
-		return 0;
+static int haveIndex(zend_long tag) {
+	/*
+		All DB indexes
+		excepted RPMDBI_PACKAGES and RPMDBI_LABEL doesn't match any tag
+	*/
+	if (tag == RPMDBI_NAME ||
+		tag == RPMDBI_BASENAMES ||
+		tag == RPMDBI_GROUP ||
+		tag == RPMDBI_REQUIRENAME ||
+		tag == RPMDBI_PROVIDENAME ||
+		tag == RPMDBI_CONFLICTNAME ||
+		tag == RPMDBI_OBSOLETENAME ||
+		tag == RPMDBI_TRIGGERNAME ||
+		tag == RPMDBI_DIRNAMES ||
+		tag == RPMDBI_INSTALLTID ||
+		tag == RPMDBI_SIGMD5 ||
+		tag == RPMDBI_SHA1HEADER ||
+		tag == RPMDBI_INSTFILENAMES ||
+		tag == RPMDBI_FILETRIGGERNAME ||
+		tag == RPMDBI_TRANSFILETRIGGERNAME ||
+		tag == RPMDBI_RECOMMENDNAME ||
+		tag == RPMDBI_SUGGESTNAME ||
+		tag == RPMDBI_SUPPLEMENTNAME ||
+		tag == RPMDBI_ENHANCENAME) {
+		return 1;
 	}
-	return 1;
+	return 0;
 }
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbsearch, 0, 0, 1)
@@ -343,21 +353,15 @@ PHP_FUNCTION(rpmdbsearch)
 	char *name;
 	size_t len;
 	zend_long crit = RPMTAG_NAME;
-	zend_long mode = 0;
+	zend_long mode = -1;
 	Header h;
 	rpmdb db;
 	rpmdbMatchIterator di;
-	int usere;
+	int useIndex = 1;
 	rpmts ts = rpminfo_getts(_RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|ll", &name, &len, &crit, &mode) == FAILURE) {
 		return;
-	}
-
-	usere = canUseRe(crit);
-	if (mode && !usere) {
-		php_error_docref(NULL, E_WARNING, "Mode not allowed for this criterion");
-		mode = 0;
 	}
 
 	if (crit == RPMTAG_PKGID) {
@@ -376,21 +380,27 @@ PHP_FUNCTION(rpmdbsearch)
 		tid = atol(name);
 		name = (char *)&tid;
 		len = sizeof(tid);
+	} else if (crit == RPMTAG_INSTFILENAMES) {
+		/* use input parameters */
+	} else {
+		/* Faster mode if index exists and name is not a pattern */
+		useIndex = haveIndex(crit) && mode < 0;
 	}
 
 	rpmtsOpenDB(ts, O_RDONLY);
 	db = rpmtsGetRdb(ts);
-	if (usere) {
-		di = rpmdbInitIterator(db, RPMDBI_PACKAGES, NULL, len);
-	} else {
+	if (useIndex) {
 		di = rpmdbInitIterator(db, crit, name, len);
+	} else {
+		/* query all packages */
+		di = rpmdbInitIterator(db, RPMDBI_PACKAGES, NULL, 0);
 	}
 	if (!di) {
 		// Not found
 		rpmtsCloseDB(ts);
 		RETURN_FALSE;
 	}
-	if (usere) {
+	if (!useIndex) {
 		if (rpmdbSetIteratorRE(di, crit, mode, name)) {
 			php_error_docref(NULL, E_WARNING, "Can't set filter");
 			rpmtsCloseDB(ts);
