@@ -27,7 +27,8 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
--
+- allow search by Pkgid, Hdrid, Installtid with specific input
+- fix search with various other tags (Version, ...)
   </notes>
   <contents>
     <dir name="/">

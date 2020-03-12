@@ -286,6 +286,48 @@ PHP_FUNCTION(rpmdbinfo)
 }
 /* }}} */
 
+static unsigned char nibble(char c) {
+	if (c >= '0' && c <= '9') {
+		return (c - '0');
+	}
+	if (c >= 'a' && c <= 'f') {
+		return (c - 'a') + 10;
+	}
+	if (c >= 'A' && c <= 'F') {
+		return (c - 'A') + 10;
+	}
+    return 0;
+}
+
+static int hex2bin(const char *hex, char *bin, int len) {
+	int i;
+
+	for (i=0 ; (i+1)<len ; i+=2, hex+=2, bin++) {
+		*bin = nibble(hex[0]) << 4 | nibble(hex[1]);
+	}
+
+	return i/2;
+}
+
+static int canUseRe(zend_long tag) {
+	if (tag == RPMTAG_GROUP ||
+		tag == RPMTAG_TRIGGERNAME ||
+		tag == RPMTAG_PKGID ||
+		tag == RPMTAG_HDRID ||
+		tag == RPMTAG_INSTALLTID ||
+		tag == RPMTAG_CONFLICTNAME ||
+		tag == RPMTAG_REQUIRENAME ||
+		tag == RPMTAG_PROVIDENAME ||
+		tag == RPMTAG_SUGGESTNAME ||
+		tag == RPMTAG_SUPPLEMENTNAME ||
+		tag == RPMTAG_RECOMMENDNAME ||
+		tag == RPMTAG_ENHANCENAME ||
+		tag == RPMTAG_INSTFILENAMES) {
+		return 0;
+	}
+	return 1;
+}
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbsearch, 0, 0, 1)
 	ZEND_ARG_INFO(0, pattern)
 	ZEND_ARG_INFO(0, rpmtag)
@@ -296,6 +338,8 @@ ZEND_END_ARG_INFO()
    Search information from installed RPMs */
 PHP_FUNCTION(rpmdbsearch)
 {
+	char MD5[16];
+	rpm_tid_t tid;
 	char *name;
 	size_t len;
 	zend_long crit = RPMTAG_NAME;
@@ -303,21 +347,41 @@ PHP_FUNCTION(rpmdbsearch)
 	Header h;
 	rpmdb db;
 	rpmdbMatchIterator di;
+	int usere;
 	rpmts ts = rpminfo_getts(_RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|ll", &name, &len, &crit, &mode) == FAILURE) {
 		return;
 	}
 
-	if (mode && crit != RPMTAG_NAME) {
-		php_error_docref(NULL, E_WARNING, "Mode only allowed for name");
+	usere = canUseRe(crit);
+	if (mode && !usere) {
+		php_error_docref(NULL, E_WARNING, "Mode not allowed for this criterion");
 		mode = 0;
+	}
+
+	if (crit == RPMTAG_PKGID) {
+		if (len != 32) {
+			php_error_docref(NULL, E_WARNING, "Bad length for PKGID, 32 expected");
+			RETURN_FALSE;
+		}
+		len = hex2bin(name, MD5, len);
+		name = MD5;
+	} else if (crit == RPMTAG_HDRID) {
+		if (len != 40) {
+			php_error_docref(NULL, E_WARNING, "Bad length for HDRID, 40 expected");
+			RETURN_FALSE;
+		}
+	} else if (crit == RPMTAG_INSTALLTID) {
+		tid = atol(name);
+		name = (char *)&tid;
+		len = sizeof(tid);
 	}
 
 	rpmtsOpenDB(ts, O_RDONLY);
 	db = rpmtsGetRdb(ts);
-	if (mode) {
-		di = rpmdbInitIterator(db, crit, NULL, len);
+	if (usere) {
+		di = rpmdbInitIterator(db, RPMDBI_PACKAGES, NULL, len);
 	} else {
 		di = rpmdbInitIterator(db, crit, name, len);
 	}
@@ -326,8 +390,7 @@ PHP_FUNCTION(rpmdbsearch)
 		rpmtsCloseDB(ts);
 		RETURN_FALSE;
 	}
-
-	if (mode) {
+	if (usere) {
 		if (rpmdbSetIteratorRE(di, crit, mode, name)) {
 			php_error_docref(NULL, E_WARNING, "Can't set filter");
 			rpmtsCloseDB(ts);
