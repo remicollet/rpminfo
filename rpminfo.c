@@ -288,8 +288,8 @@ PHP_FUNCTION(rpmdbinfo)
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbsearch, 0, 0, 1)
 	ZEND_ARG_INFO(0, pattern)
-	ZEND_ARG_INFO(0, tag_name)
-	ZEND_ARG_INFO(0, mode)
+	ZEND_ARG_INFO(0, rpmtag)
+	ZEND_ARG_INFO(0, rpmmire)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto array rpmdbsearch(string pattern [, integer tag_name = RPMTAG_NAME [, integer mode]])
