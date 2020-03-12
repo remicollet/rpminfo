@@ -410,7 +410,7 @@ PHP_FUNCTION(rpmdbsearch)
 		RETURN_FALSE;
 	}
 
-	array_init(return_value);
+	array_init_size(return_value, rpmdbGetIteratorCount(di));
 	while ((h = rpmdbNextIterator(di)) != NULL) {
 		zval tmp;
 		rpm_header_to_zval(&tmp, h, 0);
