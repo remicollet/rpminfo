@@ -27,7 +27,7 @@ Available functions:
   <license>PHP 3.01</license>
   <notes>
 - add rpmdbsearch function to search packages using
-  name, owned files, requires, provides...
+  name, installed files, requires, provides...
   </notes>
   <contents>
     <dir name="/">
@@ -37,7 +37,6 @@ Available functions:
       <file name="rpminfo.c" role="src"/>
       <!-- documentation -->
       <file name="CREDITS" role="doc"/>
-      <file name="EXPERIMENTAL" role="doc"/>
       <file name="LICENSE" role="doc"/>
       <file name="README.md" role="doc"/>
       <dir name ="examples">

@@ -139,7 +139,7 @@ function WhatProvides($crit) {
 	if (file_exists($crit)) {
 		$a = \rpmdbsearch($crit, RPM_TAG_INSTFILENAMES);
 	} else {
-		$a = \rpmdbsearch($crit, RPM_TAG_PROVIDENAME);
+		$a = \rpmdbsearch($crit, RPM_TAG_PROVIDES);
 	}
 	$r = [];
 	if (is_array($a)) {
@@ -157,7 +157,7 @@ function WhatProvides($crit) {
  * print_r($a[0]->NEVRA);
  **/
 function WhatRequires($crit) {
-	$a = \rpmdbsearch($crit, RPM_TAG_REQUIRENAME);
+	$a = \rpmdbsearch($crit, RPM_TAG_REQUIRES);
 
 	$r = [];
 	if (is_array($a)) {
