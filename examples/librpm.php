@@ -94,7 +94,7 @@ abstract class Common {
 class File extends Common {
 
 	public function __construct($path) {
-		$info = rpminfo($path, true, $error);
+		$info = \rpminfo($path, true, $error);
 
 		if ($error) {
 			throw new \RuntimeException($error);
@@ -114,7 +114,7 @@ class File extends Common {
 class Package extends Common {
 
 	public function __construct($name, $index=0) {
-		$info = rpmdbinfo($name, true);
+		$info = \rpmdbinfo($name, true);
 
 		if (!$info) {
 			throw new \RuntimeException("$name not found");
@@ -126,8 +126,47 @@ class Package extends Common {
 	}
 }
 
+/**
+ * Find packages which provides something or own a file
+ *
+ * $a = \Remi\RPM\WhatProvides("php-redis");
+ * print_r($a[0]->NEVR);
+ *
+ * $a = \Remi\RPM\WhatProvides("/usr/bin/php");
+ * print_r($a[0]->NEVR);
+ **/
+function WhatProvides($crit) {
+	if (file_exists($crit)) {
+		$a = \rpmdbsearch($crit, RPM_TAG_INSTFILENAMES);
+	} else {
+		$a = \rpmdbsearch($crit, RPM_TAG_PROVIDENAME);
+	}
+	$r = [];
+	if (is_array($a)) {
+		foreach($a as $i) {
+			$r[] = new Package($i['Name']);
+		}
+	}
+	return $r;
+}
 
+/**
+ * Find packages which requires something
+ *
+ * $a = \Remi\RPM\WhatRequires("php-common");
+ * print_r($a[0]->NEVRA);
+ **/
+function WhatRequires($crit) {
+	$a = \rpmdbsearch($crit, RPM_TAG_REQUIRENAME);
 
+	$r = [];
+	if (is_array($a)) {
+		foreach($a as $i) {
+			$r[] = new Package($i['Name']);
+		}
+	}
+	return $r;
+}
 /*
 $a = new File(dirname(__DIR__).'/tests/bidon.rpm');
 $a = new Package('phpunit7');
