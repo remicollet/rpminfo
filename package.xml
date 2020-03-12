@@ -18,7 +18,7 @@ Available functions:
   </lead>
   <date>2020-03-12</date>
   <version>
-    <release>0.3.0</release>
+    <release>0.3.1dev</release>
     <api>0.3.0</api>
   </version>
   <stability>
@@ -27,8 +27,7 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
-- add rpmdbsearch function to search packages using
-  name, installed files, requires, provides...
+-
   </notes>
   <contents>
     <dir name="/">
@@ -72,6 +71,22 @@ Available functions:
   <providesextension>rpminfo</providesextension>
   <extsrcrelease/>
   <changelog>
+    <release>
+      <date>2020-03-12</date>
+      <version>
+        <release>0.3.0</release>
+        <api>0.3.0</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <license>PHP 3.01</license>
+      <notes>
+- add rpmdbsearch function to search packages using
+  name, installed files, requires, provides...
+      </notes>
+    </release>
     <release>
       <date>2020-03-11</date>
       <version>
