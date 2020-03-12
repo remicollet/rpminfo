@@ -137,9 +137,9 @@ class Package extends Common {
  **/
 function WhatProvides($crit) {
 	if (file_exists($crit)) {
-		$a = \rpmdbsearch($crit, RPM_TAG_INSTFILENAMES);
+		$a = \rpmdbsearch($crit, RPMTAG_INSTFILENAMES);
 	} else {
-		$a = \rpmdbsearch($crit, RPM_TAG_PROVIDES);
+		$a = \rpmdbsearch($crit, RPMTAG_PROVIDES);
 	}
 	$r = [];
 	if (is_array($a)) {
@@ -157,7 +157,7 @@ function WhatProvides($crit) {
  * print_r($a[0]->NEVRA);
  **/
 function WhatRequires($crit) {
-	$a = \rpmdbsearch($crit, RPM_TAG_REQUIRES);
+	$a = \rpmdbsearch($crit, RPMTAG_REQUIRES);
 
 	$r = [];
 	if (is_array($a)) {

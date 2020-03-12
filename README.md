@@ -108,7 +108,7 @@ Retrieve information from rpm database about installed packages using glob or re
 The return value is an array of hash tables, or false if it fails.
 
     $ php -a
-    php > print_r(rpmdbsearch("php-pecl-r*", RPM_TAG_NAME, RPM_MATCH_GLOB));
+    php > print_r(rpmdbsearch("php-pecl-r*", RPMTAG_NAME, RPMMIRE_GLOB));
     Array
     (
         [0] => Array
@@ -138,7 +138,7 @@ The return value is an array of hash tables, or false if it fails.
     )
 
     $ php -a
-    php > print_r(rpmdbsearch("^php-pecl-r", RPM_TAG_NAME, RPM_MATCH_REGEX));
+    php > print_r(rpmdbsearch("^php-pecl-r", RPMTAG_NAME, RPMMIRE_REGEX));
     Array
     (
         [0] => Array
@@ -168,7 +168,7 @@ The return value is an array of hash tables, or false if it fails.
     )
 
     $ php -a
-    php > print_r(rpmdbsearch(PHP_BINARY, RPM_TAG_INSTFILENAMES));
+    php > print_r(rpmdbsearch(PHP_BINARY, RPMTAG_INSTFILENAMES));
     Array
     (
         [0] => Array
