@@ -390,22 +390,24 @@ PHP_FUNCTION(rpmdbsearch)
 	rpmtsOpenDB(ts, O_RDONLY);
 	db = rpmtsGetRdb(ts);
 	if (useIndex) {
+		/* Simple criterion using index */
 		di = rpmdbInitIterator(db, crit, name, len);
 	} else {
 		/* query all packages */
 		di = rpmdbInitIterator(db, RPMDBI_PACKAGES, NULL, 0);
+		/* add criterion */
+		if (di) {
+			if (rpmdbSetIteratorRE(di, crit, mode, name)) {
+				php_error_docref(NULL, E_WARNING, "Can't set filter");
+				rpmtsCloseDB(ts);
+				RETURN_FALSE;
+			}
+		}
 	}
 	if (!di) {
 		// Not found
 		rpmtsCloseDB(ts);
 		RETURN_FALSE;
-	}
-	if (!useIndex) {
-		if (rpmdbSetIteratorRE(di, crit, mode, name)) {
-			php_error_docref(NULL, E_WARNING, "Can't set filter");
-			rpmtsCloseDB(ts);
-			RETURN_FALSE;
-		}
 	}
 
 	array_init(return_value);
