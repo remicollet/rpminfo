@@ -1,4 +1,4 @@
-Extension [ <persistent> extension #94 rpminfo version 0.3.0 ] {
+Extension [ <persistent> extension #15 rpminfo version 0.3.1 ] {
 
   - Constants [271] {
     Constant [ string RPMVERSION ] { 4.15.1 }
