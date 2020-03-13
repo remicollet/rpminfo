@@ -15,6 +15,9 @@ if test "$PHP_RPMINFO" != "no"; then
       LIBRPM_LIBDIR=`$PKG_CONFIG rpm --libs`
       LIBRPM_VERSON=`$PKG_CONFIG rpm --modversion`
       AC_MSG_RESULT(from pkgconfig: version $LIBRPM_VERSON)
+      if $PKG_CONFIG rpm --atleast-version 4.12; then
+        AC_DEFINE(HAVE_WEAKDEP, 1, [ Weak dependencies in RPM 4.12 ])
+      fi
     else
       AC_MSG_ERROR(system librpm is too old: version 4.11.3 required)
     fi

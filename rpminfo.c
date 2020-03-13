@@ -326,13 +326,15 @@ static int haveIndex(zend_long tag) {
 		tag == RPMDBI_INSTALLTID ||
 		tag == RPMDBI_SIGMD5 ||
 		tag == RPMDBI_SHA1HEADER ||
-		tag == RPMDBI_INSTFILENAMES ||
+#ifdef HAVE_WEAKDEP
 		tag == RPMDBI_FILETRIGGERNAME ||
 		tag == RPMDBI_TRANSFILETRIGGERNAME ||
 		tag == RPMDBI_RECOMMENDNAME ||
 		tag == RPMDBI_SUGGESTNAME ||
 		tag == RPMDBI_SUPPLEMENTNAME ||
-		tag == RPMDBI_ENHANCENAME) {
+		tag == RPMDBI_ENHANCENAME ||
+#endif
+		tag == RPMDBI_INSTFILENAMES) {
 		return 1;
 	}
 	return 0;
