@@ -29,6 +29,7 @@ Available functions:
   <notes>
 - improve search logic, use index when exists and no search mode
 - add 'full' parameter to rpmdbsearch
+- allow 'rpmdbinfo' to search on NEVR (instead of name only)
   </notes>
   <contents>
     <dir name="/">

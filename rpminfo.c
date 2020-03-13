@@ -267,7 +267,7 @@ PHP_FUNCTION(rpmdbinfo)
 
 	rpmtsOpenDB(ts, O_RDONLY);
 	db = rpmtsGetRdb(ts);
-	di = rpmdbInitIterator(db, RPMTAG_NAME, name, len);
+	di = rpmdbInitIterator(db, RPMDBI_LABEL, name, len);
 	if (!di) {
 		// Not found
 		rpmtsCloseDB(ts);
