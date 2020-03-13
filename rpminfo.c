@@ -399,7 +399,7 @@ PHP_FUNCTION(rpmdbsearch)
 		di = rpmdbInitIterator(db, RPMDBI_PACKAGES, NULL, 0);
 		/* add criterion */
 		if (di) {
-			if (rpmdbSetIteratorRE(di, crit, mode, name)) {
+			if (rpmdbSetIteratorRE(di, crit, (mode<0 ? RPMMIRE_DEFAULT : mode), name)) {
 				php_error_docref(NULL, E_WARNING, "Can't set filter");
 				rpmtsCloseDB(ts);
 				RETURN_FALSE;
