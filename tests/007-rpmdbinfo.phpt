@@ -1,19 +1,11 @@
 --TEST--
-Check for rpmdbinfo function
+Check for rpmdbinfo function on Name
 --SKIPIF--
 <?php if (!extension_loaded("rpminfo")) print "skip"; ?>
 --FILE--
 <?php 
 var_dump(rpmdbinfo('doesntexistsinrpmdb'));
 var_dump(rpmdbinfo('bash'));
-
-$k = rpmdbinfo('kernel');
-var_dump(count($k) > 0); // multiple kernels
-$n = $k[0]['Name'] . '-' . $k[0]['Version'] . '-'  . $k[0]['Release'];
-
-$k = rpmdbinfo($n); // single kernel with NEVR
-var_dump(count($k) ==1);
-
 ?>
 Done
 --EXPECTF--
@@ -33,6 +25,4 @@ array(1) {
     string(%d) "%s"
   }
 }
-bool(true)
-bool(true)
 Done
