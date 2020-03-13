@@ -27,7 +27,7 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
--
+- fix build with RPM 4.12 (Fedora 21-22 only)
   </notes>
   <contents>
     <dir name="/">
