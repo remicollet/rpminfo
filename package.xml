@@ -16,20 +16,21 @@ Available functions:
     <email>remi@php.net</email>
     <active>yes</active>
   </lead>
-  <date>2020-03-12</date>
+  <date>2020-03-13</date>
   <version>
-    <release>0.3.2dev</release>
+    <release>0.4.0</release>
     <api>0.3.0</api>
   </version>
   <stability>
-    <release>beta</release>
-    <api>beta</api>
+    <release>stable</release>
+    <api>stable</api>
   </stability>
   <license>PHP 3.01</license>
   <notes>
 - improve search logic, use index when exists and no search mode
 - add 'full' parameter to rpmdbsearch
 - allow 'rpmdbinfo' to search on NEVR (instead of name only)
+- first "stable" release
   </notes>
   <contents>
     <dir name="/">
@@ -55,6 +56,7 @@ Available functions:
         <file name="006-rpminfo-errors.phpt" role="test"/>
         <file name="007-rpmdbinfo.phpt" role="test"/>
         <file name="008-rpmdbsearch.phpt" role="test"/>
+        <file name="009-rpmdbinfo2.phpt" role="test"/>
         <file name="bidon.rpm" role="test"/>
         <file name="bidon-src.rpm" role="test"/>
       </dir>

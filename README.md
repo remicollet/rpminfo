@@ -2,7 +2,11 @@
 
 Retrieve RPM information from PHP code using librpm.
 
-**Notice**: this is a experimental extension, a work in progress, so don't expect a stable API yet.
+This extension can be considered as stable, and be used on production environement.
+
+But be aware that if its API will probably stay stable,
+some changes may occur before version 1.0.0.
+
 
 ----
 
