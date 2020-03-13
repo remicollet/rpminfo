@@ -342,9 +342,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbsearch, 0, 0, 1)
 	ZEND_ARG_INFO(0, pattern)
 	ZEND_ARG_INFO(0, rpmtag)
 	ZEND_ARG_INFO(0, rpmmire)
+	ZEND_ARG_INFO(0, full)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto array rpmdbsearch(string pattern [, integer tag_name = RPMTAG_NAME [, integer mode]])
+/* {{{ proto array rpmdbsearch(string pattern [, integer tag_name = RPMTAG_NAME [, integer mode = -1 [, bool full = 0]]])
    Search information from installed RPMs */
 PHP_FUNCTION(rpmdbsearch)
 {
@@ -354,13 +355,14 @@ PHP_FUNCTION(rpmdbsearch)
 	size_t len;
 	zend_long crit = RPMTAG_NAME;
 	zend_long mode = -1;
+	zend_bool full = 0;
 	Header h;
 	rpmdb db;
 	rpmdbMatchIterator di;
 	int useIndex = 1;
 	rpmts ts = rpminfo_getts(_RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|ll", &name, &len, &crit, &mode) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|llb", &name, &len, &crit, &mode, &full) == FAILURE) {
 		return;
 	}
 
@@ -413,7 +415,7 @@ PHP_FUNCTION(rpmdbsearch)
 	array_init_size(return_value, rpmdbGetIteratorCount(di));
 	while ((h = rpmdbNextIterator(di)) != NULL) {
 		zval tmp;
-		rpm_header_to_zval(&tmp, h, 0);
+		rpm_header_to_zval(&tmp, h, full);
 		add_next_index_zval(return_value, &tmp);
 	}
 

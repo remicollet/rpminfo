@@ -28,6 +28,7 @@ Available functions:
   <license>PHP 3.01</license>
   <notes>
 - improve search logic, use index when exists and no search mode
+- add 'full' parameter to rpmdbsearch
   </notes>
   <contents>
     <dir name="/">

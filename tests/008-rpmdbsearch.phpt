@@ -26,6 +26,13 @@ var_dump($a[0]['Name'] == $phprpm);
 echo "Hdrid\n";
 $a = rpmdbsearch($p[0]['Sha1header'], RPMTAG_HDRID);
 var_dump($a[0]['Name'] == $phprpm);
+var_dump(count($a[0]) < 10);
+
+echo "Hdrid (full)\n";
+$a = rpmdbsearch($p[0]['Sha1header'], RPMTAG_HDRID, -1, true);
+var_dump($a[0]['Name'] == $phprpm);
+var_dump($a[0]['Sha1header'] == $p[0]['Sha1header']);
+var_dump(count($a[0]) > 20);
 
 echo "Installtid\n";
 $a = rpmdbsearch($p[0]['Installtid'], RPMTAG_INSTALLTID);
@@ -47,6 +54,11 @@ bool(true)
 Pkgid
 bool(true)
 Hdrid
+bool(true)
+bool(true)
+Hdrid (full)
+bool(true)
+bool(true)
 bool(true)
 Installtid
 bool(true)
