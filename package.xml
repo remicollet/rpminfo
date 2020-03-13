@@ -18,8 +18,8 @@ Available functions:
   </lead>
   <date>2020-03-13</date>
   <version>
-    <release>0.4.0</release>
-    <api>0.3.0</api>
+    <release>0.4.1dev</release>
+    <api>0.4.0</api>
   </version>
   <stability>
     <release>stable</release>
@@ -27,10 +27,7 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
-- improve search logic, use index when exists and no search mode
-- add 'full' parameter to rpmdbsearch
-- allow 'rpmdbinfo' to search on NEVR (instead of name only)
-- first "stable" release
+-
   </notes>
   <contents>
     <dir name="/">
@@ -75,6 +72,24 @@ Available functions:
   <providesextension>rpminfo</providesextension>
   <extsrcrelease/>
   <changelog>
+    <release>
+  <date>2020-03-13</date>
+      <version>
+        <release>0.4.0</release>
+        <api>0.4.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license>PHP 3.01</license>
+      <notes>
+- improve search logic, use index when exists and no search mode
+- add 'full' parameter to rpmdbsearch
+- allow 'rpmdbinfo' to search on NEVR (instead of name only)
+- first "stable" release
+      </notes>
+    </release>
     <release>
       <date>2020-03-12</date>
       <version>
