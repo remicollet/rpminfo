@@ -69,7 +69,6 @@ static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
 				}
 		}
 
-		//printf("Tag: %-30s  Type: %8lx - %8lx - %8lx\n", rpmTagGetName(tag), (long)rpmTagGetTagType(tag), (long)rpmTagGetType(tag), (long)rpmTagGetReturnType(tag));
 		type = rpmTagGetTagType(tag);
 		switch (type) {
 			case RPM_STRING_TYPE:
@@ -180,10 +179,14 @@ static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
 	}
 }
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_rpminfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, path)
-	ZEND_ARG_INFO(0, full)
-	ZEND_ARG_INFO(1, error)
+#if PHP_VERSION_ID < 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpminfo, 0, 1, IS_ARRAY, NULL, 1)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpminfo, 0, 1, IS_ARRAY, 1)
+#endif
+    ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, full, _IS_BOOL, 0)
+    ZEND_ARG_TYPE_INFO(1, error, IS_STRING, 1)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto array rpminfo(string path [, bool full [, string &$error])
@@ -240,13 +243,17 @@ PHP_FUNCTION(rpminfo)
 		}
 		efree(e_msg);
 	}
-	RETURN_FALSE;
+	RETURN_NULL();
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbinfo, 0, 0, 1)
-	ZEND_ARG_INFO(0, name)
-	ZEND_ARG_INFO(0, full)
+#if PHP_VERSION_ID < 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmdbinfo, 0, 1, IS_ARRAY, NULL, 1)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmdbinfo, 0, 1, IS_ARRAY, 1)
+#endif
+    ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, full, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto array rpmdbinfo(string name [, bool full])
@@ -271,7 +278,7 @@ PHP_FUNCTION(rpmdbinfo)
 	if (!di) {
 		// Not found
 		rpmtsCloseDB(ts);
-		RETURN_FALSE;
+		RETURN_NULL();
 	}
 
 	array_init(return_value);
@@ -340,11 +347,15 @@ static int haveIndex(zend_long tag) {
 	return 0;
 }
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmdbsearch, 0, 0, 1)
-	ZEND_ARG_INFO(0, pattern)
-	ZEND_ARG_INFO(0, rpmtag)
-	ZEND_ARG_INFO(0, rpmmire)
-	ZEND_ARG_INFO(0, full)
+#if PHP_VERSION_ID < 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmdbsearch, 0, 1, IS_ARRAY, NULL, 1)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmdbsearch, 0, 1, IS_ARRAY, 1)
+#endif
+    ZEND_ARG_TYPE_INFO(0, pattern, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, rpmtag, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, rpmmire, IS_LONG, 0)
+    ZEND_ARG_TYPE_INFO(0, full, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto array rpmdbsearch(string pattern [, integer tag_name = RPMTAG_NAME [, integer mode = -1 [, bool full = 0]]])
@@ -371,14 +382,14 @@ PHP_FUNCTION(rpmdbsearch)
 	if (crit == RPMTAG_PKGID) {
 		if (len != 32) {
 			php_error_docref(NULL, E_WARNING, "Bad length for PKGID, 32 expected");
-			RETURN_FALSE;
+			RETURN_NULL();
 		}
 		len = hex2bin(name, MD5, len);
 		name = MD5;
 	} else if (crit == RPMTAG_HDRID) {
 		if (len != 40) {
 			php_error_docref(NULL, E_WARNING, "Bad length for HDRID, 40 expected");
-			RETURN_FALSE;
+			RETURN_NULL();
 		}
 	} else if (crit == RPMTAG_INSTALLTID) {
 		tid = atol(name);
@@ -404,14 +415,14 @@ PHP_FUNCTION(rpmdbsearch)
 			if (rpmdbSetIteratorRE(di, crit, (mode<0 ? RPMMIRE_DEFAULT : mode), name)) {
 				php_error_docref(NULL, E_WARNING, "Can't set filter");
 				rpmtsCloseDB(ts);
-				RETURN_FALSE;
+				RETURN_NULL();
 			}
 		}
 	}
 	if (!di) {
 		// Not found
 		rpmtsCloseDB(ts);
-		RETURN_FALSE;
+		RETURN_NULL();
 	}
 
 	array_init_size(return_value, rpmdbGetIteratorCount(di));
@@ -426,9 +437,13 @@ PHP_FUNCTION(rpmdbsearch)
 }
 /* }}} */
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_rpmvercmp, 0, 0, 2)
-	ZEND_ARG_INFO(0, evr1)
-	ZEND_ARG_INFO(0, evr2)
+#if PHP_VERSION_ID < 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmvercmp, 0, 2, IS_LONG, NULL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmvercmp, 0, 2, IS_LONG, 0)
+#endif
+    ZEND_ARG_TYPE_INFO(0, evr1, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, evr2, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 /* {{{ proto int rpmcmpver(string evr1, string evr2)

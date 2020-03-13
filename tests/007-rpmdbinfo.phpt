@@ -9,7 +9,7 @@ var_dump(rpmdbinfo('bash'));
 ?>
 Done
 --EXPECTF--
-bool(false)
+NULL
 array(1) {
   [0]=>
   array(5) {

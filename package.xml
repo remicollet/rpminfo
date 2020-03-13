@@ -28,6 +28,8 @@ Available functions:
   <license>PHP 3.01</license>
   <notes>
 - fix build with RPM 4.12 (Fedora 21-22 only)
+- add type hinting in reflection
+- return NULL instead of FALSE on failure
   </notes>
   <contents>
     <dir name="/">

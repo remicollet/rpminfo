@@ -21,15 +21,15 @@ Done
 + PHP Warnings
 
 Warning: rpminfo(): Can't open '%s/tests/missing.rpm': No such file or directory in %s on line %d
-bool(false)
+NULL
 
 Warning: rpminfo(): Can't read '%s/tests/006-rpminfo-errors.php': Argument is not a RPM file in %s on line %d
-bool(false)
+NULL
 
 + PHP Warnings
-bool(false)
+NULL
 string(%d) "Can't open '%s/tests/missing.rpm': No such file or directory"
-bool(false)
+NULL
 string(%d) "Can't read '%s/tests/006-rpminfo-errors.php': Argument is not a RPM file"
 bool(true)
 NULL
