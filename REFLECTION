@@ -1,4 +1,4 @@
-Extension [ <persistent> extension #15 rpminfo version 0.4.0 ] {
+Extension [ <persistent> extension #94 rpminfo version 0.4.1 ] {
 
   - Constants [271] {
     Constant [ string RPMVERSION ] { 4.15.1 }
@@ -278,33 +278,37 @@ Extension [ <persistent> extension #15 rpminfo version 0.4.0 ] {
     Function [ <internal:rpminfo> function rpmdbinfo ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $name ]
-        Parameter #1 [ <optional> $full ]
+        Parameter #0 [ <required> string $name ]
+        Parameter #1 [ <optional> bool $full ]
       }
+      - Return [ array or NULL ]
     }
     Function [ <internal:rpminfo> function rpmdbsearch ] {
 
       - Parameters [4] {
-        Parameter #0 [ <required> $pattern ]
-        Parameter #1 [ <optional> $rpmtag ]
-        Parameter #2 [ <optional> $rpmmire ]
-        Parameter #3 [ <optional> $full ]
+        Parameter #0 [ <required> string $pattern ]
+        Parameter #1 [ <optional> int $rpmtag ]
+        Parameter #2 [ <optional> int $rpmmire ]
+        Parameter #3 [ <optional> bool $full ]
       }
+      - Return [ array or NULL ]
     }
     Function [ <internal:rpminfo> function rpminfo ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> $path ]
-        Parameter #1 [ <optional> $full ]
-        Parameter #2 [ <optional> &$error ]
+        Parameter #0 [ <required> string $name ]
+        Parameter #1 [ <optional> bool $full ]
+        Parameter #2 [ <optional> string or NULL &$error ]
       }
+      - Return [ array or NULL ]
     }
     Function [ <internal:rpminfo> function rpmvercmp ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> $evr1 ]
-        Parameter #1 [ <required> $evr2 ]
+        Parameter #0 [ <required> string $evr1 ]
+        Parameter #1 [ <required> string $evr2 ]
       }
+      - Return [ int ]
     }
   }
 }
