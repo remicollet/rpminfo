@@ -18,7 +18,7 @@ Available functions:
   </lead>
   <date>2020-03-18</date>
   <version>
-    <release>0.4.1</release>
+    <release>0.4.2dev</release>
     <api>0.4.0</api>
   </version>
   <stability>
@@ -27,9 +27,7 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
-- fix build with RPM 4.12 (Fedora 21-22 only)
-- add type hinting in reflection
-- return NULL instead of FALSE on failure
+-
   </notes>
   <contents>
     <dir name="/">
@@ -75,7 +73,24 @@ Available functions:
   <extsrcrelease/>
   <changelog>
     <release>
-  <date>2020-03-13</date>
+      <date>2020-03-18</date>
+      <version>
+        <release>0.4.1</release>
+        <api>0.4.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license>PHP 3.01</license>
+      <notes>
+- fix build with RPM 4.12 (Fedora 21-22 only)
+- add type hinting in reflection
+- return NULL instead of FALSE on failure
+      </notes>
+    </release>
+    <release>
+      <date>2020-03-13</date>
       <version>
         <release>0.4.0</release>
         <api>0.4.0</api>
