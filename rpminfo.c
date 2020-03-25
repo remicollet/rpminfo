@@ -184,7 +184,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpminfo, 0, 1, IS_ARRAY, NULL, 1
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpminfo, 0, 1, IS_ARRAY, 1)
 #endif
-    ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 0)
     ZEND_ARG_TYPE_INFO(0, full, _IS_BOOL, 0)
     ZEND_ARG_TYPE_INFO(1, error, IS_STRING, 1)
 ZEND_END_ARG_INFO()
@@ -252,11 +252,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmdbinfo, 0, 1, IS_ARRAY, NULL,
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmdbinfo, 0, 1, IS_ARRAY, 1)
 #endif
-    ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, nevr, IS_STRING, 0)
     ZEND_ARG_TYPE_INFO(0, full, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto array rpmdbinfo(string name [, bool full])
+/* {{{ proto array rpmdbinfo(string nevr [, bool full])
    Retrieve information from an installed RPM */
 PHP_FUNCTION(rpmdbinfo)
 {
