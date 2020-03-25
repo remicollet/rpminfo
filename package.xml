@@ -18,7 +18,7 @@ Available functions:
   </lead>
   <date>2020-03-25</date>
   <version>
-    <release>0.4.2</release>
+    <release>0.4.3dev</release>
     <api>0.4.0</api>
   </version>
   <stability>
@@ -27,8 +27,7 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
-- improve reflection with better parameter names
-- speed optimization: open DB only once per request
+-
   </notes>
   <contents>
     <dir name="/">
@@ -73,6 +72,22 @@ Available functions:
   <providesextension>rpminfo</providesextension>
   <extsrcrelease/>
   <changelog>
+    <release>
+      <date>2020-03-25</date>
+      <version>
+        <release>0.4.2</release>
+        <api>0.4.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license>PHP 3.01</license>
+      <notes>
+- improve reflection with better parameter names
+- speed optimization: open DB only once per request
+      </notes>
+    </release>
     <release>
       <date>2020-03-18</date>
       <version>
