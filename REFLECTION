@@ -1,4 +1,4 @@
-Extension [ <persistent> extension #94 rpminfo version 0.4.1 ] {
+Extension [ <persistent> extension #15 rpminfo version 0.4.2 ] {
 
   - Constants [271] {
     Constant [ string RPMVERSION ] { 4.15.1 }
@@ -278,7 +278,7 @@ Extension [ <persistent> extension #94 rpminfo version 0.4.1 ] {
     Function [ <internal:rpminfo> function rpmdbinfo ] {
 
       - Parameters [2] {
-        Parameter #0 [ <required> string $name ]
+        Parameter #0 [ <required> string $nevr ]
         Parameter #1 [ <optional> bool $full ]
       }
       - Return [ array or NULL ]
@@ -296,7 +296,7 @@ Extension [ <persistent> extension #94 rpminfo version 0.4.1 ] {
     Function [ <internal:rpminfo> function rpminfo ] {
 
       - Parameters [3] {
-        Parameter #0 [ <required> string $name ]
+        Parameter #0 [ <required> string $path ]
         Parameter #1 [ <optional> bool $full ]
         Parameter #2 [ <optional> string or NULL &$error ]
       }
