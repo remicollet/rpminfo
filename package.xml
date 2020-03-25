@@ -27,7 +27,7 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
--
+- speed optimization: open DB only once per request
   </notes>
   <contents>
     <dir name="/">

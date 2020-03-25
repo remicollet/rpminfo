@@ -34,15 +34,25 @@
 
 ZEND_DECLARE_MODULE_GLOBALS(rpminfo)
 
-static rpmts rpminfo_getts(rpmVSFlags flags) {
+static rpmts rpminfo_getts(void) {
 	if (!RPMINFO_G(ts)) {
 		rpmReadConfigFiles(NULL, NULL);
 		RPMINFO_G(ts) = rpmtsCreate();
 	}
 	if (RPMINFO_G(ts)) {
-		(void)rpmtsSetVSFlags(RPMINFO_G(ts), flags);
+		(void)rpmtsSetVSFlags(RPMINFO_G(ts), _RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
 	}
 	return RPMINFO_G(ts);
+}
+
+static rpmdb rpminfo_getdb(void) {
+	if (!RPMINFO_G(db)) {
+		rpmts ts = rpminfo_getts();
+
+		rpmtsOpenDB(ts, O_RDONLY);
+		RPMINFO_G(db) = rpmtsGetRdb(ts);
+	}
+	return RPMINFO_G(db);
 }
 
 static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
@@ -199,7 +209,7 @@ PHP_FUNCTION(rpminfo)
 	zval *error = NULL;
 	FD_t f;
 	Header h;
-	rpmts ts = rpminfo_getts(_RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
+	rpmts ts = rpminfo_getts();
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|bz", &path, &len, &full, &error) == FAILURE) {
 		return;
@@ -266,18 +276,15 @@ PHP_FUNCTION(rpmdbinfo)
 	Header h;
 	rpmdb db;
 	rpmdbMatchIterator di;
-	rpmts ts = rpminfo_getts(_RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|b", &name, &len, &full) == FAILURE) {
 		return;
 	}
 
-	rpmtsOpenDB(ts, O_RDONLY);
-	db = rpmtsGetRdb(ts);
+	db = rpminfo_getdb();
 	di = rpmdbInitIterator(db, RPMDBI_LABEL, name, len);
 	if (!di) {
 		// Not found
-		rpmtsCloseDB(ts);
 		RETURN_NULL();
 	}
 
@@ -289,7 +296,6 @@ PHP_FUNCTION(rpmdbinfo)
 	}
 
 	rpmdbFreeIterator(di);
-	rpmtsCloseDB(ts);
 }
 /* }}} */
 
@@ -373,7 +379,6 @@ PHP_FUNCTION(rpmdbsearch)
 	rpmdb db;
 	rpmdbMatchIterator di;
 	int useIndex = 1;
-	rpmts ts = rpminfo_getts(_RPMVSF_NODIGESTS | _RPMVSF_NOSIGNATURES | RPMVSF_NOHDRCHK);
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|llb", &name, &len, &crit, &mode, &full) == FAILURE) {
 		return;
@@ -402,8 +407,7 @@ PHP_FUNCTION(rpmdbsearch)
 		useIndex = haveIndex(crit) && mode < 0;
 	}
 
-	rpmtsOpenDB(ts, O_RDONLY);
-	db = rpmtsGetRdb(ts);
+	db = rpminfo_getdb();
 	if (useIndex) {
 		/* Simple criterion using index */
 		di = rpmdbInitIterator(db, crit, name, len);
@@ -414,14 +418,12 @@ PHP_FUNCTION(rpmdbsearch)
 		if (di) {
 			if (rpmdbSetIteratorRE(di, crit, (mode<0 ? RPMMIRE_DEFAULT : mode), name)) {
 				php_error_docref(NULL, E_WARNING, "Can't set filter");
-				rpmtsCloseDB(ts);
 				RETURN_NULL();
 			}
 		}
 	}
 	if (!di) {
 		// Not found
-		rpmtsCloseDB(ts);
 		RETURN_NULL();
 	}
 
@@ -433,7 +435,6 @@ PHP_FUNCTION(rpmdbsearch)
 	}
 
 	rpmdbFreeIterator(di);
-	rpmtsCloseDB(ts);
 }
 /* }}} */
 
@@ -571,6 +572,24 @@ PHP_RINIT_FUNCTION(rpminfo)
 #if defined(COMPILE_DL_RPMINFO) && defined(ZTS)
 	ZEND_TSRMLS_CACHE_UPDATE();
 #endif
+
+	return SUCCESS;
+}
+/* }}} */
+
+/* {{{ PHP_RSHUTDOWN_FUNCTION
+ */
+PHP_RSHUTDOWN_FUNCTION(rpminfo)
+{
+	if (RPMINFO_G(ts)) {
+		if (RPMINFO_G(db)) {
+			rpmtsCloseDB(RPMINFO_G(ts));
+			RPMINFO_G(db) = NULL;
+		}
+		rpmtsFree(RPMINFO_G(ts));
+		RPMINFO_G(ts) = NULL;
+	}
+
 	return SUCCESS;
 }
 /* }}} */
@@ -599,17 +618,7 @@ static PHP_GINIT_FUNCTION(rpminfo) /* {{{ */
 	ZEND_TSRMLS_CACHE_UPDATE();
 #endif
 	rpminfo_globals->ts = NULL;
-}
-/* }}} */
-
-/* {{{ PHP_GSHUTDOWN_FUNCTION
-*/
-PHP_GSHUTDOWN_FUNCTION(rpminfo)
-{
-	if (rpminfo_globals->ts) {
-		rpmtsFree(rpminfo_globals->ts);
-		rpminfo_globals->ts = NULL;
-	}
+	rpminfo_globals->db = NULL;
 }
 /* }}} */
 
@@ -637,12 +646,12 @@ zend_module_entry rpminfo_module_entry = {
 	PHP_MINIT(rpminfo),
 	NULL,
 	PHP_RINIT(rpminfo),
-	NULL,
+	PHP_RSHUTDOWN(rpminfo),
 	PHP_MINFO(rpminfo),
 	PHP_RPMINFO_VERSION,
 	PHP_MODULE_GLOBALS(rpminfo),
 	PHP_GINIT(rpminfo),
-	PHP_GSHUTDOWN(rpminfo),
+	NULL,
 	NULL,
 	STANDARD_MODULE_PROPERTIES_EX
 };

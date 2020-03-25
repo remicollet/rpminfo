@@ -38,6 +38,7 @@ extern zend_module_entry rpminfo_module_entry;
 
 ZEND_BEGIN_MODULE_GLOBALS(rpminfo)
 	rpmts ts;
+	rpmdb db;
 ZEND_END_MODULE_GLOBALS(rpminfo)
 
 #define RPMINFO_G(v) ZEND_MODULE_GLOBALS_ACCESSOR(rpminfo, v)
