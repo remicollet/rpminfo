@@ -61,22 +61,32 @@ static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
 	rpmTagVal tag;
 	rpmTagType type;
 	const char *val;
+	int i;
 
 	array_init(return_value);
 	hi = headerInitIterator(h);
 	while ((tag=headerNextTag(hi)) != RPMTAG_NOT_FOUND) {
-		switch (tag) {
-			case RPMTAG_NAME:
-			case RPMTAG_VERSION:
-			case RPMTAG_RELEASE:
-			case RPMTAG_EPOCH:
-			case RPMTAG_ARCH:
-			case RPMTAG_SUMMARY:
-				break;
-			default:
-				if (!full) {
-					continue;
-				}
+		if (!full) {
+			switch (tag) {
+				case RPMTAG_NAME:
+				case RPMTAG_VERSION:
+				case RPMTAG_RELEASE:
+				case RPMTAG_EPOCH:
+				case RPMTAG_ARCH:
+				case RPMTAG_SUMMARY:
+					/* Always present tags */
+					break;
+				default:
+					/* Additional tags */
+					for (i=0 ; i<RPMINFO_G(nb_tags) ; i++) {
+						if (tag == RPMINFO_G(tags)[i]) {
+							break;
+						}
+					}
+					if (i==RPMINFO_G(nb_tags)) {
+						continue;
+					}
+			}
 		}
 
 		type = rpmTagGetTagType(tag);
@@ -516,6 +526,43 @@ PHP_FUNCTION(rpmvercmp)
 }
 /* }}} */
 
+#if PHP_VERSION_ID < 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmaddtag, 0, 2, _IS_BOOL, NULL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmaddtag, 0, 2, _IS_BOOL, 0)
+#endif
+    ZEND_ARG_TYPE_INFO(0, rpmtag, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+/* {{{ proto int rpmaddtag(int tag)
+   add a tag in the default set */
+PHP_FUNCTION(rpmaddtag)
+{
+	int i;
+	zend_long tag;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &tag) == FAILURE) {
+		return;
+	}
+
+	if (RPMINFO_G(tags)) {
+		for (i=0 ; i<RPMINFO_G(nb_tags) ; i++) {
+			if (RPMINFO_G(tags)[i] == tag) {
+				RETURN_BOOL(0);
+			}
+		}
+		RPMINFO_G(max_tags) += 16;
+		RPMINFO_G(tags) = erealloc(RPMINFO_G(tags), RPMINFO_G(max_tags) * sizeof(rpmTagVal));
+	} else {
+		RPMINFO_G(max_tags) = 16;
+		RPMINFO_G(tags) = emalloc(RPMINFO_G(max_tags) * sizeof(rpmTagVal));
+	}
+	RPMINFO_G(tags)[RPMINFO_G(nb_tags)++] = tag;
+
+	RETURN_BOOL(1);
+}
+/* }}} */
+
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(rpminfo)
@@ -573,6 +620,10 @@ PHP_RINIT_FUNCTION(rpminfo)
 	ZEND_TSRMLS_CACHE_UPDATE();
 #endif
 
+	RPMINFO_G(nb_tags) = 0;
+	RPMINFO_G(max_tags) = 0;
+	RPMINFO_G(tags) = NULL;
+
 	return SUCCESS;
 }
 /* }}} */
@@ -588,6 +639,13 @@ PHP_RSHUTDOWN_FUNCTION(rpminfo)
 		}
 		rpmtsFree(RPMINFO_G(ts));
 		RPMINFO_G(ts) = NULL;
+	}
+
+	if (RPMINFO_G(tags)) {
+		efree(RPMINFO_G(tags));
+		RPMINFO_G(nb_tags) = 0;
+		RPMINFO_G(max_tags) = 0;
+		RPMINFO_G(tags) = NULL;
 	}
 
 	return SUCCESS;
@@ -627,6 +685,7 @@ static PHP_GINIT_FUNCTION(rpminfo) /* {{{ */
  * Every user visible function must have an entry in rpminfo_functions[].
  */
 const zend_function_entry rpminfo_functions[] = {
+	PHP_FE(rpmaddtag,         arginfo_rpmaddtag)
 	PHP_FE(rpmdbinfo,         arginfo_rpmdbinfo)
 	PHP_FE(rpmdbsearch,       arginfo_rpmdbsearch)
 	PHP_FE(rpminfo,           arginfo_rpminfo)

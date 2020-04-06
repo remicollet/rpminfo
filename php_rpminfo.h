@@ -22,7 +22,7 @@
 extern zend_module_entry rpminfo_module_entry;
 #define phpext_rpminfo_ptr &rpminfo_module_entry
 
-#define PHP_RPMINFO_VERSION "0.4.3-dev"
+#define PHP_RPMINFO_VERSION "0.5.0-dev"
 
 #ifdef PHP_WIN32
 #	define PHP_RPMINFO_API __declspec(dllexport)
@@ -37,8 +37,11 @@ extern zend_module_entry rpminfo_module_entry;
 #endif
 
 ZEND_BEGIN_MODULE_GLOBALS(rpminfo)
-	rpmts ts;
-	rpmdb db;
+	rpmts ts;			/* transaction set 	*/
+	rpmdb db;			/* database			*/
+	int nb_tags; 		/* stored tags 		*/
+	int max_tags; 		/* allocated tags 	*/
+	rpmTagVal *tags; 	/* tags storage 	*/
 ZEND_END_MODULE_GLOBALS(rpminfo)
 
 #define RPMINFO_G(v) ZEND_MODULE_GLOBALS_ACCESSOR(rpminfo, v)
