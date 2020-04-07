@@ -1,4 +1,4 @@
-Extension [ <persistent> extension #15 rpminfo version 0.4.2 ] {
+Extension [ <persistent> extension #15 rpminfo version 0.5.0 ] {
 
   - Constants [271] {
     Constant [ string RPMVERSION ] { 4.15.1 }
@@ -275,6 +275,13 @@ Extension [ <persistent> extension #15 rpminfo version 0.4.2 ] {
   }
 
   - Functions {
+    Function [ <internal:rpminfo> function rpmaddtag ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> int $rpmtag ]
+      }
+      - Return [ bool ]
+    }
     Function [ <internal:rpminfo> function rpmdbinfo ] {
 
       - Parameters [2] {
