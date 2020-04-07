@@ -3,12 +3,9 @@
   <name>rpminfo</name>
   <channel>pecl.php.net</channel>
   <summary>RPM information</summary>
-  <description>Retrieve RPM information using librpm.
-Available functions:
-- rpmvercmp to compare 2 EVRs
-- rpminfo to retrieve information from a RPM file
-- rpmdbinfo to rerieve information from an installed RPM
-- rpmdbsearch to search installed RPMs
+  <description>Retrieve RPM information using librpm, from local RPM file or from installed packages database.
+
+Documentation: https://www.php.net/rpminfo
 </description>
   <lead>
     <name>Remi Collet</name>
