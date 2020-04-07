@@ -18,7 +18,7 @@ Available functions:
   </lead>
   <date>2020-04-07</date>
   <version>
-    <release>0.5.0</release>
+    <release>0.5.1dev</release>
     <api>0.5.0</api>
   </version>
   <stability>
@@ -27,7 +27,7 @@ Available functions:
   </stability>
   <license>PHP 3.01</license>
   <notes>
-- add rpmaddtag() function
+-
   </notes>
   <contents>
     <dir name="/">
@@ -72,6 +72,21 @@ Available functions:
   <providesextension>rpminfo</providesextension>
   <extsrcrelease/>
   <changelog>
+    <release>
+      <date>2020-04-07</date>
+      <version>
+        <release>0.5.0</release>
+        <api>0.5.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license>PHP 3.01</license>
+      <notes>
+- add rpmaddtag() function
+      </notes>
+    </release>
     <release>
       <date>2020-03-25</date>
       <version>
