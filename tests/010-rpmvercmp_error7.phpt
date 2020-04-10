@@ -14,12 +14,12 @@ var_dump(rpmvercmp("a", "b", "c"));
 Done
 --EXPECTF--
 
-Warning: rpmvercmp() expects exactly 2 parameters, 0 given in %s/002-rpmvercmp.php on line %d
+Warning: rpmvercmp() expects exactly 2 parameters, 0 given in %s
 NULL
 
-Warning: rpmvercmp() expects exactly 2 parameters, 1 given in %s/002-rpmvercmp.php on line %d
+Warning: rpmvercmp() expects exactly 2 parameters, 1 given in %s
 NULL
 
-Warning: rpmvercmp() expects exactly 2 parameters, 3 given in %s/002-rpmvercmp.php on line %d
+Warning: rpmvercmp() expects exactly 2 parameters, 3 given in %s
 NULL
 Done
