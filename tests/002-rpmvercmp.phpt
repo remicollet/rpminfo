@@ -35,21 +35,8 @@ foreach ($cases as $case) {
 	}
 }
 if ($ok) echo "OK\n";
-// Errors
-var_dump(rpmvercmp());
-var_dump(rpmvercmp("a"));
-var_dump(rpmvercmp("a", "b", "c"));
 ?>
 Done
 --EXPECTF--
 OK
-
-Warning: rpmvercmp() expects exactly 2 parameters, 0 given in %s/002-rpmvercmp.php on line %d
-NULL
-
-Warning: rpmvercmp() expects exactly 2 parameters, 1 given in %s/002-rpmvercmp.php on line %d
-NULL
-
-Warning: rpmvercmp() expects exactly 2 parameters, 3 given in %s/002-rpmvercmp.php on line %d
-NULL
 Done
