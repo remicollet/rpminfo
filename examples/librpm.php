@@ -59,21 +59,73 @@ abstract class Common {
 				if (isset($this->info['Requirename'])) {
 					return $this->_dep($this->info['Requirename'], $this->info['Requireflags'], $this->info['Requireversion']);
 				}
+				else
+				{
+					return NULL;
+				}
 			case 'Conflicts':
 				if (isset($this->info['Conflictname'])) {
 					return $this->_dep($this->info['Conflictname'], $this->info['Conflictflags'], $this->info['Conflictversion']);
+				}
+				else
+				{
+					return NULL;
 				}
 			case 'Obsoletes':
 				if (isset($this->info['Obsoletename'])) {
 					return $this->_dep($this->info['Obsoletename'], $this->info['Obsoleteflags'], $this->info['Obsoleteversion']);
 				}
+				else
+				{
+					return NULL;
+				}
 			case 'Provides':
 				if (isset($this->info['Providename'])) {
 					return $this->_dep($this->info['Providename'], $this->info['Provideflags'], $this->info['Provideversion']);
 				}
+				else
+				{
+					return NULL;
+				}
+			case 'Recommends':
+				if (isset($this->info['Recommendname'])) {
+					return $this->_dep($this->info['Recommendname'], $this->info['Recommendflags'], $this->info['Recommendversion']);
+				}
+				else
+				{
+					return NULL;
+				}
+			case 'Suggests':
+				if (isset($this->info['Suggestname'])) {
+					return $this->_dep($this->info['Suggestname'], $this->info['Suggestflags'], $this->info['Suggestversion']);
+				}
+				else
+				{
+					return NULL;
+				}
+			case 'Supplements':
+				if (isset($this->info['Supplementname'])) {
+					return $this->_dep($this->info['Supplementname'], $this->info['Supplementflags'], $this->info['Supplementversion']);
+				}
+				else
+				{
+					return NULL;
+				}
+			case 'Enhances':
+				if (isset($this->info['Enhancename'])) {
+					return $this->_dep($this->info['Enhancename'], $this->info['Enhanceflags'], $this->info['Enhanceversion']);
+				}
+				else
+				{
+					return NULL;
+				}
 			case 'Files':
 				if (isset($this->info['Basenames'])) {
 					return $this->_files();
+				}
+				else
+				{
+					return NULL;
 				}
 			default:
 				if (isset($this->info[$name])) {
