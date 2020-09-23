@@ -1,6 +1,6 @@
 /*
   +----------------------------------------------------------------------+
-  | PHP Version 7                                                        |
+  | rpminfo extension for PHP                                            |
   +----------------------------------------------------------------------+
   | Copyright (c) The PHP Group                                          |
   +----------------------------------------------------------------------+
@@ -22,7 +22,7 @@
 extern zend_module_entry rpminfo_module_entry;
 #define phpext_rpminfo_ptr &rpminfo_module_entry
 
-#define PHP_RPMINFO_VERSION "0.5.1-dev"
+#define PHP_RPMINFO_VERSION "0.5.1"
 
 #ifdef PHP_WIN32
 #	define PHP_RPMINFO_API __declspec(dllexport)
