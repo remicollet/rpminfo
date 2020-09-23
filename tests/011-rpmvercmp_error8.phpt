@@ -25,7 +25,7 @@ try {
 ?>
 Done
 --EXPECTF--
-rpmvercmp() expects exactly 2 parameters, 0 given
-rpmvercmp() expects exactly 2 parameters, 1 given
-rpmvercmp() expects exactly 2 parameters, 3 given
+rpmvercmp() expects exactly 2 %s, 0 given
+rpmvercmp() expects exactly 2 %s, 1 given
+rpmvercmp() expects exactly 2 %s, 3 given
 Done
