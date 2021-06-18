@@ -24,7 +24,8 @@ Documentation: https://www.php.net/rpminfo
   </stability>
   <license>PHP 3.01</license>
   <notes>
--
+- generate arginfo from stub
+- raise dependency on PHP 7.2
   </notes>
   <contents>
     <dir name="/">
@@ -32,6 +33,8 @@ Documentation: https://www.php.net/rpminfo
       <file name="config.m4" role="src"/>
       <file name="php_rpminfo.h" role="src" />
       <file name="rpminfo.c" role="src"/>
+      <file name="rpminfo.stub.php" role="src"/>
+      <file name="rpminfo_arginfo.h" role="src"/>
       <!-- documentation -->
       <file name="CREDITS" role="doc"/>
       <file name="LICENSE" role="doc"/>
@@ -61,7 +64,7 @@ Documentation: https://www.php.net/rpminfo
   <dependencies>
     <required>
       <php>
-        <min>7.0.0</min>
+        <min>7.2.0</min>
       </php>
       <pearinstaller>
         <min>1.10.0</min>

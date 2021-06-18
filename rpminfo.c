@@ -32,6 +32,12 @@
 
 #include "php_rpminfo.h"
 
+#ifndef ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE
+#define ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(pass_by_ref, name, type_hint, allow_null, default_value) \
+        ZEND_ARG_TYPE_INFO(pass_by_ref, name, type_hint, allow_null)
+#endif
+#include "rpminfo_arginfo.h"
+
 ZEND_DECLARE_MODULE_GLOBALS(rpminfo)
 
 static rpmts rpminfo_getts(void) {
@@ -199,16 +205,6 @@ static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
 	}
 }
 
-#if PHP_VERSION_ID < 70200
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpminfo, 0, 1, IS_ARRAY, NULL, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpminfo, 0, 1, IS_ARRAY, 1)
-#endif
-    ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 0)
-    ZEND_ARG_TYPE_INFO(0, full, _IS_BOOL, 0)
-    ZEND_ARG_TYPE_INFO(1, error, IS_STRING, 1)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto array rpminfo(string path [, bool full [, string &$error])
    Retrieve information from a RPM file */
 PHP_FUNCTION(rpminfo)
@@ -266,15 +262,6 @@ PHP_FUNCTION(rpminfo)
 	RETURN_NULL();
 }
 /* }}} */
-
-#if PHP_VERSION_ID < 70200
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmdbinfo, 0, 1, IS_ARRAY, NULL, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmdbinfo, 0, 1, IS_ARRAY, 1)
-#endif
-    ZEND_ARG_TYPE_INFO(0, nevr, IS_STRING, 0)
-    ZEND_ARG_TYPE_INFO(0, full, _IS_BOOL, 0)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto array rpmdbinfo(string nevr [, bool full])
    Retrieve information from an installed RPM */
@@ -363,17 +350,6 @@ static int haveIndex(zend_long tag) {
 	return 0;
 }
 
-#if PHP_VERSION_ID < 70200
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmdbsearch, 0, 1, IS_ARRAY, NULL, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmdbsearch, 0, 1, IS_ARRAY, 1)
-#endif
-    ZEND_ARG_TYPE_INFO(0, pattern, IS_STRING, 0)
-    ZEND_ARG_TYPE_INFO(0, rpmtag, IS_LONG, 0)
-    ZEND_ARG_TYPE_INFO(0, rpmmire, IS_LONG, 0)
-    ZEND_ARG_TYPE_INFO(0, full, _IS_BOOL, 0)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto array rpmdbsearch(string pattern [, integer tag_name = RPMTAG_NAME [, integer mode = -1 [, bool full = 0]]])
    Search information from installed RPMs */
 PHP_FUNCTION(rpmdbsearch)
@@ -448,15 +424,6 @@ PHP_FUNCTION(rpmdbsearch)
 }
 /* }}} */
 
-#if PHP_VERSION_ID < 70200
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmvercmp, 0, 2, IS_LONG, NULL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmvercmp, 0, 2, IS_LONG, 0)
-#endif
-    ZEND_ARG_TYPE_INFO(0, evr1, IS_STRING, 0)
-    ZEND_ARG_TYPE_INFO(0, evr2, IS_STRING, 0)
-ZEND_END_ARG_INFO()
-
 /* {{{ proto int rpmcmpver(string evr1, string evr2)
    Compare 2 RPM EVRs (epoch:version-release) strings */
 PHP_FUNCTION(rpmvercmp)
@@ -525,14 +492,6 @@ PHP_FUNCTION(rpmvercmp)
 	efree(evr2);
 }
 /* }}} */
-
-#if PHP_VERSION_ID < 70200
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmaddtag, 0, 1, _IS_BOOL, NULL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_rpmaddtag, 0, 1, _IS_BOOL, 0)
-#endif
-    ZEND_ARG_TYPE_INFO(0, rpmtag, IS_LONG, 0)
-ZEND_END_ARG_INFO()
 
 /* {{{ proto int rpmaddtag(int tag)
    add a tag in the default set */
@@ -680,20 +639,6 @@ static PHP_GINIT_FUNCTION(rpminfo) /* {{{ */
 }
 /* }}} */
 
-/* {{{ rpminfo_functions[]
- *
- * Every user visible function must have an entry in rpminfo_functions[].
- */
-const zend_function_entry rpminfo_functions[] = {
-	PHP_FE(rpmaddtag,         arginfo_rpmaddtag)
-	PHP_FE(rpmdbinfo,         arginfo_rpmdbinfo)
-	PHP_FE(rpmdbsearch,       arginfo_rpmdbsearch)
-	PHP_FE(rpminfo,           arginfo_rpminfo)
-	PHP_FE(rpmvercmp,         arginfo_rpmvercmp)
-	PHP_FE_END
-};
-/* }}} */
-
 /* {{{ rpminfo_module_entry
  */
 zend_module_entry rpminfo_module_entry = {
@@ -701,7 +646,7 @@ zend_module_entry rpminfo_module_entry = {
 	NULL,
 	NULL,
 	"rpminfo",
-	rpminfo_functions,
+	ext_functions,
 	PHP_MINIT(rpminfo),
 	NULL,
 	PHP_RINIT(rpminfo),
