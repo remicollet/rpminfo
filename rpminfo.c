@@ -32,9 +32,14 @@
 
 #include "php_rpminfo.h"
 
+/* For PHP < 8.0 */
 #ifndef ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE
 #define ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(pass_by_ref, name, type_hint, allow_null, default_value) \
         ZEND_ARG_TYPE_INFO(pass_by_ref, name, type_hint, allow_null)
+#endif
+
+#ifndef RETURN_THROWS
+#define RETURN_THROWS return
 #endif
 
 #include "rpminfo_arginfo.h"
@@ -219,7 +224,7 @@ PHP_FUNCTION(rpminfo)
 	rpmts ts = rpminfo_getts();
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|bz", &path, &len, &full, &error) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 	if (error) {
 		ZVAL_DEREF(error);
@@ -276,7 +281,7 @@ PHP_FUNCTION(rpmdbinfo)
 	rpmdbMatchIterator di;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "p|b", &name, &len, &full) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	db = rpminfo_getdb();
@@ -368,7 +373,7 @@ PHP_FUNCTION(rpmdbsearch)
 	int useIndex = 1;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|llb", &name, &len, &crit, &mode, &full) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	if (crit == RPMTAG_PKGID) {
@@ -436,7 +441,7 @@ PHP_FUNCTION(rpmvercmp)
 	size_t len1, len2;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &in_evr1, &len1, &in_evr2, &len2) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 	evr1 = estrdup(in_evr1);
 	evr2 = estrdup(in_evr2);
@@ -502,7 +507,7 @@ PHP_FUNCTION(rpmaddtag)
 	zend_long tag;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &tag) == FAILURE) {
-		return;
+		RETURN_THROWS();
 	}
 
 	if (RPMINFO_G(tags)) {
