@@ -36,6 +36,7 @@
 #define ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(pass_by_ref, name, type_hint, allow_null, default_value) \
         ZEND_ARG_TYPE_INFO(pass_by_ref, name, type_hint, allow_null)
 #endif
+
 #include "rpminfo_arginfo.h"
 
 ZEND_DECLARE_MODULE_GLOBALS(rpminfo)
@@ -510,8 +511,10 @@ PHP_FUNCTION(rpmaddtag)
 				RETURN_BOOL(0);
 			}
 		}
-		RPMINFO_G(max_tags) += 16;
-		RPMINFO_G(tags) = erealloc(RPMINFO_G(tags), RPMINFO_G(max_tags) * sizeof(rpmTagVal));
+		if (RPMINFO_G(nb_tags) == RPMINFO_G(max_tags)) {
+			RPMINFO_G(max_tags) += 16;
+			RPMINFO_G(tags) = erealloc(RPMINFO_G(tags), RPMINFO_G(max_tags) * sizeof(rpmTagVal));
+		}
 	} else {
 		RPMINFO_G(max_tags) = 16;
 		RPMINFO_G(tags) = emalloc(RPMINFO_G(max_tags) * sizeof(rpmTagVal));
