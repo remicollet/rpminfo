@@ -39,7 +39,7 @@
 #endif
 
 #ifndef RETURN_THROWS
-#define RETURN_THROWS return
+#define RETURN_THROWS() return
 #endif
 
 #include "rpminfo_arginfo.h"
@@ -375,18 +375,50 @@ PHP_FUNCTION(rpmdbsearch)
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s|llb", &name, &len, &crit, &mode, &full) == FAILURE) {
 		RETURN_THROWS();
 	}
+	if (rpmTagGetType(crit) == RPM_NULL_TYPE) {
+#if PHP_VERSION_ID < 80000
+		php_error_docref(NULL, E_WARNING, "Unkown rpmtag");
+		RETURN_NULL();
+#else
+		zend_argument_value_error(2, "Unkown rpmtag");
+		RETURN_THROWS();
+#endif
+	}
+	if (mode != RPMMIRE_DEFAULT &&
+		mode != RPMMIRE_STRCMP &&
+		mode != RPMMIRE_REGEX &&
+		mode != RPMMIRE_GLOB &&
+		mode != -1) {
+#if PHP_VERSION_ID < 80000
+		php_error_docref(NULL, E_WARNING, "Unkown rpmmire");
+		RETURN_NULL();
+#else
+		zend_argument_value_error(3, "Unkown rpmmire");
+		RETURN_THROWS();
+#endif
+	}
 
 	if (crit == RPMTAG_PKGID) {
 		if (len != 32) {
+#if PHP_VERSION_ID < 80000
 			php_error_docref(NULL, E_WARNING, "Bad length for PKGID, 32 expected");
 			RETURN_NULL();
+#else
+			zend_argument_value_error(1, "Bad length for PKGID, 32 expected");
+			RETURN_THROWS();
+#endif
 		}
 		len = hex2bin(name, MD5, len);
 		name = MD5;
 	} else if (crit == RPMTAG_HDRID) {
 		if (len != 40) {
+#if PHP_VERSION_ID < 80000
 			php_error_docref(NULL, E_WARNING, "Bad length for HDRID, 40 expected");
 			RETURN_NULL();
+#else
+			zend_argument_value_error(1, "Bad length for HDRID, 40 expected");
+			RETURN_THROWS();
+#endif
 		}
 	} else if (crit == RPMTAG_INSTALLTID) {
 		tid = atol(name);
@@ -508,6 +540,16 @@ PHP_FUNCTION(rpmaddtag)
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &tag) == FAILURE) {
 		RETURN_THROWS();
+	}
+
+	if (rpmTagGetType(tag) == RPM_NULL_TYPE) {
+#if PHP_VERSION_ID < 80000
+		php_error_docref(NULL, E_WARNING, "Unkown rpmtag");
+		RETURN_BOOL(0);
+#else
+		zend_argument_value_error(1, "Unkown rpmtag");
+		RETURN_THROWS();
+#endif
 	}
 
 	if (RPMINFO_G(tags)) {
