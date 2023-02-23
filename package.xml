@@ -22,7 +22,7 @@ Documentation: https://www.php.net/rpminfo
     <release>stable</release>
     <api>stable</api>
   </stability>
-  <license>PHP 3.01</license>
+  <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes>
 - generate arginfo from stub and add missing default values
 - raise dependency on PHP 7.2
