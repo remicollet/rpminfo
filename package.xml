@@ -13,10 +13,10 @@ Documentation: https://www.php.net/rpminfo
     <email>remi@php.net</email>
     <active>yes</active>
   </lead>
-  <date>2021-06-18</date>
+  <date>2021-09-11</date>
   <version>
-    <release>0.6.0</release>
-    <api>0.5.0</api>
+    <release>0.7.0dev</release>
+    <api>0.7.0</api>
   </version>
   <stability>
     <release>stable</release>
@@ -24,9 +24,7 @@ Documentation: https://www.php.net/rpminfo
   </stability>
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes>
-- generate arginfo from stub and add missing default values
-- raise dependency on PHP 7.2
-- raise exception on bad parameter value with PHP 8
+-
   </notes>
   <contents>
     <dir name="/">
@@ -77,6 +75,23 @@ Documentation: https://www.php.net/rpminfo
   <providesextension>rpminfo</providesextension>
   <extsrcrelease/>
   <changelog>
+    <release>
+      <date>2021-06-18</date>
+      <version>
+        <release>0.6.0</release>
+        <api>0.5.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
+      <notes>
+- generate arginfo from stub and add missing default values
+- raise dependency on PHP 7.2
+- raise exception on bad parameter value with PHP 8
+      </notes>
+    </release>
     <release>
       <date>2020-09-23</date>
       <version>
