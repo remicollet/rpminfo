@@ -32,21 +32,6 @@
 
 #include "php_rpminfo.h"
 
-/* For PHP < 8.0 */
-#ifndef ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE
-#define ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(pass_by_ref, name, type_hint, allow_null, default_value) \
-        ZEND_ARG_TYPE_INFO(pass_by_ref, name, type_hint, allow_null)
-#endif
-/* only used for rpmvercmp */
-#ifndef ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX
-#define ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(name, return_reference, required_num_args, type) \
-        ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, IS_LONG, 0)
-#endif
-
-#ifndef RETURN_THROWS
-#define RETURN_THROWS() return
-#endif
-
 #include "rpminfo_arginfo.h"
 
 ZEND_DECLARE_MODULE_GLOBALS(rpminfo)
@@ -381,49 +366,29 @@ PHP_FUNCTION(rpmdbsearch)
 		RETURN_THROWS();
 	}
 	if (rpmTagGetType(crit) == RPM_NULL_TYPE) {
-#if PHP_VERSION_ID < 80000
-		php_error_docref(NULL, E_WARNING, "Unkown rpmtag");
-		RETURN_NULL();
-#else
 		zend_argument_value_error(2, "Unkown rpmtag");
 		RETURN_THROWS();
-#endif
 	}
 	if (mode != RPMMIRE_DEFAULT &&
 		mode != RPMMIRE_STRCMP &&
 		mode != RPMMIRE_REGEX &&
 		mode != RPMMIRE_GLOB &&
 		mode != -1) {
-#if PHP_VERSION_ID < 80000
-		php_error_docref(NULL, E_WARNING, "Unkown rpmmire");
-		RETURN_NULL();
-#else
 		zend_argument_value_error(3, "Unkown rpmmire");
 		RETURN_THROWS();
-#endif
 	}
 
 	if (crit == RPMTAG_PKGID) {
 		if (len != 32) {
-#if PHP_VERSION_ID < 80000
-			php_error_docref(NULL, E_WARNING, "Bad length for PKGID, 32 expected");
-			RETURN_NULL();
-#else
 			zend_argument_value_error(1, "Bad length for PKGID, 32 expected");
 			RETURN_THROWS();
-#endif
 		}
 		len = hex2bin(name, MD5, len);
 		name = MD5;
 	} else if (crit == RPMTAG_HDRID) {
 		if (len != 40) {
-#if PHP_VERSION_ID < 80000
-			php_error_docref(NULL, E_WARNING, "Bad length for HDRID, 40 expected");
-			RETURN_NULL();
-#else
 			zend_argument_value_error(1, "Bad length for HDRID, 40 expected");
 			RETURN_THROWS();
-#endif
 		}
 	} else if (crit == RPMTAG_INSTALLTID) {
 		tid = atol(name);
@@ -555,13 +520,8 @@ PHP_FUNCTION(rpmvercmp)
 		RETURN_BOOL(r != 0);
 	}
 
-#if PHP_VERSION_ID < 80000
-	php_error_docref(NULL, E_WARNING, "%s is not a valid comparison operator", op);
-	RETURN_NULL();
-#else
 	zend_argument_value_error(3, "must be a valid comparison operator");
 	RETURN_THROWS();
-#endif
 }
 /* }}} */
 
@@ -577,13 +537,8 @@ PHP_FUNCTION(rpmaddtag)
 	}
 
 	if (rpmTagGetType(tag) == RPM_NULL_TYPE) {
-#if PHP_VERSION_ID < 80000
-		php_error_docref(NULL, E_WARNING, "Unkown rpmtag");
-		RETURN_BOOL(0);
-#else
 		zend_argument_value_error(1, "Unkown rpmtag");
 		RETURN_THROWS();
-#endif
 	}
 
 	if (RPMINFO_G(tags)) {

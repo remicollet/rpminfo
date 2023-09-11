@@ -25,6 +25,7 @@ Documentation: https://www.php.net/rpminfo
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes>
 - add optional operator to rpmcmpver for consistency with version_compare
+- drop support for PHP 7
   </notes>
   <contents>
     <dir name="/">
@@ -65,7 +66,7 @@ Documentation: https://www.php.net/rpminfo
   <dependencies>
     <required>
       <php>
-        <min>7.2.0</min>
+        <min>8.0.0</min>
       </php>
       <pearinstaller>
         <min>1.10.0</min>
