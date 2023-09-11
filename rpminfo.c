@@ -37,6 +37,11 @@
 #define ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(pass_by_ref, name, type_hint, allow_null, default_value) \
         ZEND_ARG_TYPE_INFO(pass_by_ref, name, type_hint, allow_null)
 #endif
+/* only used for rpmvercmp */
+#ifndef ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX
+#define ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(name, return_reference, required_num_args, type) \
+        ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(name, return_reference, required_num_args, IS_LONG, 0)
+#endif
 
 #ifndef RETURN_THROWS
 #define RETURN_THROWS() return
@@ -469,10 +474,11 @@ PHP_FUNCTION(rpmvercmp)
 	char *in_evr1, *evr1, *v1, *r1;
 	char *in_evr2, *evr2, *v2, *r2;
 	char *p, empty[] = "";
+	char *op = NULL;
 	long e1, e2, r;
-	size_t len1, len2;
+	size_t len1, len2, oplen;
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ss", &in_evr1, &len1, &in_evr2, &len2) == FAILURE) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ss|s", &in_evr1, &len1, &in_evr2, &len2, &op, &oplen) == FAILURE) {
 		RETURN_THROWS();
 	}
 	evr1 = estrdup(in_evr1);
@@ -498,9 +504,9 @@ PHP_FUNCTION(rpmvercmp)
 		e2 = 0;
 	}
 	if (e1 < e2) {
-		RETVAL_LONG(-1);
+		r = -1;
 	} else if (e1 > e2) {
-		RETVAL_LONG(1);
+		r = 1;
 	} else {
 		// Version
 		p = strchr(v1, '-');
@@ -518,16 +524,44 @@ PHP_FUNCTION(rpmvercmp)
 			r2 = empty;
 		}
 		r = rpmvercmp(v1, v2);
-		if (r) {
-			RETVAL_LONG(r);
-		} else {
+		if (!r) {
 			// Release
 			r = rpmvercmp(r1, r2);
-			RETVAL_LONG(r);
 		}
 	}
 	efree(evr1);
 	efree(evr2);
+
+	if (!op) {
+		RETURN_LONG(r);
+	}
+
+	if (!strcmp(op, "<") || !strcmp(op, "lt")) {
+		RETURN_BOOL(r < 0);
+	}
+	if (!strcmp(op, "<=") || !strcmp(op, "le")) {
+		RETURN_BOOL(r <= 0);
+	}
+	if (!strcmp(op, ">") || !strcmp(op, "gt")) {
+		RETURN_BOOL(r > 0);
+	}
+	if (!strcmp(op, ">=") || !strcmp(op, "ge")) {
+		RETURN_BOOL(r >= 0);
+	}
+	if (!strcmp(op, "==") || !strcmp(op, "=") || !strcmp(op, "eq")) {
+		RETURN_BOOL(r == 0);
+	}
+	if (!strcmp(op, "!=") || !strcmp(op, "<>") || !strcmp(op, "ne")) {
+		RETURN_BOOL(r != 0);
+	}
+
+#if PHP_VERSION_ID < 80000
+	php_error_docref(NULL, E_WARNING, "%s is not a valid comparison operator", op);
+	RETURN_NULL();
+#else
+	zend_argument_value_error(3, "must be a valid comparison operator");
+	RETURN_THROWS();
+#endif
 }
 /* }}} */
 

@@ -24,7 +24,7 @@ Documentation: https://www.php.net/rpminfo
   </stability>
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes>
--
+- add optional operator to rpmcmpver for consistency with version_compare
   </notes>
   <contents>
     <dir name="/">

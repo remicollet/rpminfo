@@ -19,13 +19,19 @@ try {
 }
 try {
 	var_dump(rpmvercmp("a", "b", "c"));
+} catch (ValueError $e) {
+    echo $e->getMessage(), "\n";
+}
+try {
+	var_dump(rpmvercmp("a", "b", "c", "d"));
 } catch (ArgumentCountError $e) {
     echo $e->getMessage(), "\n";
 }
 ?>
 Done
 --EXPECTF--
-rpmvercmp() expects exactly 2 %s, 0 given
-rpmvercmp() expects exactly 2 %s, 1 given
-rpmvercmp() expects exactly 2 %s, 3 given
+rpmvercmp() expects at least 2 %s, 0 given
+rpmvercmp() expects at least 2 %s, 1 given
+rpmvercmp(): Argument #3 ($operator) must be a valid comparison operator
+rpmvercmp() expects at most 3 %s, 4 given
 Done

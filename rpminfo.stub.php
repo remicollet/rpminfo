@@ -10,6 +10,6 @@ function rpmdbsearch(string $pattern, int $rpmtag = RPMTAG_NAME, int $rpmmire = 
 
 function rpminfo(string $path, bool $full = false, ?string &$error = null): Array|null {}
 
-function rpmvercmp(string $evr1, string $evr2): int {}
+function rpmvercmp(string $evr1, string $evr2, ?string $operator = null): int|bool {}
 
 
