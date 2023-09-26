@@ -54,7 +54,6 @@ Documentation: https://www.php.net/rpminfo
         <file name="007-rpmdbinfo.phpt" role="test"/>
         <file name="008-rpmdbsearch.phpt" role="test"/>
         <file name="009-rpmdbinfo2.phpt" role="test"/>
-        <file name="010-rpmvercmp_error7.phpt" role="test"/>
         <file name="011-rpmvercmp_error8.phpt" role="test"/>
         <file name="012-rpmaddtag.phpt" role="test"/>
         <file name="013-rpmdbsearch-error.phpt" role="test"/>
