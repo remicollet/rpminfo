@@ -13,9 +13,9 @@ Documentation: https://www.php.net/rpminfo
     <email>remi@php.net</email>
     <active>yes</active>
   </lead>
-  <date>2021-09-11</date>
+  <date>2023-09-26</date>
   <version>
-    <release>0.7.0dev</release>
+    <release>0.7.0</release>
     <api>0.7.0</api>
   </version>
   <stability>
