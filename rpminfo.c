@@ -590,10 +590,8 @@ static ssize_t php_rpm_ops_read(php_stream *stream, char *buf, size_t count)
 	return n;
 }
 
-static int php_rpm_ops_close(php_stream *stream, int close_handle)
+static void php_rpm_ops_free(struct php_rpm_stream_data_t *self, int close_handle)
 {
-	STREAM_DATA_FROM_STREAM();
-
 	if (self) {
 		if (close_handle) {
 			Fclose(self->gzdi);
@@ -603,6 +601,13 @@ static int php_rpm_ops_close(php_stream *stream, int close_handle)
 		}
 		efree(self);
 	}
+}
+
+static int php_rpm_ops_close(php_stream *stream, int close_handle)
+{
+	STREAM_DATA_FROM_STREAM();
+
+	php_rpm_ops_free(self, close_handle);
 	stream->abstract = NULL;
 
 	return EOF;
@@ -630,20 +635,14 @@ const php_stream_ops php_stream_rpmio_ops = {
 	NULL  /* set_option */
 };
 
-php_stream *php_stream_rpm_opener(php_stream_wrapper *wrapper,
-											const char *path,
-											const char *mode,
-											int options,
-											zend_string **opened_path,
-											php_stream_context *context STREAMS_DC)
+static struct php_rpm_stream_data_t *php_stream_rpm_finder(const char *path, const char *mode)
 {
 	size_t path_len;
 	zend_string *file_basename;
 	char file_dirname[MAXPATHLEN];
 	char *fragment;
 	size_t fragment_len;
-	php_stream *stream = NULL;
-	struct php_rpm_stream_data_t *self;
+	struct php_rpm_stream_data_t *self = NULL;
 	FD_t fdi;
 	FD_t gzdi;
 	int rc;
@@ -710,7 +709,7 @@ php_stream *php_stream_rpm_opener(php_stream_wrapper *wrapper,
 			break;
 		}
 	}
-	if (rc == RPMERR_ITER_END || !S_ISREG(rpmfiFMode(fi)) || !rpmfiArchiveHasContent(fi)) {
+	if (rc == RPMERR_ITER_END) {
 		Fclose(gzdi);
 		rpmfilesFree(files);
 		rpmfiFree(fi);
@@ -721,19 +720,56 @@ php_stream *php_stream_rpm_opener(php_stream_wrapper *wrapper,
 		self->files  = files;
 		self->fi     = fi;
 		self->h      = h;
-
-		stream = php_stream_alloc(&php_stream_rpmio_ops, self, NULL, mode);
 	}
 	zend_string_release_ex(file_basename, 0);
 
-	return stream;
+	return self;
+}
+
+php_stream *php_stream_rpm_opener(php_stream_wrapper *wrapper,
+											const char *path,
+											const char *mode,
+											int options,
+											zend_string **opened_path,
+											php_stream_context *context STREAMS_DC)
+{
+	struct php_rpm_stream_data_t *self;
+
+	self = php_stream_rpm_finder(path, mode);
+	if (self) {
+		if (opened_path) {
+			*opened_path = zend_string_init(path, strlen(path), 0);
+		}
+		if (!S_ISREG(rpmfiFMode(self->fi)) || !rpmfiArchiveHasContent(self->fi)) {
+			php_rpm_ops_free(self, 1);
+		} else {
+			return php_stream_alloc(&php_stream_rpmio_ops, self, NULL, mode);
+		}
+	}
+
+	return NULL;
+}
+
+static int php_stream_rpm_stat(php_stream_wrapper *wrapper, const char *url, int flags,
+								 php_stream_statbuf *ssb, php_stream_context *context)
+{
+	struct php_rpm_stream_data_t *self;
+	int rc = -1;
+
+	self = php_stream_rpm_finder(url, "r");
+	if (self) {
+		rc = rpmfiStat(self->fi, 0, &ssb->sb);
+		php_rpm_ops_free(self, 1);
+	}
+
+	return rc;
 }
 
 static const php_stream_wrapper_ops rpm_stream_wops = {
 	php_stream_rpm_opener,
 	NULL,	/* close */
 	NULL,	/* fstat */
-	NULL,	/* stat */
+	php_stream_rpm_stat,
 	NULL,	/* opendir */
 	"RPM wrapper",
 	NULL,	/* unlink */
