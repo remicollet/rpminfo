@@ -23,6 +23,7 @@
 #include "php.h"
 #include "php_ini.h"
 #include "ext/standard/info.h"
+#include "ext/standard/php_string.h"
 
 #include <fcntl.h>
 #include <rpm/rpmdb.h>
@@ -33,6 +34,17 @@
 #include "php_rpminfo.h"
 
 #include "rpminfo_arginfo.h"
+
+struct php_rpm_stream_data_t {
+	FD_t        gzdi;
+	Header      h;
+	rpmfiles    files;
+	rpmfi       fi;
+	php_stream *stream;
+};
+
+#define STREAM_DATA_FROM_STREAM() \
+	struct php_rpm_stream_data_t *self = (struct php_rpm_stream_data_t *) stream->abstract;
 
 ZEND_DECLARE_MODULE_GLOBALS(rpminfo)
 
@@ -302,7 +314,7 @@ static unsigned char nibble(char c) {
 	if (c >= 'A' && c <= 'F') {
 		return (c - 'A') + 10;
 	}
-    return 0;
+	return 0;
 }
 
 static int hex2bin(const char *hex, char *bin, int len) {
@@ -561,6 +573,169 @@ PHP_FUNCTION(rpmaddtag)
 }
 /* }}} */
 
+static ssize_t php_rpm_ops_read(php_stream *stream, char *buf, size_t count)
+{
+	ssize_t n = -1;
+	STREAM_DATA_FROM_STREAM();
+
+	if (self) {
+		n = rpmfiArchiveRead(self->fi, buf, count);
+		if (n == 0 || n < (ssize_t)count) {
+			stream->eof = 1;
+		}
+	}
+	return n;
+}
+
+static int php_rpm_ops_close(php_stream *stream, int close_handle)
+{
+	STREAM_DATA_FROM_STREAM();
+
+	if (self) {
+		if (close_handle) {
+			Fclose(self->gzdi);
+			rpmfilesFree(self->files);
+			rpmfiFree(self->fi);
+			headerFree(self->h);
+		}
+		efree(self);
+	}
+	stream->abstract = NULL;
+
+	return EOF;
+}
+
+
+const php_stream_ops php_stream_rpmio_ops = {
+	NULL, /* write */
+	php_rpm_ops_read,
+	php_rpm_ops_close,
+	NULL, /* flush */
+	"rpm",
+	NULL, /* seek */
+	NULL, /* cast */
+	NULL, /* stat */
+	NULL  /* set_option */
+};
+
+php_stream *php_stream_rpm_opener(php_stream_wrapper *wrapper,
+											const char *path,
+											const char *mode,
+											int options,
+											zend_string **opened_path,
+											php_stream_context *context STREAMS_DC)
+{
+	size_t path_len;
+	zend_string *file_basename;
+	char file_dirname[MAXPATHLEN];
+	char *fragment;
+	size_t fragment_len;
+	php_stream *stream = NULL;
+	struct php_rpm_stream_data_t *self;
+	FD_t fdi;
+	FD_t gzdi;
+	int rc;
+	Header h;
+	char rpmio_flags[80];
+	const char *compr;
+	rpmfiles files;
+	rpmfi fi;
+	rpmts ts = rpminfo_getts();
+
+	fragment = strchr(path, '#');
+	if (!fragment) {
+		return NULL;
+	}
+	if (strncasecmp("rpm://", path, 6) == 0) {
+		path += 6;
+	}
+	fragment_len = strlen(fragment);
+	if (fragment_len < 1) {
+		return NULL;
+	}
+	path_len = strlen(path);
+	if (path_len >= MAXPATHLEN || mode[0] != 'r') {
+		return NULL;
+	}
+	memcpy(file_dirname, path, path_len - fragment_len);
+	file_dirname[path_len - fragment_len] = '\0';
+	file_basename = php_basename(path, path_len - fragment_len, NULL, 0);
+	fragment++;
+	if (php_check_open_basedir(file_dirname)) {
+		zend_string_release_ex(file_basename, 0);
+		return NULL;
+	}
+	fdi = Fopen(file_dirname, "r.ufdio");
+	if (Ferror(fdi)) {
+		zend_string_release_ex(file_basename, 0);
+		return NULL;
+	}
+	rc = rpmReadPackageFile(ts, fdi, "rpm2cpio", &h);
+	if (rc != RPMRC_OK && rc != RPMRC_NOKEY && rc != RPMRC_NOTTRUSTED) {
+		zend_string_release_ex(file_basename, 0);
+		return NULL;
+	}
+
+	compr = headerGetString(h, RPMTAG_PAYLOADCOMPRESSOR);
+	snprintf(rpmio_flags, sizeof(rpmio_flags), "r.%s", compr ? compr : "gzip");
+	gzdi = Fdopen(fdi, rpmio_flags);
+	if (gzdi == NULL) {
+		zend_string_release_ex(file_basename, 0);
+		return NULL;
+	}
+
+	files = rpmfilesNew(NULL, h, 0, RPMFI_KEEPHEADER);
+	fi = rpmfiNewArchiveReader(gzdi, files, RPMFI_ITER_READ_ARCHIVE_CONTENT_FIRST);
+
+	while((rc = rpmfiNext(fi)) >=0) {
+		const char *fn = rpmfiFN(fi);
+		/*
+		printf("Name=%s, Size=%d, N=%d, mode=%d, reg=%d, content=%d\n", fn,
+			(int)rpmfiFSize(fi), (int)rpmfiFNlink(fi), (int)rpmfiFMode(fi),
+			(int)S_ISREG(rpmfiFMode(fi)), (int)rpmfiArchiveHasContent(fi));
+		*/
+		if (!strcmp(fn, fragment)) {
+			break;
+		}
+	}
+	if (rc == RPMERR_ITER_END || !S_ISREG(rpmfiFMode(fi)) || !rpmfiArchiveHasContent(fi)) {
+		Fclose(gzdi);
+		rpmfilesFree(files);
+		rpmfiFree(fi);
+		headerFree(h);
+	} else {
+		self = emalloc(sizeof(*self));
+		self->gzdi   = gzdi;
+		self->files  = files;
+		self->fi     = fi;
+		self->h      = h;
+
+		stream = php_stream_alloc(&php_stream_rpmio_ops, self, NULL, mode);
+	}
+	zend_string_release_ex(file_basename, 0);
+
+	return stream;
+}
+
+static const php_stream_wrapper_ops rpm_stream_wops = {
+	php_stream_rpm_opener,
+	NULL,	/* close */
+	NULL,	/* fstat */
+	NULL,	/* stat */
+	NULL,	/* opendir */
+	"RPM wrapper",
+	NULL,	/* unlink */
+	NULL,	/* rename */
+	NULL,	/* mkdir */
+	NULL,	/* rmdir */
+	NULL	/* metadata */
+};
+
+const php_stream_wrapper php_stream_rpm_wrapper = {
+	&rpm_stream_wops,
+	NULL,
+	0 /* is_url */
+};
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(rpminfo)
@@ -605,6 +780,8 @@ PHP_MINIT_FUNCTION(rpminfo)
 		zend_register_long_constant(tagname, strlen(tagname), rpmTagGetValue(tagname+7), CONST_CS | CONST_PERSISTENT, module_number);
 	}
 	rpmtdFree(names);
+
+	php_register_url_stream_wrapper("rpm", &php_stream_rpm_wrapper);
 
 	return SUCCESS;
 }

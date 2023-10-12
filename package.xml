@@ -13,10 +13,10 @@ Documentation: https://www.php.net/rpminfo
     <email>remi@php.net</email>
     <active>yes</active>
   </lead>
-  <date>2023-09-26</date>
+  <date>2023-10-12</date>
   <version>
-    <release>0.7.1dev</release>
-    <api>0.7.0</api>
+    <release>0.8.0dev</release>
+    <api>0.0.0</api>
   </version>
   <stability>
     <release>stable</release>
@@ -24,7 +24,7 @@ Documentation: https://www.php.net/rpminfo
   </stability>
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes>
--
+- implement rpm stream wrapper
   </notes>
   <contents>
     <dir name="/">
@@ -56,6 +56,7 @@ Documentation: https://www.php.net/rpminfo
         <file name="011-rpmvercmp_error8.phpt" role="test"/>
         <file name="012-rpmaddtag.phpt" role="test"/>
         <file name="013-rpmdbsearch-error.phpt" role="test"/>
+        <file name="014-stream.phpt" role="test"/>
         <file name="bidon.rpm" role="test"/>
         <file name="bidon-src.rpm" role="test"/>
       </dir>
