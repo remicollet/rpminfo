@@ -635,7 +635,7 @@ const php_stream_ops php_stream_rpmio_ops = {
 	NULL  /* set_option */
 };
 
-static struct php_rpm_stream_data_t *php_stream_rpm_finder(const char *path, const char *mode)
+static struct php_rpm_stream_data_t *php_stream_rpm_finder(const char *path)
 {
 	size_t path_len;
 	zend_string *file_basename;
@@ -665,7 +665,7 @@ static struct php_rpm_stream_data_t *php_stream_rpm_finder(const char *path, con
 		return NULL;
 	}
 	path_len = strlen(path);
-	if (path_len >= MAXPATHLEN || mode[0] != 'r') {
+	if (path_len >= MAXPATHLEN) {
 		return NULL;
 	}
 	memcpy(file_dirname, path, path_len - fragment_len);
@@ -735,7 +735,10 @@ php_stream *php_stream_rpm_opener(php_stream_wrapper *wrapper,
 {
 	struct php_rpm_stream_data_t *self;
 
-	self = php_stream_rpm_finder(path, mode);
+	if (mode[0] != 'r') {
+		return NULL;
+	}
+	self = php_stream_rpm_finder(path);
 	if (self) {
 		if (opened_path) {
 			*opened_path = zend_string_init(path, strlen(path), 0);
@@ -756,7 +759,7 @@ static int php_stream_rpm_stat(php_stream_wrapper *wrapper, const char *url, int
 	struct php_rpm_stream_data_t *self;
 	int rc = -1;
 
-	self = php_stream_rpm_finder(url, "r");
+	self = php_stream_rpm_finder(url);
 	if (self) {
 		rc = rpmfiStat(self->fi, 0, &ssb->sb);
 		php_rpm_ops_free(self, 1);
