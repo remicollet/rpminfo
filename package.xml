@@ -15,8 +15,8 @@ Documentation: https://www.php.net/rpminfo
   </lead>
   <date>2023-10-12</date>
   <version>
-    <release>0.8.0dev</release>
-    <api>0.0.0</api>
+    <release>1.0.0</release>
+    <api>1.0.0</api>
   </version>
   <stability>
     <release>stable</release>
@@ -24,7 +24,7 @@ Documentation: https://www.php.net/rpminfo
   </stability>
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes>
-- implement rpm stream wrapper
+- implement rpm stream wrapper with librpm >= 4.13
   </notes>
   <contents>
     <dir name="/">

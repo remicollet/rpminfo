@@ -22,7 +22,7 @@
 extern zend_module_entry rpminfo_module_entry;
 #define phpext_rpminfo_ptr &rpminfo_module_entry
 
-#define PHP_RPMINFO_VERSION "0.8.0-dev"
+#define PHP_RPMINFO_VERSION "1.0.0"
 
 #ifdef PHP_WIN32
 #	define PHP_RPMINFO_API __declspec(dllexport)
