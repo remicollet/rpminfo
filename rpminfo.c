@@ -608,6 +608,15 @@ static int php_rpm_ops_close(php_stream *stream, int close_handle)
 	return EOF;
 }
 
+static int php_zip_ops_stat(php_stream *stream, php_stream_statbuf *ssb)
+{
+	STREAM_DATA_FROM_STREAM();
+
+	if (self) {
+		 return rpmfiStat(self->fi, 0, &ssb->sb);
+	}
+	return -1;
+}
 
 const php_stream_ops php_stream_rpmio_ops = {
 	NULL, /* write */
@@ -617,7 +626,7 @@ const php_stream_ops php_stream_rpmio_ops = {
 	"rpm",
 	NULL, /* seek */
 	NULL, /* cast */
-	NULL, /* stat */
+	php_zip_ops_stat,
 	NULL  /* set_option */
 };
 

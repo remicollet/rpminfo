@@ -12,6 +12,8 @@ $n = "rpm://" . __DIR__ . "/bidon.rpm#/usr/share/doc/bidon/README";
 var_dump(in_array('rpm', stream_get_wrappers()));
 
 var_dump($f = fopen($n, "r"));
+$s = fstat($f);
+var_dump($s['size'], $s['mode']);
 var_dump(trim(fread($f, 10)));
 var_dump(feof($f));
 var_dump(trim(fread($f, 100)));
@@ -26,6 +28,8 @@ Done
 --EXPECTF--
 bool(true)
 resource(%d) of type (stream)
+int(29)
+int(33188)
 string(10) "Mon Feb 12"
 bool(false)
 string(17) "13:27:47 CET 2018"
