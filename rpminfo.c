@@ -35,6 +35,7 @@
 
 #include "rpminfo_arginfo.h"
 
+#ifdef HAVE_ARCHIVE
 struct php_rpm_stream_data_t {
 	FD_t        gzdi;
 	Header      h;
@@ -45,6 +46,7 @@ struct php_rpm_stream_data_t {
 
 #define STREAM_DATA_FROM_STREAM() \
 	struct php_rpm_stream_data_t *self = (struct php_rpm_stream_data_t *) stream->abstract;
+#endif
 
 ZEND_DECLARE_MODULE_GLOBALS(rpminfo)
 
@@ -573,6 +575,7 @@ PHP_FUNCTION(rpmaddtag)
 }
 /* }}} */
 
+#ifdef HAVE_ARCHIVE
 static ssize_t php_rpm_ops_read(php_stream *stream, char *buf, size_t count)
 {
 	ssize_t n = -1;
@@ -736,6 +739,9 @@ const php_stream_wrapper php_stream_rpm_wrapper = {
 	NULL,
 	0 /* is_url */
 };
+#endif
+
+
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(rpminfo)
@@ -781,7 +787,9 @@ PHP_MINIT_FUNCTION(rpminfo)
 	}
 	rpmtdFree(names);
 
+#ifdef HAVE_ARCHIVE
 	php_register_url_stream_wrapper("rpm", &php_stream_rpm_wrapper);
+#endif
 
 	return SUCCESS;
 }
@@ -835,6 +843,11 @@ PHP_MINFO_FUNCTION(rpminfo)
 	php_info_print_table_header(2, "rpminfo support", "enabled");
 	php_info_print_table_row(2, "Extension version", PHP_RPMINFO_VERSION);
 	php_info_print_table_row(2, "RPM library version", RPMVERSION);
+#ifdef HAVE_ARCHIVE
+	php_info_print_table_row(2, "RPM stream wrapper", "yes");
+#else
+	php_info_print_table_row(2, "RPM stream wrapper", "no");
+#endif
 	php_info_print_table_end();
 
 	/* Remove comments if you have entries in php.ini

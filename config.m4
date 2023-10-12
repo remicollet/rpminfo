@@ -16,6 +16,7 @@ if test "$PHP_RPMINFO" != "no"; then
       LIBRPM_VERSON=`$PKG_CONFIG rpm --modversion`
       AC_MSG_RESULT(from pkgconfig: version $LIBRPM_VERSON)
       if $PKG_CONFIG rpm --atleast-version 4.13; then
+        AC_DEFINE(HAVE_ARCHIVE, 1, [ Archive reader since RPM 4.13 ])
         AC_DEFINE(HAVE_WEAKDEP, 1, [ Indexes on weak dependency field since RPM 4.13 ])
       fi
     else

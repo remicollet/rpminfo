@@ -1,7 +1,10 @@
 --TEST--
 Check for stream
 --SKIPIF--
-<?php if (!extension_loaded("rpminfo")) print "skip"; ?>
+<?php
+if (!extension_loaded("rpminfo")) print "skip";
+if (version_compare(RPMVERSION, '4.13', 'lt')) print("skip librpm is older than 4.13");
+?>
 --FILE--
 <?php 
 $n = "rpm://" . __DIR__ . "/bidon.rpm#/usr/share/doc/bidon/README";
