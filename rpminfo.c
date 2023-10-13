@@ -618,7 +618,11 @@ static int php_zip_ops_stat(php_stream *stream, php_stream_statbuf *ssb)
 	STREAM_DATA_FROM_STREAM();
 
 	if (self) {
-		 return rpmfiStat(self->fi, 0, &ssb->sb);
+		struct stat s[2]; // librpm may use different size (32-bit)
+		int rc;
+		rc = rpmfiStat(self->fi, 0, s);
+		memcpy(&ssb->sb, s, sizeof(ssb->sb));
+		return rc;
 	}
 	return -1;
 }
@@ -761,7 +765,9 @@ static int php_stream_rpm_stat(php_stream_wrapper *wrapper, const char *url, int
 
 	self = php_stream_rpm_finder(url);
 	if (self) {
-		rc = rpmfiStat(self->fi, 0, &ssb->sb);
+		struct stat s[2]; // librpm may use different size (32-bit)
+		rc = rpmfiStat(self->fi, 0, s);
+		memcpy(&ssb->sb, s, sizeof(ssb->sb));
 		php_rpm_ops_free(self, 1);
 	}
 
