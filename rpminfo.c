@@ -639,7 +639,7 @@ const php_stream_ops php_stream_rpmio_ops = {
 	NULL  /* set_option */
 };
 
-static struct php_rpm_stream_data_t *php_stream_rpm_finder(const char *path)
+static struct php_rpm_stream_data_t *php_stream_rpm_finder(const char *path, int want_content)
 {
 	size_t path_len;
 	zend_string *file_basename;
@@ -700,16 +700,26 @@ static struct php_rpm_stream_data_t *php_stream_rpm_finder(const char *path)
 	}
 
 	files = rpmfilesNew(NULL, h, 0, RPMFI_KEEPHEADER);
-	fi = rpmfiNewArchiveReader(gzdi, files, RPMFI_ITER_READ_ARCHIVE_CONTENT_FIRST);
+	fi = rpmfiNewArchiveReader(gzdi, files, RPMFI_ITER_READ_ARCHIVE);
 
 	while((rc = rpmfiNext(fi)) >=0) {
 		const char *fn = rpmfiFN(fi);
 		/*
-		printf("Name=%s, Size=%d, N=%d, mode=%d, reg=%d, content=%d\n", fn,
+		printf("Name=%s, Size=%d, N=%d, mode=%d, reg=%d, content=%d, rdev=%d, inode=%d\n", fn,
 			(int)rpmfiFSize(fi), (int)rpmfiFNlink(fi), (int)rpmfiFMode(fi),
-			(int)S_ISREG(rpmfiFMode(fi)), (int)rpmfiArchiveHasContent(fi));
+			(int)S_ISREG(rpmfiFMode(fi)), (int)rpmfiArchiveHasContent(fi),
+			(int)rpmfiFRdev(fi), (int)rpmfiFInode(fi));
 		*/
 		if (!strcmp(fn, fragment)) {
+			if (want_content && S_ISREG(rpmfiFMode(fi)) && !rpmfiArchiveHasContent(fi)) {
+				rpm_rdev_t rdev = rpmfiFRdev(fi);
+				rpm_ino_t  inode = rpmfiFInode(fi);
+				while((rc = rpmfiNext(fi)) >=0) {
+					if (rdev == rpmfiFRdev(fi) && inode == rpmfiFInode(fi) && rpmfiArchiveHasContent(fi)) {
+						break;
+					}
+				}
+			}
 			break;
 		}
 	}
@@ -742,7 +752,7 @@ php_stream *php_stream_rpm_opener(php_stream_wrapper *wrapper,
 	if (mode[0] != 'r') {
 		return NULL;
 	}
-	self = php_stream_rpm_finder(path);
+	self = php_stream_rpm_finder(path, 1);
 	if (self) {
 		if (opened_path) {
 			*opened_path = zend_string_init(path, strlen(path), 0);
@@ -763,7 +773,7 @@ static int php_stream_rpm_stat(php_stream_wrapper *wrapper, const char *url, int
 	struct php_rpm_stream_data_t *self;
 	int rc = -1;
 
-	self = php_stream_rpm_finder(url);
+	self = php_stream_rpm_finder(url, 0);
 	if (self) {
 		struct stat s[2]; // librpm may use different size (32-bit)
 		rc = rpmfiStat(self->fi, 0, s);

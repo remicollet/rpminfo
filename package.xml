@@ -25,6 +25,7 @@ Documentation: https://www.php.net/rpminfo
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes>
 - fix stack smashing on 32-bit
+- allow retrieval of hardlink content
   </notes>
   <contents>
     <dir name="/">
