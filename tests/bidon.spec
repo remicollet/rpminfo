@@ -5,7 +5,7 @@ Version:	%{ver}
 Release:	2%{?dist}
 Summary:	Bidon
 License:	Public Domain
-URL:		http://blog.famillecollet.com/
+URL:		https://rpms.remirepo.net/
 
 Obsoletes:  fooobs < 2
 
