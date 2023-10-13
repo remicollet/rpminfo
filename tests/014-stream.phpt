@@ -9,6 +9,7 @@ if (version_compare(RPMVERSION, '4.13', 'lt')) print("skip librpm is older than 
 <?php 
 $d = "rpm://" . __DIR__ . "/bidon.rpm#/usr/share/doc/bidon";
 $n = "rpm://" . __DIR__ . "/bidon.rpm#/usr/share/doc/bidon/README";
+$x = "rpm://" . __DIR__ . "/bidon.rpm#/usr/share/doc/bidon/MISSING";
 $foo = "rpm://" . __DIR__ . "/bidon.rpm#/etc/foo.conf";
 $bar = "rpm://" . __DIR__ . "/bidon.rpm#/etc/bar.conf";
 
@@ -34,11 +35,10 @@ var_dump(feof($f));
 fclose($f);
 
 echo "+ stream\n";
-var_dump(trim(file_get_contents($n)));
-var_dump(trim(file_get_contents($foo)));
-var_dump(trim(file_get_contents($bar)));
-
-var_dump(file_get_contents(str_replace('README', 'TODO', $n)));
+var_dump(trim(file_get_contents($n)));		// Existing file
+var_dump(trim(file_get_contents($foo)));	// Hardlink with content
+var_dump(trim(file_get_contents($bar)));	// hardlink without content
+var_dump(file_get_contents($x)); 		// Missing file
 ?>
 Done
 --EXPECTF--
@@ -70,6 +70,6 @@ string(29) "Fri Oct 13 12:24:27 CEST 2023"
 string(7) "content"
 string(7) "content"
 
-Warning: file_get_contents(%s/bidon.rpm#/usr/share/doc/bidon/TODO): Failed to open stream: operation failed in %s on line %d
+Warning: file_get_contents(%s/bidon.rpm#/usr/share/doc/bidon/MISSING): Failed to open stream: operation failed in %s on line %d
 bool(false)
 Done

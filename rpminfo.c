@@ -291,7 +291,7 @@ PHP_FUNCTION(rpmdbinfo)
 	db = rpminfo_getdb();
 	di = rpmdbInitIterator(db, RPMDBI_LABEL, name, len);
 	if (!di) {
-		// Not found
+		/* Not found */
 		RETURN_NULL();
 	}
 
@@ -431,7 +431,7 @@ PHP_FUNCTION(rpmdbsearch)
 		}
 	}
 	if (!di) {
-		// Not found
+		/* Not found */
 		RETURN_NULL();
 	}
 
@@ -463,7 +463,7 @@ PHP_FUNCTION(rpmvercmp)
 	evr1 = estrdup(in_evr1);
 	evr2 = estrdup(in_evr2);
 
-	// Epoch
+	/* Epoch */
 	p = strchr(evr1, ':');
 	if (p) {
 		v1 = p+1;
@@ -487,7 +487,7 @@ PHP_FUNCTION(rpmvercmp)
 	} else if (e1 > e2) {
 		r = 1;
 	} else {
-		// Version
+		/* Version */
 		p = strchr(v1, '-');
 		if (p) {
 			r1 = p+1;
@@ -504,7 +504,7 @@ PHP_FUNCTION(rpmvercmp)
 		}
 		r = rpmvercmp(v1, v2);
 		if (!r) {
-			// Release
+			/* Release*/
 			r = rpmvercmp(r1, r2);
 		}
 	}
@@ -618,7 +618,7 @@ static int php_zip_ops_stat(php_stream *stream, php_stream_statbuf *ssb)
 	STREAM_DATA_FROM_STREAM();
 
 	if (self) {
-		struct stat s[2]; // librpm may use different size (32-bit)
+		struct stat s[2]; /* librpm may use different size (32-bit) */
 		int rc;
 		rc = rpmfiStat(self->fi, 0, s);
 		memcpy(&ssb->sb, s, sizeof(ssb->sb));
@@ -775,7 +775,7 @@ static int php_stream_rpm_stat(php_stream_wrapper *wrapper, const char *url, int
 
 	self = php_stream_rpm_finder(url, 0);
 	if (self) {
-		struct stat s[2]; // librpm may use different size (32-bit)
+		struct stat s[2]; /* librpm may use different size (32-bit) */
 		rc = rpmfiStat(self->fi, 0, s);
 		memcpy(&ssb->sb, s, sizeof(ssb->sb));
 		php_rpm_ops_free(self, 1);
@@ -810,8 +810,8 @@ const php_stream_wrapper php_stream_rpm_wrapper = {
  */
 PHP_MINIT_FUNCTION(rpminfo)
 {
-    const char *tagname;
-    rpmtd names;
+	const char *tagname;
+	rpmtd names;
 
 	REGISTER_STRING_CONSTANT("RPMVERSION", (char *)RPMVERSION, CONST_CS | CONST_PERSISTENT);
 
