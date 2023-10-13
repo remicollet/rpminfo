@@ -26,7 +26,7 @@ string(5) "bidon"
 string(15) "A dummy package"
 array(1) {
   [0]=>
-  string(8) "- create"
+  string(20) "- add some hardlinks"
 }
 bool(false)
 array(1) {
