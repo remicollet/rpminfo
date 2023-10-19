@@ -24,8 +24,10 @@ Done
 --- bidon.rpm ---
 string(5) "bidon"
 string(15) "A dummy package"
-array(1) {
+array(2) {
   [0]=>
+  string(14) "- add symlinks"
+  [1]=>
   string(20) "- add some hardlinks"
 }
 bool(false)

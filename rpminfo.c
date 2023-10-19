@@ -705,10 +705,10 @@ static struct php_rpm_stream_data_t *php_stream_rpm_finder(const char *path, int
 	while((rc = rpmfiNext(fi)) >=0) {
 		const char *fn = rpmfiFN(fi);
 		/*
-		printf("Name=%s, Size=%d, N=%d, mode=%d, reg=%d, content=%d, rdev=%d, inode=%d\n", fn,
+		printf("Name=%s, Size=%d, N=%d, mode=%d, reg=%d, content=%d, rdev=%d, inode=%d link=%s\n", fn,
 			(int)rpmfiFSize(fi), (int)rpmfiFNlink(fi), (int)rpmfiFMode(fi),
 			(int)S_ISREG(rpmfiFMode(fi)), (int)rpmfiArchiveHasContent(fi),
-			(int)rpmfiFRdev(fi), (int)rpmfiFInode(fi));
+			(int)rpmfiFRdev(fi), (int)rpmfiFInode(fi), rpmfiFLink(fi));
 		*/
 		if (!strcmp(fn, fragment)) {
 			if (want_content && S_ISREG(rpmfiFMode(fi)) && !rpmfiArchiveHasContent(fi)) {

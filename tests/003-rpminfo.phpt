@@ -14,7 +14,7 @@ array(5) {
   ["Version"]=>
   string(1) "1"
   ["Release"]=>
-  string(11) "2.fc37.remi"
+  string(1) "3"
   ["Summary"]=>
   string(5) "Bidon"
   ["Arch"]=>

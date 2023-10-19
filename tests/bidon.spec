@@ -2,7 +2,7 @@
 
 Name:		bidon
 Version:	%{ver}
-Release:	2%{?dist}
+Release:	3
 Summary:	Bidon
 License:	Public Domain
 URL:		https://rpms.remirepo.net/
@@ -22,7 +22,9 @@ echo "content" >conf
 
 %install
 install -Dpm644 conf %{buildroot}%{_sysconfdir}/foo.conf
-ln %{buildroot}%{_sysconfdir}/foo.conf %{buildroot}%{_sysconfdir}/bar.conf
+cd %{buildroot}%{_sysconfdir}
+ln foo.conf bar.conf
+ln -s foo.conf toto.conf
 
 %files
 %doc README
@@ -30,6 +32,9 @@ ln %{buildroot}%{_sysconfdir}/foo.conf %{buildroot}%{_sysconfdir}/bar.conf
 
 
 %changelog
+* Thu Oct 19 2023 Remi Collet <remi@fedoraproject.org> - 1-3
+- add symlinks
+
 * Fri Oct 13 2023 Remi Collet <remi@fedoraproject.org> - 1-2
 - add some hardlinks
 
