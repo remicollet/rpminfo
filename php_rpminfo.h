@@ -22,15 +22,7 @@
 extern zend_module_entry rpminfo_module_entry;
 #define phpext_rpminfo_ptr &rpminfo_module_entry
 
-#define PHP_RPMINFO_VERSION "1.1.0-dev"
-
-#ifdef PHP_WIN32
-#	define PHP_RPMINFO_API __declspec(dllexport)
-#elif defined(__GNUC__) && __GNUC__ >= 4
-#	define PHP_RPMINFO_API __attribute__ ((visibility("default")))
-#else
-#	define PHP_RPMINFO_API
-#endif
+#define PHP_RPMINFO_VERSION "1.1.0"
 
 #ifdef ZTS
 #include "TSRM.h"
