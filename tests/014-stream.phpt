@@ -43,6 +43,11 @@ var_dump(trim(file_get_contents($n)));		// Existing file
 var_dump(trim(file_get_contents($foo)));	// Hardlink with content
 var_dump(trim(file_get_contents($bar)));	// hardlink without content
 var_dump(file_get_contents($x)); 		// Missing file
+
+echo "+ symlink\n";
+var_dump(rpmgetsymlink(__DIR__ . "/bidon.rpm", "missing"));
+var_dump(rpmgetsymlink(__DIR__ . "/bidon.rpm", "/etc/foo.conf"));  // not a symlink
+var_dump(rpmgetsymlink(__DIR__ . "/bidon.rpm", "/etc/toto.conf")); // symlink
 ?>
 Done
 --EXPECTF--
@@ -85,4 +90,8 @@ string(7) "content"
 
 Warning: file_get_contents(%s/bidon.rpm#/usr/share/doc/bidon/MISSING): Failed to open stream: operation failed in %s on line %d
 bool(false)
++ symlink
+NULL
+string(0) ""
+string(8) "foo.conf"
 Done

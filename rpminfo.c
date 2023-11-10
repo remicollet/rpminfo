@@ -235,6 +235,9 @@ PHP_FUNCTION(rpminfo)
 		zval_dtor(error);
 		ZVAL_NULL(error);
 	}
+	if (php_check_open_basedir(path)) {
+		RETURN_NULL();
+	}
 
 	f = Fopen(path, "r");
 	if (f) {
@@ -688,6 +691,7 @@ static struct php_rpm_stream_data_t *php_stream_rpm_finder(const char *path, int
 	rc = rpmReadPackageFile(ts, fdi, "rpm2cpio", &h);
 	if (rc != RPMRC_OK && rc != RPMRC_NOKEY && rc != RPMRC_NOTTRUSTED) {
 		zend_string_release_ex(file_basename, 0);
+		Fclose(fdi);
 		return NULL;
 	}
 
@@ -695,6 +699,8 @@ static struct php_rpm_stream_data_t *php_stream_rpm_finder(const char *path, int
 	snprintf(rpmio_flags, sizeof(rpmio_flags), "r.%s", compr ? compr : "gzip");
 	gzdi = Fdopen(fdi, rpmio_flags);
 	if (gzdi == NULL) {
+		headerFree(h);
+		Fclose(fdi);
 		zend_string_release_ex(file_basename, 0);
 		return NULL;
 	}
@@ -803,7 +809,68 @@ const php_stream_wrapper php_stream_rpm_wrapper = {
 	NULL,
 	0 /* is_url */
 };
-#endif
+
+/* {{{ proto array rpmgetsymlink(string path , string name)
+   Retrieve soft link target of en entry */
+PHP_FUNCTION(rpmgetsymlink)
+{
+	char *path, *name;
+	const char *link;
+	size_t plen, nlen;
+	FD_t fdi;
+	FD_t gzdi;
+	int rc;
+	Header h;
+	char rpmio_flags[80];
+	const char *compr;
+	rpmfiles files;
+	rpmfi fi;
+	rpmts ts = rpminfo_getts();
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "pp", &path, &plen, &name, &nlen) == FAILURE) {
+		RETURN_THROWS();
+	}
+
+	if (php_check_open_basedir(path)) {
+		RETURN_NULL();
+	}
+	fdi = Fopen(path, "r.ufdio");
+	if (Ferror(fdi)) {
+		RETURN_NULL();
+	}
+	rc = rpmReadPackageFile(ts, fdi, "rpm2cpio", &h);
+	if (rc != RPMRC_OK && rc != RPMRC_NOKEY && rc != RPMRC_NOTTRUSTED) {
+		Fclose(fdi);
+		RETURN_NULL();
+	}
+
+	compr = headerGetString(h, RPMTAG_PAYLOADCOMPRESSOR);
+	snprintf(rpmio_flags, sizeof(rpmio_flags), "r.%s", compr ? compr : "gzip");
+	gzdi = Fdopen(fdi, rpmio_flags);
+	if (gzdi == NULL) {
+		headerFree(h);
+		Fclose(fdi);
+		RETURN_NULL();
+	}
+
+	files = rpmfilesNew(NULL, h, 0, RPMFI_KEEPHEADER);
+	fi = rpmfiNewArchiveReader(gzdi, files, RPMFI_ITER_READ_ARCHIVE);
+
+	rc = rpmfiFindFN(fi, name);
+	if (rc < 0
+        || rpmfiSetFX(fi, rc) < 0
+		|| (link = rpmfiFLink(fi)) == NULL) {
+		RETVAL_NULL();
+	} else {
+		RETVAL_STRING(link);
+	}
+	rpmfiFree(fi);
+	rpmfilesFree(files);
+	headerFree(h);
+	Fclose(gzdi);
+}
+/* }}} */
+#endif /* HAVE_ARCHIVE */
 
 
 /* {{{ PHP_MINIT_FUNCTION

@@ -13,9 +13,9 @@ Documentation: https://www.php.net/rpminfo
     <email>remi@php.net</email>
     <active>yes</active>
   </lead>
-  <date>2023-10-13</date>
+  <date>2023-11-10</date>
   <version>
-    <release>1.0.2dev</release>
+    <release>1.1.0dev</release>
     <api>1.0.0</api>
   </version>
   <stability>
@@ -24,7 +24,8 @@ Documentation: https://www.php.net/rpminfo
   </stability>
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes>
--
+- check open_basedir restriction
+- new function: rpmgetsymlink(string $path, string $name): ?string
   </notes>
   <contents>
     <dir name="/">
