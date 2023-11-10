@@ -15,8 +15,8 @@ Documentation: https://www.php.net/rpminfo
   </lead>
   <date>2023-11-10</date>
   <version>
-    <release>1.1.0</release>
-    <api>1.0.0</api>
+    <release>1.1.1dev</release>
+    <api>1.1.0</api>
   </version>
   <stability>
     <release>stable</release>
@@ -76,6 +76,22 @@ Documentation: https://www.php.net/rpminfo
   <providesextension>rpminfo</providesextension>
   <extsrcrelease/>
   <changelog>
+    <release>
+      <date>2023-11-10</date>
+      <version>
+        <release>1.1.0</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
+      <notes>
+- check open_basedir restriction
+- new function: rpmgetsymlink(string $path, string $name): ?string
+      </notes>
+    </release>
     <release>
       <date>2023-10-13</date>
       <version>
