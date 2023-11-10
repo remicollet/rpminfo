@@ -857,8 +857,9 @@ PHP_FUNCTION(rpmgetsymlink)
 	fi = rpmfiNewArchiveReader(gzdi, files, RPMFI_ITER_READ_ARCHIVE);
 
 	rc = rpmfiFindFN(fi, name);
+	rpmfiSetFX(fi, rc); /* return value not reliable on librpm < 4.17 */
 	if (rc < 0
-        || rpmfiSetFX(fi, rc) < 0
+        || rpmfiFX(fi) != rc
 		|| (link = rpmfiFLink(fi)) == NULL) {
 		RETVAL_NULL();
 	} else {
