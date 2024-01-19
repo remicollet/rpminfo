@@ -974,6 +974,8 @@ PHP_MINFO_FUNCTION(rpminfo)
 	php_info_print_table_start();
 	php_info_print_table_header(2, "rpminfo support", "enabled");
 	php_info_print_table_row(2, "Extension version", PHP_RPMINFO_VERSION);
+	php_info_print_table_row(2, "Author", PHP_RPMINFO_AUTHOR);
+	php_info_print_table_row(2, "License", PHP_RPMINFO_LICENSE);
 	php_info_print_table_row(2, "RPM library version", RPMVERSION);
 #ifdef HAVE_ARCHIVE
 	php_info_print_table_row(2, "RPM stream wrapper", "yes");
