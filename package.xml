@@ -23,10 +23,10 @@ Documentation: https://www.php.net/rpminfo
     <api>stable</api>
   </stability>
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
-  <notes>
-- check open_basedir restriction
-- new function: rpmgetsymlink(string $path, string $name): ?string
-  </notes>
+  <notes><![CDATA[
+- display author and license in phpinfo
+- drop support for librpm < 4.13
+  ]]></notes>
   <contents>
     <dir name="/">
       <!-- sources -->

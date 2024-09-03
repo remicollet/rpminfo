@@ -12,6 +12,4 @@ function rpminfo(string $path, bool $full = false, ?string &$error = null): Arra
 
 function rpmvercmp(string $evr1, string $evr2, ?string $operator = null): int|bool {}
 
-#ifdef HAVE_ARCHIVE
 function rpmgetsymlink(string $path, string $name): string|null {}
-#endif
