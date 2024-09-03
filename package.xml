@@ -15,7 +15,7 @@ Documentation: https://www.php.net/rpminfo
   </lead>
   <date>2024-09-03</date>
   <version>
-    <release>1.1.1</release>
+    <release>1.1.2dev</release>
     <api>1.1.0</api>
   </version>
   <stability>
@@ -24,8 +24,7 @@ Documentation: https://www.php.net/rpminfo
   </stability>
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes><![CDATA[
-- display author and license in phpinfo
-- drop support for librpm < 4.13
+- 
   ]]></notes>
   <contents>
     <dir name="/">
@@ -76,6 +75,22 @@ Documentation: https://www.php.net/rpminfo
   <providesextension>rpminfo</providesextension>
   <extsrcrelease/>
   <changelog>
+    <release>
+      <date>2024-09-03</date>
+      <version>
+        <release>1.1.1</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
+      <notes><![CDATA[
+- display author and license in phpinfo
+- drop support for librpm < 4.13
+      ]]></notes>
+    </release>
     <release>
       <date>2023-11-10</date>
       <version>

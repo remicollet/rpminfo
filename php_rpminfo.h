@@ -22,7 +22,7 @@
 extern zend_module_entry rpminfo_module_entry;
 #define phpext_rpminfo_ptr &rpminfo_module_entry
 
-#define PHP_RPMINFO_VERSION "1.1.1"
+#define PHP_RPMINFO_VERSION "1.1.2-dev"
 #define PHP_RPMINFO_AUTHOR  "Remi Collet"
 #define PHP_RPMINFO_LICENSE "PHP-3.01"
 
