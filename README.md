@@ -4,9 +4,6 @@ Retrieve RPM information from PHP code using librpm.
 
 This extension can be considered as stable, and be used on production environement.
 
-But be aware that if its API will probably stay stable,
-some changes may occur before version 1.0.0.
-
 
 ----
 
@@ -17,7 +14,7 @@ some changes may occur before version 1.0.0.
 
 # Build
 
-You need the rpm development files (rpm-devel) version >= 4.11.3.
+You need the rpm development files (rpm-devel) version >= 4.13.
 
 From the sources tree
 
