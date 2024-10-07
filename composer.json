@@ -1,0 +1,13 @@
+{
+    "name": "remi/rpminfo",
+    "type": "php-ext",
+    "license": "PHP-3.01",
+    "description": "RPM information",
+    "require": {
+        "php": ">= 8.0.0"
+    },
+    "php-ext": {
+        "extension-name": "rpminfo",
+        "configure-options": []
+    }
+}
