@@ -55,6 +55,7 @@ modules
 run-tests.php
 run-tests.log
 tmp-php.ini
+sendpackagist
 
 # Archives
 rpminfo-*.tgz
