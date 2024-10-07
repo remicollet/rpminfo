@@ -23,11 +23,11 @@ From the sources tree
     $ make
     $ make test
 
-From https://pecl.php.net/
+From https://pecl.php.net/ using pecl command
 
     $ pecl install rpminfo
 
-Using https://packagist.org/
+From https://packagist.org/ using PHP Installer for Extensions
 
     $ pie install remi/rpminfo
 
