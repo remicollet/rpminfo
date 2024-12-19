@@ -221,7 +221,7 @@ For example, can be used to set the Database path and backend
 
     $ mock -r almalinux-8-x86_64 init
     ...
-    $ mock -r fedora-41-x86_64 ini
+    $ mock -r fedora-41-x86_64 init
     ...
     $ php -a
     php > // use an old database (bdb) from an EL-8 chroot
