@@ -15,7 +15,7 @@ Documentation: https://www.php.net/rpminfo
   </lead>
   <date>2024-12-19</date>
   <version>
-    <release>1.2.0dev</release>
+    <release>1.2.0</release>
     <api>1.2.0</api>
   </version>
   <stability>
@@ -58,6 +58,7 @@ Documentation: https://www.php.net/rpminfo
         <file name="012-rpmaddtag.phpt" role="test"/>
         <file name="013-rpmdbsearch-error.phpt" role="test"/>
         <file name="014-stream.phpt" role="test"/>
+        <file name="015-rpmmacro.phpt" role="test"/>
         <file name="bidon.rpm" role="test"/>
         <file name="bidon-src.rpm" role="test"/>
       </dir>
