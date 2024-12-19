@@ -51,7 +51,7 @@ Allow to compare 2 EVR (epoch:version-release) strings. The return value is < 0 
 
 ## rpminfo
 
-	array rpminfo(string path [, bool full  [, string &error]]);
+	rpminfo(string path [, bool full  [, string &error]]): array;
 
 Retrieve information from a rpm file, reading its metadata.
 If given `error` will be used to store error message instead of raising a warning.
@@ -95,7 +95,7 @@ The return value is a hash table, or false if it fails.
 
 ## rpmdbinfo
 
-	array rpmdbinfo(string path [, bool full ]);
+	rpmdbinfo(string path [, bool full ]): array;
 
 Retrieve information from rpm database about an installed package.
 The return value is an array of hash tables, or false if it fails.
@@ -190,6 +190,50 @@ The return value is an array of hash tables, or false if it fails.
                 [Arch] => x86_64
             )
     )
+
+## rpmexpand
+
+	rpmexpand($text): string
+
+Retrieve expanded value of a RPM macro
+
+    $ php -a
+    php > var_dump(rpmexpand("%{?fedora:Fedora %{fedora}}%{?rhel:Enterprise Linux %{rhel}}"));
+    string(9) "Fedora 41"
+
+## rpmexpandnumeric
+
+	rpmexpandnumeric($text): int
+
+Retrieve numerical value of a RPM macro
+
+    $ php -a
+    php > var_dump(rpmexpandnumeric("%__isa_bits"));
+    int(64)
+
+## rpmdefine
+
+	rpmdefine($text): bool
+
+Define or change a RPM macro value.
+
+For example, can be used to set the Database path and backend
+
+    $ mock -r almalinux-8-x86_64 init
+    ...
+    $ php -a
+    php > rpmdefine("_dbpath /var/lib/mock/almalinux-8-x86_64/root/var/lib/rpm");
+    php > rpmdefine("_db_backend bdb_ro");
+    php > var_dump(rpmdbinfo("almalinux-release")[0]["Summary"]);
+    string(22) "AlmaLinux release file"
+
+    $ mock -r fedora-41-x86_64 ini
+    ...
+    $ php -a
+    php > rpmdefine("_dbpath /var/lib/mock/fedora-41-x86_64/root/usr/lib/sysimage/rpm");
+    php > rpmdefine("_db_backend sqlite");
+    php > var_dump(rpmdbinfo("fedora-release")[0]["Summary"]);
+    string(20) "Fedora release files"
 
 ----
 
