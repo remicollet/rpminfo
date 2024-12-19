@@ -224,12 +224,12 @@ For example, can be used to set the Database path and backend
     $ mock -r fedora-41-x86_64 ini
     ...
     $ php -a
-    php > // use and old database (bdb) from an EL-8 chroot
+    php > // use an old database (bdb) from an EL-8 chroot
     php > rpmdefine("_dbpath /var/lib/mock/almalinux-8-x86_64/root/var/lib/rpm");
     php > rpmdefine("_db_backend bdb_ro");
     php > var_dump(rpmdbinfo("almalinux-release")[0]["Summary"]);
     string(22) "AlmaLinux release file"
-    php > // use and new database (sqlite) from an Fedora-41 chroot
+    php > // use a new database (sqlite) from a Fedora-41 chroot
     php > rpmdefine("_dbpath /var/lib/mock/fedora-41-x86_64/root/usr/lib/sysimage/rpm");
     php > rpmdefine("_db_backend sqlite");
     php > var_dump(rpmdbinfo("fedora-release")[0]["Summary"]);
