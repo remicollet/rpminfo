@@ -30,6 +30,7 @@
 #include <rpm/rpmio.h>
 #include <rpm/rpmlib.h>
 #include <rpm/rpmts.h>
+#include <rpm/rpmmacro.h>
 
 #include "php_rpminfo.h"
 
@@ -867,6 +868,64 @@ PHP_FUNCTION(rpmgetsymlink)
 }
 /* }}} */
 
+/* {{{ proto array rpmexpand(string $text): string
+   Expand macro in text */
+PHP_FUNCTION(rpmexpand)
+{
+	char *text, *result;
+	size_t len;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &text, &len) == FAILURE) {
+		RETURN_THROWS();
+	}
+
+	(void)rpminfo_getts(); // read config files
+
+	result = rpmExpand(text, NULL);
+	RETVAL_STRING(result);
+	free(result);
+}
+/* }}} */
+
+/* {{{ proto array rpmexpandnumeric(string $text): int
+   Expand macro in text */
+PHP_FUNCTION(rpmexpandnumeric)
+{
+	char *text;
+	size_t len;
+	int result;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &text, &len) == FAILURE) {
+		RETURN_THROWS();
+	}
+
+	(void)rpminfo_getts(); // read config files
+
+	result = rpmExpandNumeric(text);
+
+	RETURN_LONG(result);
+}
+/* }}} */
+
+/* {{{ proto array rpmdefine(string $macro): bool
+   Define a new macro */
+PHP_FUNCTION(rpmdefine)
+{
+	char *macro;
+	size_t len;
+	int result;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &macro, &len) == FAILURE) {
+		RETURN_THROWS();
+	}
+
+	(void)rpminfo_getts(); // read config files
+
+	result = rpmDefineMacro(NULL, macro, RMIL_GLOBAL);
+
+	RETURN_BOOL(result == 0);
+}
+/* }}} */
 
 /* {{{ PHP_MINIT_FUNCTION
  */

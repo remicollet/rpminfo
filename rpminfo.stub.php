@@ -13,3 +13,10 @@ function rpminfo(string $path, bool $full = false, ?string &$error = null): Arra
 function rpmvercmp(string $evr1, string $evr2, ?string $operator = null): int|bool {}
 
 function rpmgetsymlink(string $path, string $name): string|null {}
+
+function rpmexpand(string $text): string {}
+
+function rpmexpandnumeric(string $text): int {}
+
+function rpmdefine(string $macro): bool {}
+

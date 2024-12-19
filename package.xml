@@ -15,8 +15,8 @@ Documentation: https://www.php.net/rpminfo
   </lead>
   <date>2024-09-03</date>
   <version>
-    <release>1.1.2dev</release>
-    <api>1.1.0</api>
+    <release>1.2.0dev</release>
+    <api>1.2.0</api>
   </version>
   <stability>
     <release>stable</release>
@@ -24,7 +24,8 @@ Documentation: https://www.php.net/rpminfo
   </stability>
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes><![CDATA[
-- 
+- add rpmexpand, rpmexpandnumeric to retrieve rpm macro value
+- add rpmdefine to set rpm macro value
   ]]></notes>
   <contents>
     <dir name="/">
