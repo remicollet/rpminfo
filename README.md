@@ -221,15 +221,13 @@ For example, can be used to set the Database path and backend
 
     $ mock -r almalinux-8-x86_64 init
     ...
+    $ mock -r fedora-41-x86_64 ini
+    ...
     $ php -a
     php > rpmdefine("_dbpath /var/lib/mock/almalinux-8-x86_64/root/var/lib/rpm");
     php > rpmdefine("_db_backend bdb_ro");
     php > var_dump(rpmdbinfo("almalinux-release")[0]["Summary"]);
     string(22) "AlmaLinux release file"
-
-    $ mock -r fedora-41-x86_64 ini
-    ...
-    $ php -a
     php > rpmdefine("_dbpath /var/lib/mock/fedora-41-x86_64/root/usr/lib/sysimage/rpm");
     php > rpmdefine("_db_backend sqlite");
     php > var_dump(rpmdbinfo("fedora-release")[0]["Summary"]);

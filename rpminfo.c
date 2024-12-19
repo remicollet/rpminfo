@@ -70,6 +70,13 @@ static rpmdb rpminfo_getdb(void) {
 	return RPMINFO_G(db);
 }
 
+static void rpminfo_closedb(void) {
+	if (RPMINFO_G(db)) {
+		rpmtsCloseDB(RPMINFO_G(ts));
+		RPMINFO_G(db) = NULL;
+	}
+}
+
 static void rpm_header_to_zval(zval *return_value, Header h, zend_bool full)
 {
 	HeaderIterator hi;
@@ -879,7 +886,7 @@ PHP_FUNCTION(rpmexpand)
 		RETURN_THROWS();
 	}
 
-	(void)rpminfo_getts(); // read config files
+	(void)rpminfo_getts(); /* read config files */
 
 	result = rpmExpand(text, NULL);
 	RETVAL_STRING(result);
@@ -899,7 +906,7 @@ PHP_FUNCTION(rpmexpandnumeric)
 		RETURN_THROWS();
 	}
 
-	(void)rpminfo_getts(); // read config files
+	(void)rpminfo_getts(); /* read config files */
 
 	result = rpmExpandNumeric(text);
 
@@ -919,7 +926,9 @@ PHP_FUNCTION(rpmdefine)
 		RETURN_THROWS();
 	}
 
-	(void)rpminfo_getts(); // read config files
+	(void)rpminfo_getts(); /* read config files */
+
+	rpminfo_closedb(); /* Close the DB to allow path change */
 
 	result = rpmDefineMacro(NULL, macro, RMIL_GLOBAL);
 
@@ -999,10 +1008,8 @@ PHP_RINIT_FUNCTION(rpminfo)
 PHP_RSHUTDOWN_FUNCTION(rpminfo)
 {
 	if (RPMINFO_G(ts)) {
-		if (RPMINFO_G(db)) {
-			rpmtsCloseDB(RPMINFO_G(ts));
-			RPMINFO_G(db) = NULL;
-		}
+		rpminfo_closedb();
+
 		rpmtsFree(RPMINFO_G(ts));
 		RPMINFO_G(ts) = NULL;
 	}
