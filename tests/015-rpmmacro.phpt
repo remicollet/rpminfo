@@ -7,7 +7,7 @@ Check for rpmdefine, rpmexpand, rpmexpandnumeric
 var_dump(is_dir(rpmexpand("%{_dbpath}")));
 
 var_dump(rpmexpandnumeric("%__isa_bits") === PHP_INT_SIZE * 8);
-var_dump(rpmexpandnumeric("0%{?fedora}%{?rhel}") > 0);
+var_dump(is_int(rpmexpandnumeric("0%{?fedora}%{?rhel}")));
 
 $name = "_my_test_macro_for_rpminfo_";
 $val  = __FILE__;
