@@ -1,3 +1,5 @@
+[![CI](https://github.com/remicollet/rpminfo/actions/workflows/ci.yaml/badge.svg)](https://github.com/remicollet/rpminfo/actions/workflows/ci.yaml)
+
 # RPM information extension for PHP
 
 Retrieve RPM information from PHP code using librpm.
