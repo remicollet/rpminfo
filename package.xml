@@ -24,7 +24,8 @@ Documentation: https://www.php.net/rpminfo
   </stability>
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes><![CDATA[
-- RPMTAG_PKGID and RPMTAG_HDRID removed in RPM 6
+- use RPMTAG_SIGMD5 instead of RPMTAG_PKGID removed in RPM 6
+- use RPMTAG_SHA1HEADER instead of RPMTAG_HDRID removed in RPM 6
   ]]></notes>
   <contents>
     <dir name="/">
@@ -58,7 +59,6 @@ Documentation: https://www.php.net/rpminfo
         <file name="013-rpmdbsearch-error.phpt" role="test"/>
         <file name="014-stream.phpt" role="test"/>
         <file name="015-rpmmacro.phpt" role="test"/>
-        <file name="016-rpmdbsearch2.phpt" role="test"/>
         <file name="bidon.rpm" role="test"/>
         <file name="bidon-src.rpm" role="test"/>
       </dir>
