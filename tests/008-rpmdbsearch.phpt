@@ -3,7 +3,6 @@ Check for rpmdbinfo function
 --SKIPIF--
 <?php
 if (!extension_loaded("rpminfo")) print "skip";
-if (version_compare(RPMVERSION, '5', '>=')) die("skip for RPM 4.x");
 ?>
 
 --FILE--
@@ -24,16 +23,16 @@ $phprpm = $a[0]['Name'];
 $p = rpmdbinfo($phprpm, 1);
 
 echo "Pkgid\n";
-$a = rpmdbsearch($p[0]['Sigmd5'], RPMTAG_PKGID);
+$a = rpmdbsearch($p[0]['Sigmd5'], RPMTAG_SIGMD5);
 var_dump($a[0]['Name'] == $phprpm);
 
 echo "Hdrid\n";
-$a = rpmdbsearch($p[0]['Sha1header'], RPMTAG_HDRID);
+$a = rpmdbsearch($p[0]['Sha1header'], RPMTAG_SHA1HEADER);
 var_dump($a[0]['Name'] == $phprpm);
 var_dump(count($a[0]) < 10);
 
 echo "Hdrid (full)\n";
-$a = rpmdbsearch($p[0]['Sha1header'], RPMTAG_HDRID, -1, true);
+$a = rpmdbsearch($p[0]['Sha1header'], RPMTAG_SHA1HEADER, -1, true);
 var_dump($a[0]['Name'] == $phprpm);
 var_dump($a[0]['Sha1header'] == $p[0]['Sha1header']);
 var_dump(count($a[0]) > 20);
