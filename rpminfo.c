@@ -399,22 +399,26 @@ PHP_FUNCTION(rpmdbsearch)
 		RETURN_THROWS();
 	}
 
-	if (crit == RPMTAG_PKGID) {
+	if (crit == RPMTAG_INSTALLTID) {
+		tid = atol(name);
+		name = (char *)&tid;
+		len = sizeof(tid);
+#ifdef RPMTAG_PKGID
+	} else if (crit == RPMTAG_PKGID) {
 		if (len != 32) {
 			zend_argument_value_error(1, "Bad length for PKGID, 32 expected");
 			RETURN_THROWS();
 		}
 		len = hex2bin(name, MD5, len);
 		name = MD5;
+#endif
+#ifdef RPMTAG_HDRID
 	} else if (crit == RPMTAG_HDRID) {
 		if (len != 40) {
 			zend_argument_value_error(1, "Bad length for HDRID, 40 expected");
 			RETURN_THROWS();
 		}
-	} else if (crit == RPMTAG_INSTALLTID) {
-		tid = atol(name);
-		name = (char *)&tid;
-		len = sizeof(tid);
+#endif
 	} else if (crit == RPMTAG_INSTFILENAMES) {
 		/* use input parameters */
 	} else {
