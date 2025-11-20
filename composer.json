@@ -8,6 +8,7 @@
     },
     "php-ext": {
         "extension-name": "rpminfo",
+        "os-families": "linux",
         "configure-options": []
     }
 }
