@@ -1,277 +1,301 @@
-Extension [ <persistent> extension #15 rpminfo version 0.5.0 ] {
+Extension [ <persistent> extension #113 rpminfo version 1.2.1 ] {
 
-  - Constants [271] {
-    Constant [ string RPMVERSION ] { 4.15.1 }
-    Constant [ int RPMSENSE_ANY ] { 0 }
-    Constant [ int RPMSENSE_LESS ] { 2 }
-    Constant [ int RPMSENSE_GREATER ] { 4 }
-    Constant [ int RPMSENSE_EQUAL ] { 8 }
-    Constant [ int RPMSENSE_POSTTRANS ] { 32 }
-    Constant [ int RPMSENSE_PREREQ ] { 64 }
-    Constant [ int RPMSENSE_PRETRANS ] { 128 }
-    Constant [ int RPMSENSE_INTERP ] { 256 }
-    Constant [ int RPMSENSE_SCRIPT_PRE ] { 512 }
-    Constant [ int RPMSENSE_SCRIPT_POST ] { 1024 }
-    Constant [ int RPMSENSE_SCRIPT_PREUN ] { 2048 }
-    Constant [ int RPMSENSE_SCRIPT_POSTUN ] { 4096 }
-    Constant [ int RPMSENSE_SCRIPT_VERIFY ] { 8192 }
-    Constant [ int RPMSENSE_FIND_REQUIRES ] { 16384 }
-    Constant [ int RPMSENSE_FIND_PROVIDES ] { 32768 }
-    Constant [ int RPMSENSE_TRIGGERIN ] { 65536 }
-    Constant [ int RPMSENSE_TRIGGERUN ] { 131072 }
-    Constant [ int RPMSENSE_TRIGGERPOSTUN ] { 262144 }
-    Constant [ int RPMSENSE_MISSINGOK ] { 524288 }
-    Constant [ int RPMSENSE_RPMLIB ] { 16777216 }
-    Constant [ int RPMSENSE_TRIGGERPREIN ] { 33554432 }
-    Constant [ int RPMSENSE_KEYRING ] { 67108864 }
-    Constant [ int RPMSENSE_CONFIG ] { 268435456 }
-    Constant [ int RPMMIRE_DEFAULT ] { 0 }
-    Constant [ int RPMMIRE_STRCMP ] { 1 }
-    Constant [ int RPMMIRE_REGEX ] { 2 }
-    Constant [ int RPMMIRE_GLOB ] { 3 }
-    Constant [ int RPMTAG_ARCH ] { 1022 }
-    Constant [ int RPMTAG_ARCHIVESIZE ] { 1046 }
-    Constant [ int RPMTAG_BASENAMES ] { 1117 }
-    Constant [ int RPMTAG_BUGURL ] { 5012 }
-    Constant [ int RPMTAG_BUILDARCHS ] { 1089 }
-    Constant [ int RPMTAG_BUILDHOST ] { 1007 }
-    Constant [ int RPMTAG_BUILDTIME ] { 1006 }
-    Constant [ int RPMTAG_C ] { 1054 }
-    Constant [ int RPMTAG_CHANGELOGNAME ] { 1081 }
-    Constant [ int RPMTAG_CHANGELOGTEXT ] { 1082 }
-    Constant [ int RPMTAG_CHANGELOGTIME ] { 1080 }
-    Constant [ int RPMTAG_CLASSDICT ] { 1142 }
-    Constant [ int RPMTAG_CONFLICTFLAGS ] { 1053 }
-    Constant [ int RPMTAG_CONFLICTNAME ] { 1054 }
-    Constant [ int RPMTAG_CONFLICTNEVRS ] { 5044 }
-    Constant [ int RPMTAG_CONFLICTS ] { 1054 }
-    Constant [ int RPMTAG_CONFLICTVERSION ] { 1055 }
-    Constant [ int RPMTAG_COOKIE ] { 1094 }
-    Constant [ int RPMTAG_DBINSTANCE ] { 1195 }
-    Constant [ int RPMTAG_DEPENDSDICT ] { 1145 }
-    Constant [ int RPMTAG_DESCRIPTION ] { 1005 }
-    Constant [ int RPMTAG_DIRINDEXES ] { 1116 }
-    Constant [ int RPMTAG_DIRNAMES ] { 1118 }
-    Constant [ int RPMTAG_DISTRIBUTION ] { 1010 }
-    Constant [ int RPMTAG_DISTTAG ] { 1155 }
-    Constant [ int RPMTAG_DISTURL ] { 1123 }
-    Constant [ int RPMTAG_DSAHEADER ] { 267 }
-    Constant [ int RPMTAG_E ] { 1003 }
-    Constant [ int RPMTAG_ENCODING ] { 5062 }
-    Constant [ int RPMTAG_ENHANCEFLAGS ] { 5057 }
-    Constant [ int RPMTAG_ENHANCENAME ] { 5055 }
-    Constant [ int RPMTAG_ENHANCENEVRS ] { 5061 }
-    Constant [ int RPMTAG_ENHANCES ] { 5055 }
-    Constant [ int RPMTAG_ENHANCEVERSION ] { 5056 }
-    Constant [ int RPMTAG_EPOCH ] { 1003 }
-    Constant [ int RPMTAG_EPOCHNUM ] { 5019 }
-    Constant [ int RPMTAG_EVR ] { 5013 }
-    Constant [ int RPMTAG_EXCLUDEARCH ] { 1059 }
-    Constant [ int RPMTAG_EXCLUDEOS ] { 1060 }
-    Constant [ int RPMTAG_EXCLUSIVEARCH ] { 1061 }
-    Constant [ int RPMTAG_EXCLUSIVEOS ] { 1062 }
-    Constant [ int RPMTAG_FILECAPS ] { 5010 }
-    Constant [ int RPMTAG_FILECLASS ] { 1141 }
-    Constant [ int RPMTAG_FILECOLORS ] { 1140 }
-    Constant [ int RPMTAG_FILECONTEXTS ] { 1147 }
-    Constant [ int RPMTAG_FILEDEPENDSN ] { 1144 }
-    Constant [ int RPMTAG_FILEDEPENDSX ] { 1143 }
-    Constant [ int RPMTAG_FILEDEVICES ] { 1095 }
-    Constant [ int RPMTAG_FILEDIGESTALGO ] { 5011 }
-    Constant [ int RPMTAG_FILEDIGESTS ] { 1035 }
-    Constant [ int RPMTAG_FILEFLAGS ] { 1037 }
-    Constant [ int RPMTAG_FILEGROUPNAME ] { 1040 }
-    Constant [ int RPMTAG_FILEINODES ] { 1096 }
-    Constant [ int RPMTAG_FILELANGS ] { 1097 }
-    Constant [ int RPMTAG_FILELINKTOS ] { 1036 }
-    Constant [ int RPMTAG_FILEMD5S ] { 1035 }
-    Constant [ int RPMTAG_FILEMODES ] { 1030 }
-    Constant [ int RPMTAG_FILEMTIMES ] { 1034 }
-    Constant [ int RPMTAG_FILENAMES ] { 5000 }
-    Constant [ int RPMTAG_FILENLINKS ] { 5045 }
-    Constant [ int RPMTAG_FILEPROVIDE ] { 5001 }
-    Constant [ int RPMTAG_FILERDEVS ] { 1033 }
-    Constant [ int RPMTAG_FILEREQUIRE ] { 5002 }
-    Constant [ int RPMTAG_FILESIGNATURELENGTH ] { 5091 }
-    Constant [ int RPMTAG_FILESIGNATURES ] { 5090 }
-    Constant [ int RPMTAG_FILESIZES ] { 1028 }
-    Constant [ int RPMTAG_FILESTATES ] { 1029 }
-    Constant [ int RPMTAG_FILETRIGGERCONDS ] { 5086 }
-    Constant [ int RPMTAG_FILETRIGGERFLAGS ] { 5072 }
-    Constant [ int RPMTAG_FILETRIGGERINDEX ] { 5070 }
-    Constant [ int RPMTAG_FILETRIGGERNAME ] { 5069 }
-    Constant [ int RPMTAG_FILETRIGGERPRIORITIES ] { 5084 }
-    Constant [ int RPMTAG_FILETRIGGERSCRIPTFLAGS ] { 5068 }
-    Constant [ int RPMTAG_FILETRIGGERSCRIPTPROG ] { 5067 }
-    Constant [ int RPMTAG_FILETRIGGERSCRIPTS ] { 5066 }
-    Constant [ int RPMTAG_FILETRIGGERTYPE ] { 5087 }
-    Constant [ int RPMTAG_FILETRIGGERVERSION ] { 5071 }
-    Constant [ int RPMTAG_FILEUSERNAME ] { 1039 }
-    Constant [ int RPMTAG_FILEVERIFYFLAGS ] { 1045 }
-    Constant [ int RPMTAG_FSCONTEXTS ] { 1148 }
-    Constant [ int RPMTAG_GIF ] { 1012 }
-    Constant [ int RPMTAG_GROUP ] { 1016 }
-    Constant [ int RPMTAG_HDRID ] { 269 }
-    Constant [ int RPMTAG_HEADERCOLOR ] { 5017 }
-    Constant [ int RPMTAG_HEADERI18NTABLE ] { 100 }
-    Constant [ int RPMTAG_HEADERIMAGE ] { 61 }
-    Constant [ int RPMTAG_HEADERIMMUTABLE ] { 63 }
-    Constant [ int RPMTAG_HEADERREGIONS ] { 64 }
-    Constant [ int RPMTAG_HEADERSIGNATURES ] { 62 }
-    Constant [ int RPMTAG_ICON ] { 1043 }
-    Constant [ int RPMTAG_INSTALLCOLOR ] { 1127 }
-    Constant [ int RPMTAG_INSTALLTID ] { 1128 }
-    Constant [ int RPMTAG_INSTALLTIME ] { 1008 }
-    Constant [ int RPMTAG_INSTFILENAMES ] { 5040 }
-    Constant [ int RPMTAG_INSTPREFIXES ] { 1099 }
-    Constant [ int RPMTAG_LICENSE ] { 1014 }
-    Constant [ int RPMTAG_LONGARCHIVESIZE ] { 271 }
-    Constant [ int RPMTAG_LONGFILESIZES ] { 5008 }
-    Constant [ int RPMTAG_LONGSIGSIZE ] { 270 }
-    Constant [ int RPMTAG_LONGSIZE ] { 5009 }
-    Constant [ int RPMTAG_MODULARITYLABEL ] { 5096 }
-    Constant [ int RPMTAG_N ] { 1000 }
-    Constant [ int RPMTAG_NAME ] { 1000 }
-    Constant [ int RPMTAG_NEVR ] { 5015 }
-    Constant [ int RPMTAG_NEVRA ] { 5016 }
-    Constant [ int RPMTAG_NOPATCH ] { 1052 }
-    Constant [ int RPMTAG_NOSOURCE ] { 1051 }
-    Constant [ int RPMTAG_NVR ] { 5014 }
-    Constant [ int RPMTAG_NVRA ] { 1196 }
-    Constant [ int RPMTAG_O ] { 1090 }
-    Constant [ int RPMTAG_OBSOLETEFLAGS ] { 1114 }
-    Constant [ int RPMTAG_OBSOLETENAME ] { 1090 }
-    Constant [ int RPMTAG_OBSOLETENEVRS ] { 5043 }
-    Constant [ int RPMTAG_OBSOLETES ] { 1090 }
-    Constant [ int RPMTAG_OBSOLETEVERSION ] { 1115 }
-    Constant [ int RPMTAG_OLDENHANCES ] { 1159 }
-    Constant [ int RPMTAG_OLDENHANCESFLAGS ] { 1161 }
-    Constant [ int RPMTAG_OLDENHANCESNAME ] { 1159 }
-    Constant [ int RPMTAG_OLDENHANCESVERSION ] { 1160 }
-    Constant [ int RPMTAG_OLDFILENAMES ] { 1027 }
-    Constant [ int RPMTAG_OLDSUGGESTS ] { 1156 }
-    Constant [ int RPMTAG_OLDSUGGESTSFLAGS ] { 1158 }
-    Constant [ int RPMTAG_OLDSUGGESTSNAME ] { 1156 }
-    Constant [ int RPMTAG_OLDSUGGESTSVERSION ] { 1157 }
-    Constant [ int RPMTAG_OPTFLAGS ] { 1122 }
-    Constant [ int RPMTAG_ORDERFLAGS ] { 5037 }
-    Constant [ int RPMTAG_ORDERNAME ] { 5035 }
-    Constant [ int RPMTAG_ORDERVERSION ] { 5036 }
-    Constant [ int RPMTAG_ORIGBASENAMES ] { 1120 }
-    Constant [ int RPMTAG_ORIGDIRINDEXES ] { 1119 }
-    Constant [ int RPMTAG_ORIGDIRNAMES ] { 1121 }
-    Constant [ int RPMTAG_ORIGFILENAMES ] { 5007 }
-    Constant [ int RPMTAG_OS ] { 1021 }
-    Constant [ int RPMTAG_P ] { 1047 }
-    Constant [ int RPMTAG_PACKAGER ] { 1015 }
-    Constant [ int RPMTAG_PATCH ] { 1019 }
-    Constant [ int RPMTAG_PATCHESFLAGS ] { 1134 }
-    Constant [ int RPMTAG_PATCHESNAME ] { 1133 }
-    Constant [ int RPMTAG_PATCHESVERSION ] { 1135 }
-    Constant [ int RPMTAG_PAYLOADCOMPRESSOR ] { 1125 }
-    Constant [ int RPMTAG_PAYLOADDIGEST ] { 5092 }
-    Constant [ int RPMTAG_PAYLOADDIGESTALGO ] { 5093 }
-    Constant [ int RPMTAG_PAYLOADFLAGS ] { 1126 }
-    Constant [ int RPMTAG_PAYLOADFORMAT ] { 1124 }
-    Constant [ int RPMTAG_PKGID ] { 261 }
-    Constant [ int RPMTAG_PLATFORM ] { 1132 }
-    Constant [ int RPMTAG_POLICIES ] { 1150 }
-    Constant [ int RPMTAG_POLICYFLAGS ] { 5033 }
-    Constant [ int RPMTAG_POLICYNAMES ] { 5030 }
-    Constant [ int RPMTAG_POLICYTYPES ] { 5031 }
-    Constant [ int RPMTAG_POLICYTYPESINDEXES ] { 5032 }
-    Constant [ int RPMTAG_POSTIN ] { 1024 }
-    Constant [ int RPMTAG_POSTINFLAGS ] { 5021 }
-    Constant [ int RPMTAG_POSTINPROG ] { 1086 }
-    Constant [ int RPMTAG_POSTTRANS ] { 1152 }
-    Constant [ int RPMTAG_POSTTRANSFLAGS ] { 5025 }
-    Constant [ int RPMTAG_POSTTRANSPROG ] { 1154 }
-    Constant [ int RPMTAG_POSTUN ] { 1026 }
-    Constant [ int RPMTAG_POSTUNFLAGS ] { 5023 }
-    Constant [ int RPMTAG_POSTUNPROG ] { 1088 }
-    Constant [ int RPMTAG_PREFIXES ] { 1098 }
-    Constant [ int RPMTAG_PREIN ] { 1023 }
-    Constant [ int RPMTAG_PREINFLAGS ] { 5020 }
-    Constant [ int RPMTAG_PREINPROG ] { 1085 }
-    Constant [ int RPMTAG_PRETRANS ] { 1151 }
-    Constant [ int RPMTAG_PRETRANSFLAGS ] { 5024 }
-    Constant [ int RPMTAG_PRETRANSPROG ] { 1153 }
-    Constant [ int RPMTAG_PREUN ] { 1025 }
-    Constant [ int RPMTAG_PREUNFLAGS ] { 5022 }
-    Constant [ int RPMTAG_PREUNPROG ] { 1087 }
-    Constant [ int RPMTAG_PROVIDEFLAGS ] { 1112 }
-    Constant [ int RPMTAG_PROVIDENAME ] { 1047 }
-    Constant [ int RPMTAG_PROVIDENEVRS ] { 5042 }
-    Constant [ int RPMTAG_PROVIDES ] { 1047 }
-    Constant [ int RPMTAG_PROVIDEVERSION ] { 1113 }
-    Constant [ int RPMTAG_PUBKEYS ] { 266 }
-    Constant [ int RPMTAG_R ] { 1002 }
-    Constant [ int RPMTAG_RECOMMENDFLAGS ] { 5048 }
-    Constant [ int RPMTAG_RECOMMENDNAME ] { 5046 }
-    Constant [ int RPMTAG_RECOMMENDNEVRS ] { 5058 }
-    Constant [ int RPMTAG_RECOMMENDS ] { 5046 }
-    Constant [ int RPMTAG_RECOMMENDVERSION ] { 5047 }
-    Constant [ int RPMTAG_RECONTEXTS ] { 1149 }
-    Constant [ int RPMTAG_RELEASE ] { 1002 }
-    Constant [ int RPMTAG_REMOVETID ] { 1129 }
-    Constant [ int RPMTAG_REQUIREFLAGS ] { 1048 }
-    Constant [ int RPMTAG_REQUIRENAME ] { 1049 }
-    Constant [ int RPMTAG_REQUIRENEVRS ] { 5041 }
-    Constant [ int RPMTAG_REQUIRES ] { 1049 }
-    Constant [ int RPMTAG_REQUIREVERSION ] { 1050 }
-    Constant [ int RPMTAG_RPMVERSION ] { 1064 }
-    Constant [ int RPMTAG_RSAHEADER ] { 268 }
-    Constant [ int RPMTAG_SHA1HEADER ] { 269 }
-    Constant [ int RPMTAG_SHA256HEADER ] { 273 }
-    Constant [ int RPMTAG_SIGGPG ] { 262 }
-    Constant [ int RPMTAG_SIGMD5 ] { 261 }
-    Constant [ int RPMTAG_SIGPGP ] { 259 }
-    Constant [ int RPMTAG_SIGSIZE ] { 257 }
-    Constant [ int RPMTAG_SIZE ] { 1009 }
-    Constant [ int RPMTAG_SOURCE ] { 1018 }
-    Constant [ int RPMTAG_SOURCEPACKAGE ] { 1106 }
-    Constant [ int RPMTAG_SOURCEPKGID ] { 1146 }
-    Constant [ int RPMTAG_SOURCERPM ] { 1044 }
-    Constant [ int RPMTAG_SUGGESTFLAGS ] { 5051 }
-    Constant [ int RPMTAG_SUGGESTNAME ] { 5049 }
-    Constant [ int RPMTAG_SUGGESTNEVRS ] { 5059 }
-    Constant [ int RPMTAG_SUGGESTS ] { 5049 }
-    Constant [ int RPMTAG_SUGGESTVERSION ] { 5050 }
-    Constant [ int RPMTAG_SUMMARY ] { 1004 }
-    Constant [ int RPMTAG_SUPPLEMENTFLAGS ] { 5054 }
-    Constant [ int RPMTAG_SUPPLEMENTNAME ] { 5052 }
-    Constant [ int RPMTAG_SUPPLEMENTNEVRS ] { 5060 }
-    Constant [ int RPMTAG_SUPPLEMENTS ] { 5052 }
-    Constant [ int RPMTAG_SUPPLEMENTVERSION ] { 5053 }
-    Constant [ int RPMTAG_TRANSFILETRIGGERCONDS ] { 5088 }
-    Constant [ int RPMTAG_TRANSFILETRIGGERFLAGS ] { 5082 }
-    Constant [ int RPMTAG_TRANSFILETRIGGERINDEX ] { 5080 }
-    Constant [ int RPMTAG_TRANSFILETRIGGERNAME ] { 5079 }
-    Constant [ int RPMTAG_TRANSFILETRIGGERPRIORITIES ] { 5085 }
-    Constant [ int RPMTAG_TRANSFILETRIGGERSCRIPTFLAGS ] { 5078 }
-    Constant [ int RPMTAG_TRANSFILETRIGGERSCRIPTPROG ] { 5077 }
-    Constant [ int RPMTAG_TRANSFILETRIGGERSCRIPTS ] { 5076 }
-    Constant [ int RPMTAG_TRANSFILETRIGGERTYPE ] { 5089 }
-    Constant [ int RPMTAG_TRANSFILETRIGGERVERSION ] { 5081 }
-    Constant [ int RPMTAG_TRIGGERCONDS ] { 5005 }
-    Constant [ int RPMTAG_TRIGGERFLAGS ] { 1068 }
-    Constant [ int RPMTAG_TRIGGERINDEX ] { 1069 }
-    Constant [ int RPMTAG_TRIGGERNAME ] { 1066 }
-    Constant [ int RPMTAG_TRIGGERSCRIPTFLAGS ] { 5027 }
-    Constant [ int RPMTAG_TRIGGERSCRIPTPROG ] { 1092 }
-    Constant [ int RPMTAG_TRIGGERSCRIPTS ] { 1065 }
-    Constant [ int RPMTAG_TRIGGERTYPE ] { 5006 }
-    Constant [ int RPMTAG_TRIGGERVERSION ] { 1067 }
-    Constant [ int RPMTAG_URL ] { 1020 }
-    Constant [ int RPMTAG_V ] { 1001 }
-    Constant [ int RPMTAG_VCS ] { 5034 }
-    Constant [ int RPMTAG_VENDOR ] { 1011 }
-    Constant [ int RPMTAG_VERBOSE ] { 5018 }
-    Constant [ int RPMTAG_VERIFYSCRIPT ] { 1079 }
-    Constant [ int RPMTAG_VERIFYSCRIPTFLAGS ] { 5026 }
-    Constant [ int RPMTAG_VERIFYSCRIPTPROG ] { 1091 }
-    Constant [ int RPMTAG_VERSION ] { 1001 }
-    Constant [ int RPMTAG_XPM ] { 1013 }
+  - Constants [295] {
+    Constant [ <persistent> string RPMVERSION ] { 6.0.1 }
+    Constant [ <persistent> int RPMSENSE_ANY ] { 0 }
+    Constant [ <persistent> int RPMSENSE_LESS ] { 2 }
+    Constant [ <persistent> int RPMSENSE_GREATER ] { 4 }
+    Constant [ <persistent> int RPMSENSE_EQUAL ] { 8 }
+    Constant [ <persistent> int RPMSENSE_POSTTRANS ] { 32 }
+    Constant [ <persistent> int RPMSENSE_PREREQ ] { 64 }
+    Constant [ <persistent> int RPMSENSE_PRETRANS ] { 128 }
+    Constant [ <persistent> int RPMSENSE_INTERP ] { 256 }
+    Constant [ <persistent> int RPMSENSE_SCRIPT_PRE ] { 512 }
+    Constant [ <persistent> int RPMSENSE_SCRIPT_POST ] { 1024 }
+    Constant [ <persistent> int RPMSENSE_SCRIPT_PREUN ] { 2048 }
+    Constant [ <persistent> int RPMSENSE_SCRIPT_POSTUN ] { 4096 }
+    Constant [ <persistent> int RPMSENSE_SCRIPT_VERIFY ] { 8192 }
+    Constant [ <persistent> int RPMSENSE_FIND_REQUIRES ] { 16384 }
+    Constant [ <persistent> int RPMSENSE_FIND_PROVIDES ] { 32768 }
+    Constant [ <persistent> int RPMSENSE_TRIGGERIN ] { 65536 }
+    Constant [ <persistent> int RPMSENSE_TRIGGERUN ] { 131072 }
+    Constant [ <persistent> int RPMSENSE_TRIGGERPOSTUN ] { 262144 }
+    Constant [ <persistent> int RPMSENSE_MISSINGOK ] { 524288 }
+    Constant [ <persistent> int RPMSENSE_RPMLIB ] { 16777216 }
+    Constant [ <persistent> int RPMSENSE_TRIGGERPREIN ] { 33554432 }
+    Constant [ <persistent> int RPMSENSE_KEYRING ] { 67108864 }
+    Constant [ <persistent> int RPMSENSE_CONFIG ] { 268435456 }
+    Constant [ <persistent> int RPMMIRE_DEFAULT ] { 0 }
+    Constant [ <persistent> int RPMMIRE_STRCMP ] { 1 }
+    Constant [ <persistent> int RPMMIRE_REGEX ] { 2 }
+    Constant [ <persistent> int RPMMIRE_GLOB ] { 3 }
+    Constant [ <persistent> int RPMTAG_ARCH ] { 1022 }
+    Constant [ <persistent> int RPMTAG_ARCHIVESIZE ] { 1046 }
+    Constant [ <persistent> int RPMTAG_ARCHSUFFIX ] { 5098 }
+    Constant [ <persistent> int RPMTAG_BASENAMES ] { 1117 }
+    Constant [ <persistent> int RPMTAG_BUGURL ] { 5012 }
+    Constant [ <persistent> int RPMTAG_BUILDARCHS ] { 1089 }
+    Constant [ <persistent> int RPMTAG_BUILDHOST ] { 1007 }
+    Constant [ <persistent> int RPMTAG_BUILDTIME ] { 1006 }
+    Constant [ <persistent> int RPMTAG_C ] { 1054 }
+    Constant [ <persistent> int RPMTAG_CHANGELOGNAME ] { 1081 }
+    Constant [ <persistent> int RPMTAG_CHANGELOGTEXT ] { 1082 }
+    Constant [ <persistent> int RPMTAG_CHANGELOGTIME ] { 1080 }
+    Constant [ <persistent> int RPMTAG_CLASSDICT ] { 1142 }
+    Constant [ <persistent> int RPMTAG_CONFLICTFLAGS ] { 1053 }
+    Constant [ <persistent> int RPMTAG_CONFLICTNAME ] { 1054 }
+    Constant [ <persistent> int RPMTAG_CONFLICTNEVRS ] { 5044 }
+    Constant [ <persistent> int RPMTAG_CONFLICTS ] { 1054 }
+    Constant [ <persistent> int RPMTAG_CONFLICTVERSION ] { 1055 }
+    Constant [ <persistent> int RPMTAG_COOKIE ] { 1094 }
+    Constant [ <persistent> int RPMTAG_DBINSTANCE ] { 1195 }
+    Constant [ <persistent> int RPMTAG_DEPENDSDICT ] { 1145 }
+    Constant [ <persistent> int RPMTAG_DESCRIPTION ] { 1005 }
+    Constant [ <persistent> int RPMTAG_DIRINDEXES ] { 1116 }
+    Constant [ <persistent> int RPMTAG_DIRNAMES ] { 1118 }
+    Constant [ <persistent> int RPMTAG_DISTRIBUTION ] { 1010 }
+    Constant [ <persistent> int RPMTAG_DISTTAG ] { 1155 }
+    Constant [ <persistent> int RPMTAG_DISTURL ] { 1123 }
+    Constant [ <persistent> int RPMTAG_DSAHEADER ] { 267 }
+    Constant [ <persistent> int RPMTAG_E ] { 1003 }
+    Constant [ <persistent> int RPMTAG_ENCODING ] { 5062 }
+    Constant [ <persistent> int RPMTAG_ENHANCEFLAGS ] { 5057 }
+    Constant [ <persistent> int RPMTAG_ENHANCENAME ] { 5055 }
+    Constant [ <persistent> int RPMTAG_ENHANCENEVRS ] { 5061 }
+    Constant [ <persistent> int RPMTAG_ENHANCES ] { 5055 }
+    Constant [ <persistent> int RPMTAG_ENHANCEVERSION ] { 5056 }
+    Constant [ <persistent> int RPMTAG_EPOCH ] { 1003 }
+    Constant [ <persistent> int RPMTAG_EPOCHNUM ] { 5019 }
+    Constant [ <persistent> int RPMTAG_EVR ] { 5013 }
+    Constant [ <persistent> int RPMTAG_EXCLUDEARCH ] { 1059 }
+    Constant [ <persistent> int RPMTAG_EXCLUDEOS ] { 1060 }
+    Constant [ <persistent> int RPMTAG_EXCLUSIVEARCH ] { 1061 }
+    Constant [ <persistent> int RPMTAG_EXCLUSIVEOS ] { 1062 }
+    Constant [ <persistent> int RPMTAG_FILECAPS ] { 5010 }
+    Constant [ <persistent> int RPMTAG_FILECLASS ] { 1141 }
+    Constant [ <persistent> int RPMTAG_FILECOLORS ] { 1140 }
+    Constant [ <persistent> int RPMTAG_FILECONTEXTS ] { 1147 }
+    Constant [ <persistent> int RPMTAG_FILEDEPENDSN ] { 1144 }
+    Constant [ <persistent> int RPMTAG_FILEDEPENDSX ] { 1143 }
+    Constant [ <persistent> int RPMTAG_FILEDEVICES ] { 1095 }
+    Constant [ <persistent> int RPMTAG_FILEDIGESTALGO ] { 5011 }
+    Constant [ <persistent> int RPMTAG_FILEDIGESTS ] { 1035 }
+    Constant [ <persistent> int RPMTAG_FILEFLAGS ] { 1037 }
+    Constant [ <persistent> int RPMTAG_FILEGROUPNAME ] { 1040 }
+    Constant [ <persistent> int RPMTAG_FILEINODES ] { 1096 }
+    Constant [ <persistent> int RPMTAG_FILELANGS ] { 1097 }
+    Constant [ <persistent> int RPMTAG_FILELINKTOS ] { 1036 }
+    Constant [ <persistent> int RPMTAG_FILEMD5S ] { 1035 }
+    Constant [ <persistent> int RPMTAG_FILEMIMEINDEX ] { 5115 }
+    Constant [ <persistent> int RPMTAG_FILEMIMES ] { 5117 }
+    Constant [ <persistent> int RPMTAG_FILEMODES ] { 1030 }
+    Constant [ <persistent> int RPMTAG_FILEMTIMES ] { 1034 }
+    Constant [ <persistent> int RPMTAG_FILENAMES ] { 5000 }
+    Constant [ <persistent> int RPMTAG_FILENLINKS ] { 5045 }
+    Constant [ <persistent> int RPMTAG_FILEPROVIDE ] { 5001 }
+    Constant [ <persistent> int RPMTAG_FILERDEVS ] { 1033 }
+    Constant [ <persistent> int RPMTAG_FILEREQUIRE ] { 5002 }
+    Constant [ <persistent> int RPMTAG_FILESIGNATURELENGTH ] { 5091 }
+    Constant [ <persistent> int RPMTAG_FILESIGNATURES ] { 5090 }
+    Constant [ <persistent> int RPMTAG_FILESIZES ] { 1028 }
+    Constant [ <persistent> int RPMTAG_FILESTATES ] { 1029 }
+    Constant [ <persistent> int RPMTAG_FILETRIGGERCONDS ] { 5086 }
+    Constant [ <persistent> int RPMTAG_FILETRIGGERFLAGS ] { 5072 }
+    Constant [ <persistent> int RPMTAG_FILETRIGGERINDEX ] { 5070 }
+    Constant [ <persistent> int RPMTAG_FILETRIGGERNAME ] { 5069 }
+    Constant [ <persistent> int RPMTAG_FILETRIGGERPRIORITIES ] { 5084 }
+    Constant [ <persistent> int RPMTAG_FILETRIGGERSCRIPTFLAGS ] { 5068 }
+    Constant [ <persistent> int RPMTAG_FILETRIGGERSCRIPTPROG ] { 5067 }
+    Constant [ <persistent> int RPMTAG_FILETRIGGERSCRIPTS ] { 5066 }
+    Constant [ <persistent> int RPMTAG_FILETRIGGERTYPE ] { 5087 }
+    Constant [ <persistent> int RPMTAG_FILETRIGGERVERSION ] { 5071 }
+    Constant [ <persistent> int RPMTAG_FILEUSERNAME ] { 1039 }
+    Constant [ <persistent> int RPMTAG_FILEVERIFYFLAGS ] { 1045 }
+    Constant [ <persistent> int RPMTAG_FSCONTEXTS ] { 1148 }
+    Constant [ <persistent> int RPMTAG_GIF ] { 1012 }
+    Constant [ <persistent> int RPMTAG_GROUP ] { 1016 }
+    Constant [ <persistent> int RPMTAG_HEADERCOLOR ] { 5017 }
+    Constant [ <persistent> int RPMTAG_HEADERI18NTABLE ] { 100 }
+    Constant [ <persistent> int RPMTAG_HEADERIMMUTABLE ] { 63 }
+    Constant [ <persistent> int RPMTAG_ICON ] { 1043 }
+    Constant [ <persistent> int RPMTAG_INSTALLCOLOR ] { 1127 }
+    Constant [ <persistent> int RPMTAG_INSTALLTID ] { 1128 }
+    Constant [ <persistent> int RPMTAG_INSTALLTIME ] { 1008 }
+    Constant [ <persistent> int RPMTAG_INSTFILENAMES ] { 5040 }
+    Constant [ <persistent> int RPMTAG_INSTPREFIXES ] { 1099 }
+    Constant [ <persistent> int RPMTAG_LICENSE ] { 1014 }
+    Constant [ <persistent> int RPMTAG_LONGARCHIVESIZE ] { 271 }
+    Constant [ <persistent> int RPMTAG_LONGFILESIZES ] { 5008 }
+    Constant [ <persistent> int RPMTAG_LONGSIGSIZE ] { 270 }
+    Constant [ <persistent> int RPMTAG_LONGSIZE ] { 5009 }
+    Constant [ <persistent> int RPMTAG_MIMEDICT ] { 5116 }
+    Constant [ <persistent> int RPMTAG_MODULARITYLABEL ] { 5096 }
+    Constant [ <persistent> int RPMTAG_N ] { 1000 }
+    Constant [ <persistent> int RPMTAG_NAME ] { 1000 }
+    Constant [ <persistent> int RPMTAG_NEVR ] { 5015 }
+    Constant [ <persistent> int RPMTAG_NEVRA ] { 5016 }
+    Constant [ <persistent> int RPMTAG_NOPATCH ] { 1052 }
+    Constant [ <persistent> int RPMTAG_NOSOURCE ] { 1051 }
+    Constant [ <persistent> int RPMTAG_NVR ] { 5014 }
+    Constant [ <persistent> int RPMTAG_NVRA ] { 1196 }
+    Constant [ <persistent> int RPMTAG_O ] { 1090 }
+    Constant [ <persistent> int RPMTAG_OBSOLETEFLAGS ] { 1114 }
+    Constant [ <persistent> int RPMTAG_OBSOLETENAME ] { 1090 }
+    Constant [ <persistent> int RPMTAG_OBSOLETENEVRS ] { 5043 }
+    Constant [ <persistent> int RPMTAG_OBSOLETES ] { 1090 }
+    Constant [ <persistent> int RPMTAG_OBSOLETEVERSION ] { 1115 }
+    Constant [ <persistent> int RPMTAG_OLDENHANCES ] { 1159 }
+    Constant [ <persistent> int RPMTAG_OLDENHANCESFLAGS ] { 1161 }
+    Constant [ <persistent> int RPMTAG_OLDENHANCESNAME ] { 1159 }
+    Constant [ <persistent> int RPMTAG_OLDENHANCESVERSION ] { 1160 }
+    Constant [ <persistent> int RPMTAG_OLDFILENAMES ] { 1027 }
+    Constant [ <persistent> int RPMTAG_OLDSUGGESTS ] { 1156 }
+    Constant [ <persistent> int RPMTAG_OLDSUGGESTSFLAGS ] { 1158 }
+    Constant [ <persistent> int RPMTAG_OLDSUGGESTSNAME ] { 1156 }
+    Constant [ <persistent> int RPMTAG_OLDSUGGESTSVERSION ] { 1157 }
+    Constant [ <persistent> int RPMTAG_OPENPGP ] { 278 }
+    Constant [ <persistent> int RPMTAG_OPTFLAGS ] { 1122 }
+    Constant [ <persistent> int RPMTAG_ORDERFLAGS ] { 5037 }
+    Constant [ <persistent> int RPMTAG_ORDERNAME ] { 5035 }
+    Constant [ <persistent> int RPMTAG_ORDERVERSION ] { 5036 }
+    Constant [ <persistent> int RPMTAG_ORIGBASENAMES ] { 1120 }
+    Constant [ <persistent> int RPMTAG_ORIGDIRINDEXES ] { 1119 }
+    Constant [ <persistent> int RPMTAG_ORIGDIRNAMES ] { 1121 }
+    Constant [ <persistent> int RPMTAG_ORIGFILENAMES ] { 5007 }
+    Constant [ <persistent> int RPMTAG_OS ] { 1021 }
+    Constant [ <persistent> int RPMTAG_P ] { 1047 }
+    Constant [ <persistent> int RPMTAG_PACKAGEDIGESTALGOS ] { 5119 }
+    Constant [ <persistent> int RPMTAG_PACKAGEDIGESTS ] { 5118 }
+    Constant [ <persistent> int RPMTAG_PACKAGER ] { 1015 }
+    Constant [ <persistent> int RPMTAG_PATCH ] { 1019 }
+    Constant [ <persistent> int RPMTAG_PATCHESFLAGS ] { 1134 }
+    Constant [ <persistent> int RPMTAG_PATCHESNAME ] { 1133 }
+    Constant [ <persistent> int RPMTAG_PATCHESVERSION ] { 1135 }
+    Constant [ <persistent> int RPMTAG_PAYLOADCOMPRESSOR ] { 1125 }
+    Constant [ <persistent> int RPMTAG_PAYLOADFLAGS ] { 1126 }
+    Constant [ <persistent> int RPMTAG_PAYLOADFORMAT ] { 1124 }
+    Constant [ <persistent> int RPMTAG_PAYLOADSHA256 ] { 5092 }
+    Constant [ <persistent> int RPMTAG_PAYLOADSHA256ALGO ] { 5093 }
+    Constant [ <persistent> int RPMTAG_PAYLOADSHA256ALT ] { 5097 }
+    Constant [ <persistent> int RPMTAG_PAYLOADSHA3_256 ] { 5123 }
+    Constant [ <persistent> int RPMTAG_PAYLOADSHA3_256ALT ] { 5124 }
+    Constant [ <persistent> int RPMTAG_PAYLOADSHA512 ] { 5121 }
+    Constant [ <persistent> int RPMTAG_PAYLOADSHA512ALT ] { 5122 }
+    Constant [ <persistent> int RPMTAG_PAYLOADSIZE ] { 5112 }
+    Constant [ <persistent> int RPMTAG_PAYLOADSIZEALT ] { 5113 }
+    Constant [ <persistent> int RPMTAG_PLATFORM ] { 1132 }
+    Constant [ <persistent> int RPMTAG_POLICIES ] { 1150 }
+    Constant [ <persistent> int RPMTAG_POLICYFLAGS ] { 5033 }
+    Constant [ <persistent> int RPMTAG_POLICYNAMES ] { 5030 }
+    Constant [ <persistent> int RPMTAG_POLICYTYPES ] { 5031 }
+    Constant [ <persistent> int RPMTAG_POLICYTYPESINDEXES ] { 5032 }
+    Constant [ <persistent> int RPMTAG_POSTIN ] { 1024 }
+    Constant [ <persistent> int RPMTAG_POSTINFLAGS ] { 5021 }
+    Constant [ <persistent> int RPMTAG_POSTINPROG ] { 1086 }
+    Constant [ <persistent> int RPMTAG_POSTTRANS ] { 1152 }
+    Constant [ <persistent> int RPMTAG_POSTTRANSFLAGS ] { 5025 }
+    Constant [ <persistent> int RPMTAG_POSTTRANSPROG ] { 1154 }
+    Constant [ <persistent> int RPMTAG_POSTUN ] { 1026 }
+    Constant [ <persistent> int RPMTAG_POSTUNFLAGS ] { 5023 }
+    Constant [ <persistent> int RPMTAG_POSTUNPROG ] { 1088 }
+    Constant [ <persistent> int RPMTAG_POSTUNTRANS ] { 5104 }
+    Constant [ <persistent> int RPMTAG_POSTUNTRANSFLAGS ] { 5108 }
+    Constant [ <persistent> int RPMTAG_POSTUNTRANSPROG ] { 5106 }
+    Constant [ <persistent> int RPMTAG_PREFIXES ] { 1098 }
+    Constant [ <persistent> int RPMTAG_PREIN ] { 1023 }
+    Constant [ <persistent> int RPMTAG_PREINFLAGS ] { 5020 }
+    Constant [ <persistent> int RPMTAG_PREINPROG ] { 1085 }
+    Constant [ <persistent> int RPMTAG_PRETRANS ] { 1151 }
+    Constant [ <persistent> int RPMTAG_PRETRANSFLAGS ] { 5024 }
+    Constant [ <persistent> int RPMTAG_PRETRANSPROG ] { 1153 }
+    Constant [ <persistent> int RPMTAG_PREUN ] { 1025 }
+    Constant [ <persistent> int RPMTAG_PREUNFLAGS ] { 5022 }
+    Constant [ <persistent> int RPMTAG_PREUNPROG ] { 1087 }
+    Constant [ <persistent> int RPMTAG_PREUNTRANS ] { 5103 }
+    Constant [ <persistent> int RPMTAG_PREUNTRANSFLAGS ] { 5107 }
+    Constant [ <persistent> int RPMTAG_PREUNTRANSPROG ] { 5105 }
+    Constant [ <persistent> int RPMTAG_PROVIDEFLAGS ] { 1112 }
+    Constant [ <persistent> int RPMTAG_PROVIDENAME ] { 1047 }
+    Constant [ <persistent> int RPMTAG_PROVIDENEVRS ] { 5042 }
+    Constant [ <persistent> int RPMTAG_PROVIDES ] { 1047 }
+    Constant [ <persistent> int RPMTAG_PROVIDEVERSION ] { 1113 }
+    Constant [ <persistent> int RPMTAG_PUBKEYS ] { 266 }
+    Constant [ <persistent> int RPMTAG_R ] { 1002 }
+    Constant [ <persistent> int RPMTAG_RECOMMENDFLAGS ] { 5048 }
+    Constant [ <persistent> int RPMTAG_RECOMMENDNAME ] { 5046 }
+    Constant [ <persistent> int RPMTAG_RECOMMENDNEVRS ] { 5058 }
+    Constant [ <persistent> int RPMTAG_RECOMMENDS ] { 5046 }
+    Constant [ <persistent> int RPMTAG_RECOMMENDVERSION ] { 5047 }
+    Constant [ <persistent> int RPMTAG_RECONTEXTS ] { 1149 }
+    Constant [ <persistent> int RPMTAG_RELEASE ] { 1002 }
+    Constant [ <persistent> int RPMTAG_REMOVETID ] { 1129 }
+    Constant [ <persistent> int RPMTAG_REQUIREFLAGS ] { 1048 }
+    Constant [ <persistent> int RPMTAG_REQUIRENAME ] { 1049 }
+    Constant [ <persistent> int RPMTAG_REQUIRENEVRS ] { 5041 }
+    Constant [ <persistent> int RPMTAG_REQUIRES ] { 1049 }
+    Constant [ <persistent> int RPMTAG_REQUIREVERSION ] { 1050 }
+    Constant [ <persistent> int RPMTAG_RPMFORMAT ] { 5114 }
+    Constant [ <persistent> int RPMTAG_RPMVERSION ] { 1064 }
+    Constant [ <persistent> int RPMTAG_RSAHEADER ] { 268 }
+    Constant [ <persistent> int RPMTAG_SHA1HEADER ] { 269 }
+    Constant [ <persistent> int RPMTAG_SHA256HEADER ] { 273 }
+    Constant [ <persistent> int RPMTAG_SHA3_256HEADER ] { 279 }
+    Constant [ <persistent> int RPMTAG_SIGGPG ] { 262 }
+    Constant [ <persistent> int RPMTAG_SIGMD5 ] { 261 }
+    Constant [ <persistent> int RPMTAG_SIGPGP ] { 259 }
+    Constant [ <persistent> int RPMTAG_SIGSIZE ] { 257 }
+    Constant [ <persistent> int RPMTAG_SIZE ] { 1009 }
+    Constant [ <persistent> int RPMTAG_SOURCE ] { 1018 }
+    Constant [ <persistent> int RPMTAG_SOURCENEVR ] { 5120 }
+    Constant [ <persistent> int RPMTAG_SOURCEPACKAGE ] { 1106 }
+    Constant [ <persistent> int RPMTAG_SOURCERPM ] { 1044 }
+    Constant [ <persistent> int RPMTAG_SOURCESIGMD5 ] { 1146 }
+    Constant [ <persistent> int RPMTAG_SPEC ] { 5099 }
+    Constant [ <persistent> int RPMTAG_SUGGESTFLAGS ] { 5051 }
+    Constant [ <persistent> int RPMTAG_SUGGESTNAME ] { 5049 }
+    Constant [ <persistent> int RPMTAG_SUGGESTNEVRS ] { 5059 }
+    Constant [ <persistent> int RPMTAG_SUGGESTS ] { 5049 }
+    Constant [ <persistent> int RPMTAG_SUGGESTVERSION ] { 5050 }
+    Constant [ <persistent> int RPMTAG_SUMMARY ] { 1004 }
+    Constant [ <persistent> int RPMTAG_SUPPLEMENTFLAGS ] { 5054 }
+    Constant [ <persistent> int RPMTAG_SUPPLEMENTNAME ] { 5052 }
+    Constant [ <persistent> int RPMTAG_SUPPLEMENTNEVRS ] { 5060 }
+    Constant [ <persistent> int RPMTAG_SUPPLEMENTS ] { 5052 }
+    Constant [ <persistent> int RPMTAG_SUPPLEMENTVERSION ] { 5053 }
+    Constant [ <persistent> int RPMTAG_SYSUSERS ] { 5109 }
+    Constant [ <persistent> int RPMTAG_TRANSFILETRIGGERCONDS ] { 5088 }
+    Constant [ <persistent> int RPMTAG_TRANSFILETRIGGERFLAGS ] { 5082 }
+    Constant [ <persistent> int RPMTAG_TRANSFILETRIGGERINDEX ] { 5080 }
+    Constant [ <persistent> int RPMTAG_TRANSFILETRIGGERNAME ] { 5079 }
+    Constant [ <persistent> int RPMTAG_TRANSFILETRIGGERPRIORITIES ] { 5085 }
+    Constant [ <persistent> int RPMTAG_TRANSFILETRIGGERSCRIPTFLAGS ] { 5078 }
+    Constant [ <persistent> int RPMTAG_TRANSFILETRIGGERSCRIPTPROG ] { 5077 }
+    Constant [ <persistent> int RPMTAG_TRANSFILETRIGGERSCRIPTS ] { 5076 }
+    Constant [ <persistent> int RPMTAG_TRANSFILETRIGGERTYPE ] { 5089 }
+    Constant [ <persistent> int RPMTAG_TRANSFILETRIGGERVERSION ] { 5081 }
+    Constant [ <persistent> int RPMTAG_TRANSLATIONURL ] { 5100 }
+    Constant [ <persistent> int RPMTAG_TRIGGERCONDS ] { 5005 }
+    Constant [ <persistent> int RPMTAG_TRIGGERFLAGS ] { 1068 }
+    Constant [ <persistent> int RPMTAG_TRIGGERINDEX ] { 1069 }
+    Constant [ <persistent> int RPMTAG_TRIGGERNAME ] { 1066 }
+    Constant [ <persistent> int RPMTAG_TRIGGERSCRIPTFLAGS ] { 5027 }
+    Constant [ <persistent> int RPMTAG_TRIGGERSCRIPTPROG ] { 1092 }
+    Constant [ <persistent> int RPMTAG_TRIGGERSCRIPTS ] { 1065 }
+    Constant [ <persistent> int RPMTAG_TRIGGERTYPE ] { 5006 }
+    Constant [ <persistent> int RPMTAG_TRIGGERVERSION ] { 1067 }
+    Constant [ <persistent> int RPMTAG_UPSTREAMRELEASES ] { 5101 }
+    Constant [ <persistent> int RPMTAG_URL ] { 1020 }
+    Constant [ <persistent> int RPMTAG_V ] { 1001 }
+    Constant [ <persistent> int RPMTAG_VCS ] { 5034 }
+    Constant [ <persistent> int RPMTAG_VENDOR ] { 1011 }
+    Constant [ <persistent> int RPMTAG_VERBOSE ] { 5018 }
+    Constant [ <persistent> int RPMTAG_VERIFYSCRIPT ] { 1079 }
+    Constant [ <persistent> int RPMTAG_VERIFYSCRIPTFLAGS ] { 5026 }
+    Constant [ <persistent> int RPMTAG_VERIFYSCRIPTPROG ] { 1091 }
+    Constant [ <persistent> int RPMTAG_VERITYSIGNATUREALGO ] { 277 }
+    Constant [ <persistent> int RPMTAG_VERITYSIGNATURES ] { 276 }
+    Constant [ <persistent> int RPMTAG_VERSION ] { 1001 }
+    Constant [ <persistent> int RPMTAG_XPM ] { 1013 }
   }
 
   - Functions {
@@ -286,36 +310,66 @@ Extension [ <persistent> extension #15 rpminfo version 0.5.0 ] {
 
       - Parameters [2] {
         Parameter #0 [ <required> string $nevr ]
-        Parameter #1 [ <optional> bool $full ]
+        Parameter #1 [ <optional> bool $full = false ]
       }
-      - Return [ array or NULL ]
+      - Return [ ?array ]
     }
     Function [ <internal:rpminfo> function rpmdbsearch ] {
 
       - Parameters [4] {
         Parameter #0 [ <required> string $pattern ]
-        Parameter #1 [ <optional> int $rpmtag ]
-        Parameter #2 [ <optional> int $rpmmire ]
-        Parameter #3 [ <optional> bool $full ]
+        Parameter #1 [ <optional> int $rpmtag = RPMTAG_NAME ]
+        Parameter #2 [ <optional> int $rpmmire = -1 ]
+        Parameter #3 [ <optional> bool $full = false ]
       }
-      - Return [ array or NULL ]
+      - Return [ ?array ]
     }
     Function [ <internal:rpminfo> function rpminfo ] {
 
       - Parameters [3] {
         Parameter #0 [ <required> string $path ]
-        Parameter #1 [ <optional> bool $full ]
-        Parameter #2 [ <optional> string or NULL &$error ]
+        Parameter #1 [ <optional> bool $full = false ]
+        Parameter #2 [ <optional> ?string &$error = null ]
       }
-      - Return [ array or NULL ]
+      - Return [ ?array ]
     }
     Function [ <internal:rpminfo> function rpmvercmp ] {
 
-      - Parameters [2] {
+      - Parameters [3] {
         Parameter #0 [ <required> string $evr1 ]
         Parameter #1 [ <required> string $evr2 ]
+        Parameter #2 [ <optional> ?string $operator = null ]
+      }
+      - Return [ int|bool ]
+    }
+    Function [ <internal:rpminfo> function rpmgetsymlink ] {
+
+      - Parameters [2] {
+        Parameter #0 [ <required> string $path ]
+        Parameter #1 [ <required> string $name ]
+      }
+      - Return [ ?string ]
+    }
+    Function [ <internal:rpminfo> function rpmexpand ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> string $text ]
+      }
+      - Return [ string ]
+    }
+    Function [ <internal:rpminfo> function rpmexpandnumeric ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> string $text ]
       }
       - Return [ int ]
+    }
+    Function [ <internal:rpminfo> function rpmdefine ] {
+
+      - Parameters [1] {
+        Parameter #0 [ <required> string $macro ]
+      }
+      - Return [ bool ]
     }
   }
 }
