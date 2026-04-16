@@ -1,6 +1,6 @@
 # Unreleased
 
--
+- update PHP License from version 3 to version 4 (BSD-3-Clause)
 
 # Version 1.2.1 - 2025-09-25
 
