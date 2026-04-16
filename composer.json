@@ -1,7 +1,7 @@
 {
     "name": "remi/rpminfo",
     "type": "php-ext",
-    "license": "PHP-3.01",
+    "license": "BSD-3-Clause",
     "description": "RPM information",
     "require": {
         "php": ">= 8.0.0"
