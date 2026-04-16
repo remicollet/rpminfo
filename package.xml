@@ -15,7 +15,7 @@ Documentation: https://www.php.net/rpminfo
   </lead>
   <date>2025-09-25</date>
   <version>
-    <release>1.2.1</release>
+    <release>1.2.2dev</release>
     <api>1.2.0</api>
   </version>
   <stability>
@@ -24,8 +24,7 @@ Documentation: https://www.php.net/rpminfo
   </stability>
   <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
   <notes><![CDATA[
-- use RPMTAG_SIGMD5 instead of RPMTAG_PKGID removed in RPM 6
-- use RPMTAG_SHA1HEADER instead of RPMTAG_HDRID removed in RPM 6
+-
   ]]></notes>
   <contents>
     <dir name="/">
@@ -78,6 +77,22 @@ Documentation: https://www.php.net/rpminfo
   <providesextension>rpminfo</providesextension>
   <extsrcrelease/>
   <changelog>
+    <release>
+      <date>2025-09-25</date>
+      <version>
+        <release>1.2.1</release>
+        <api>1.2.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license uri="https://www.php.net/license/3_01.txt" filesource="LICENSE">PHP-3.01</license>
+      <notes><![CDATA[
+- use RPMTAG_SIGMD5 instead of RPMTAG_PKGID removed in RPM 6
+- use RPMTAG_SHA1HEADER instead of RPMTAG_HDRID removed in RPM 6
+      ]]></notes>
+    </release>
     <release>
       <date>2024-12-19</date>
       <version>
