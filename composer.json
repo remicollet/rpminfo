@@ -3,6 +3,23 @@
     "type": "php-ext",
     "license": "BSD-3-Clause",
     "description": "RPM information",
+    "keywords": [
+        "rpm",
+        "database",
+        "librpm"
+    ],
+    "authors": [
+        {
+        "name": "Remi Collet",
+        "email": "remi@php.net",
+        "role": "lead"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/remicollet/rpminfo/issues",
+        "source": "https://github.com/remicollet/rpminfo",
+        "docs": "https://www.php.net/rpminfo"
+    },
     "require": {
         "php": ">= 8.0.0"
     },
