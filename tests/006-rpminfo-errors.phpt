@@ -7,8 +7,9 @@ Check for rpminfo function errors
 echo "+ PHP Warnings\n";
 var_dump(rpminfo(__DIR__ . "/missing.rpm"));
 var_dump(rpminfo(__FILE__));
+var_dump(is_array(rpminfo(__DIR__ . "/bidon.rpm")));
 
-echo "\n+ PHP Warnings\n";
+echo "\n+ Error returned\n";
 $error='xxx';
 var_dump(rpminfo(__DIR__ . "/missing.rpm", true,  $error), 
 	$error);
@@ -26,8 +27,9 @@ NULL
 
 Warning: rpminfo(): Can't read '%s/tests/006-rpminfo-errors.php': Argument is not a RPM file in %s on line %d
 NULL
+bool(true)
 
-+ PHP Warnings
++ Error returned
 NULL
 string(%d) "Can't open '%s/tests/missing.rpm': No such file or directory"
 NULL
