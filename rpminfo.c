@@ -233,9 +233,7 @@ PHP_FUNCTION(rpminfo)
 		RETURN_THROWS();
 	}
 	if (error) {
-		ZVAL_DEREF(error);
-		zval_ptr_dtor_nogc(error);
-		ZVAL_NULL(error);
+		ZEND_TRY_ASSIGN_REF_NULL(error);
 	}
 	if (php_check_open_basedir(path)) {
 		RETURN_NULL();
@@ -268,7 +266,7 @@ PHP_FUNCTION(rpminfo)
 	}
 	if (e_len) {
 		if (error) {
-			ZVAL_STRINGL(error, e_msg, e_len);
+			ZEND_TRY_ASSIGN_REF_STRINGL(error, e_msg, e_len);
 		} else {
 			php_error_docref(NULL, E_WARNING, "%s", e_msg);
 		}

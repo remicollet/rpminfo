@@ -9,6 +9,7 @@ var_dump(rpminfo(__DIR__ . "/missing.rpm"));
 var_dump(rpminfo(__FILE__));
 
 echo "\n+ PHP Warnings\n";
+$error='xxx';
 var_dump(rpminfo(__DIR__ . "/missing.rpm", true,  $error), 
 	$error);
 var_dump(rpminfo(__FILE__,                 false, $error), 
