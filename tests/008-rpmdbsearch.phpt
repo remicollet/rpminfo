@@ -2,7 +2,9 @@
 Check for rpmdbinfo function
 --SKIPIF--
 <?php
-if (!extension_loaded("rpminfo")) print "skip";
+if (!extension_loaded("rpminfo")) dir('skip extension missing');
+$a = rpmdbsearch(PHP_BINARY, RPMTAG_INSTFILENAMES);
+if (is_null($a)) die('skip PHP installed from sources');
 ?>
 
 --FILE--

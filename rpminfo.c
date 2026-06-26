@@ -234,7 +234,7 @@ PHP_FUNCTION(rpminfo)
 	}
 	if (error) {
 		ZVAL_DEREF(error);
-		zval_dtor(error);
+		zval_ptr_dtor_nogc(error);
 		ZVAL_NULL(error);
 	}
 	if (php_check_open_basedir(path)) {
