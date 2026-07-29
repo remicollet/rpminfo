@@ -88,7 +88,7 @@ string(29) "Thu Oct 19 12:01:02 CEST 2023"
 string(7) "content"
 string(7) "content"
 
-Warning: file_get_contents(%s/bidon.rpm#/usr/share/doc/bidon/MISSING): Failed to open stream: operation failed in %s on line %d
+Warning: file_get_contents(%s: Failed to open stream: operation failed in %s on line %d
 bool(false)
 + symlink
 NULL
