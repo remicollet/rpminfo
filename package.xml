@@ -13,9 +13,9 @@ Documentation: https://www.php.net/rpminfo
     <email>remi@php.net</email>
     <active>yes</active>
   </lead>
-  <date>2025-09-25</date>
+  <date>2026-10-08</date>
   <version>
-    <release>1.2.2dev</release>
+    <release>1.2.2</release>
     <api>1.2.0</api>
   </version>
   <stability>
@@ -24,7 +24,8 @@ Documentation: https://www.php.net/rpminfo
   </stability>
   <license uri="https://opensource.org/license/BSD-3-Clause" filesource="LICENSE">BSD-3-Clause</license>
   <notes><![CDATA[
-- update PHP License from version 3 to version 4 (BSD-3-Clause)
+- Update PHP License from version 3 to version 4 (BSD-3-Clause)
+- Compatibility with PHP 8.6
   ]]></notes>
   <contents>
     <dir name="/">

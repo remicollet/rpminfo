@@ -1,6 +1,7 @@
-# Unreleased
+# Version 1.2.2 - 2026-10-08
 
-- update PHP License from version 3 to version 4 (BSD-3-Clause)
+- Update PHP License from version 3 to version 4 (BSD-3-Clause)
+- Compatibility with PHP 8.6
 
 # Version 1.2.1 - 2025-09-25
 
